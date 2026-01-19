@@ -1,0 +1,16 @@
+= IndieWeb2 Bastion integration
+
+To make the LCB site IndieWeb compatible, we treat `indieweb2-bastion` as the upgrade path for consent-first ingress, odns graph proofs, and intentional provenance. The bastion provokes the same hardened flows we already document (consent-aware HTTP, HTTP capability governance, hybrid automation, feedback). Follow this plan:
+
+== Integration steps
+* Keep the `indieweb2-bastion` `bootstrap`/`just build` steps near `docs/hardened-wordpress.adoc`; the bastion provides the consent-first proxies and the GraphQL DNS we need for the Yacht.  
+* Use the bastion’s `PWA`/GUI server as the identity portal that yields the `.well-known/aibdp.json` declarations and invites bots to declare consent before reaching the gateway.  
+* Mirror the bastion’s Nickel policy/SurrealDB provenance artifacts inside our hardened manifests so the same GraphQL DNS/identity flows can be rehydrated inside Svalinn’s logging plane.
+
+== Why this matters
+IndieWeb2 gives us the consent-first stack, cryptographic provenance store (SurrealDB), and adoption of GraphQL DNS that align perfectly with the verified container story. Rather than building these pieces from scratch, we reference the `indieweb2-bastion` repo (https://gitlab.com/hyperpolymath/indieweb2) and copy/extend the necessary configs into this repo whenever we adjust consent policies or GraphQL capabilities.
+
+== Next actions
+* Document the mapping between `indieweb2-bastion` Nickel policies and our `consent-aware-http` spec so upgrades stay consistent.  
+* Update the README to mention that the IndieWeb GUI/proxy is the inbound consent portal for the hardened WordPress site.  
+* Keep the IndieWeb upgrade repo's `capabilities`, `docs/PREREQUISITES.adoc`, and `docs/ARCHITECTURE.adoc` available as reference when we adjust the bastion configuration or the WAF/consent gating.
