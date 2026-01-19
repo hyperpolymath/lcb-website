@@ -5,6 +5,31 @@ This site will run on the Debian-based hardened WordPress artifacts we pull thro
 == Hardened base artifact
 We base every deployment on the Debian flavor of the Docker Hardened Images (DHI) WordPress catalog entry. The DHI catalog is now open source, Apache 2.0 licensed, and built on Debian/Alpine foundations, so it fits our Debian runtime without ever touching a Docker daemon. Treat the `dhi.io/wordpress:6.9-php8.5` or `dhi.io/wordpress:7.0-beta1-php8.5` tags as the “Yacht” runtime that Cerro Torre packages, signs, and verifies before Svalinn accepts any container operation request.
 
+== Manifest + packaging options
+We keep a concrete Cerro Torre manifest at `infra/wordpress.ctp`. It imports the Debian Hardened Image, overlays the Sinople theme plus php-aegis helpers, copies `.well-known` assets, and emits the signed OCI bundle that Vörðr executes.
+
+*Option A (single manifest)* – Everything described above lives in one `.ctp` file, making the wallet of provenance easier to follow: one manifest = SBOM + attestation + `ct pack` result.
+
+*Option B (layered manifests)* – Build a base manifest around the DHI image and a second manifest for overlays (theme, php-aegis, `.well-known`). Svalinn can validate the base before the overlay is applied, and the CT repo can tag each artifact (e.g., `lcb-wordpress-base` and `lcb-wordpress-overlay`).
+
+Each manifest must document the metadata fields below; they keep the provenance auditors at CT, Svalinn, and Vörðr in sync.
+
+== Manifest metadata checklist
+|===
+| Field | Purpose / Example
+| `metadata.summary` | “Hardened LCB WordPress (Sinople + php-aegis)” for quick discovery in catalogs.
+| `upstream.family` + `section` | `dhi.io`, `wordpress` to tie back to the DHI catalog.
+| `inputs.sources.artifacts.uri` | `oci://dhi.io/wordpress:6.9-php8.5` (and `7.0-beta1-php8.5` once the beta image is available).
+| `inputs.sources.artifacts.sha256` | Exact digest from the DHI catalog / your registry.
+| `build.plan.overlay` | Steps describing how the theme + MU plugin + `.well-known` files are merged.
+| `outputs.artifacts` | `oci_image`, `sbom_spdx_json`, `in_toto_provenance`.
+| `policy.attestations` | Require `source-signature`, `reproducible-build`, `sbom-complete`.
+| `attestations.require` | Mirror the policy requirement; optionally recommend `security-audit`.
+| `provenance.sbom`, `provenance.provenance_log` | Paths inside `sbom/` and `in_toto/`.
+|===
+
+Document each `sanctify`/php-aegis step directly in the manifest so CT can trace which sanitizers and headers were applied before the bundle is signed.
+
 == Version trajectory
 * **WordPress 6.9 “Gene”** ships December 2, 2025; we pin staging/production to that release as soon as the DHI tag is available. Keep the previous 6.8 line for rollbacks.  
 * **WordPress 7.0** beta testing starts February 19, 2026 with RC1 on March 19, 2026 and final release around April 9, 2026; keep a beta manifest ready (`dhi.io/wordpress:7.0-beta1-php8.5`) so we can promote the beta stream as soon as we have validation and attestations.
