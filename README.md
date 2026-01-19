@@ -42,6 +42,10 @@ To coordinate automation (consent audits, feedback reporting, manifest rebuilds)
 
 The site’s inbound consent portal and provenance layer follow `indieweb2-bastion`; see `docs/indieweb2-bastion.adoc` for how the bastion’s consent-first GUI, Nickel/SurrealDB provenance, and GraphQL DNS policies seed the hardened WordPress stack and match the consent-aware HTTP specification.
 
+## ZeroTier overlay
+
+Encrypted overlay networking uses `zerotier-k8s-link`; `docs/zerotier-k8s-link.adoc` explains how the ZeroTier DaemonSet joins the yacht/agents to the private mesh, how the overlay routes feed the capability gateway and automation router, and how health commands tie back into the feedback pipeline.
+
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.
