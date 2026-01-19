@@ -1,0 +1,13 @@
+= WP Sinople theme for LCB
+
+The LCB site will use the `wp-sinople-theme` as its WordPress theme to stay consistent with IndieWeb, semantic-web, and accessibility goals. The theme combines ReScript, Deno/Fresh, Rust/WASM, and semantic APIs that align with the hardened stack.
+
+## Integration notes
+* Clone `wp-sinople-theme` and build the WASM semantic processor (`wasm/semantic_processor/build.sh`), then compile the ReScript app before copying `wordpress/` into the deployed WordPress theme directory inside our Cerro Torre manifest.
+* Leverage the theme's Webmention/Micropub endpoints (`/wp-json/sinople/v1/...`) so the IndyWeb portal and consent flows can interact with content inside the Hardened WordPress runtime.
+* Use the theme's WCAG 2.3 AAA/IndieWeb Level 4 capabilities as the front-end baseline for the `cadre-router` SPA and `feedback-o-tron` dashboards. Embed its semantic RDF endpoints into the `cadre-router` route definitions for references and provenance linking.
+
+## Next steps
+* Add the theme’s `.wordpress` files into the Cerro Torre manifest so the Hardened WordPress image always contains the Sinople theme.  
+* Document the theme build steps in `Containerfile` `docs/hardened-wordpress.adoc` so future iterations rebuild the WASM/ReScript pieces when semantic graph logic changes.  
+* Keep the theme’s `SECURITY_INTEGRATION.md` and `RSR_AUDIT.md` handy when we run audits in this repo so we do not misalign the accessibility/compliance claims.
