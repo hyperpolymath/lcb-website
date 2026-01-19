@@ -58,6 +58,10 @@ The hardened WordPress runtime runs the `wp-sinople-theme`; see `docs/wp-sinople
 
 `vext` powers our IRC alerting channel, feeding consent/capability events into `feedback-o-tron` and offering operators a Hybrid Automation Router hook for manual overrides; see `docs/vext-irc-support.adoc` for the workflow details and tie-ins with ZeroTier and capability logs.
 
+## K8s & Twingate SDP
+
+The hardened stack will eventually run behind the Twingate SDP mesh; `docs/twingate-k8s-integration.adoc` records the plan to align the K8s manifests with `twingate-helm-deploy` so the ZeroTier overlay, capability gateway, and consent portal are all behind the SDP path.
+
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.
