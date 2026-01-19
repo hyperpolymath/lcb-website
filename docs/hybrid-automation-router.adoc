@@ -1,0 +1,12 @@
+= Hybrid Automation Router for LCB automation
+
+`hybrid-automation-router` sits inside the Wharf/Crane/Decision plane and orchestrates automation flows (e.g., consent checks, feedback submission, capability enforcement). We enqueue the router whenever the hardened stack needs to trigger automation tasks, ensuring consistent auth and workflow sequencing.
+
+== Key automation hooks
+* The router exposes authenticated workflows for the consent-aware HTTP circuit, `feedback-o-tron` MCP tool, and capability governance updates, so each stage can call a named job (`hybrid-automation-router` uses auth plugins defined in `config/`).
+* Use the router to bridge Vörðr/Svalinn events into external systems (email alerts, audit dashboards). Each automation entrypoint owes an auth token and policy that the router validates before it invokes the downstream service.
+* The router also provides a JavaScript/Elixir API for dashboard widgets so the `cadre-router` UI can prompt for automation triggers (rebuild manifest, run sanctify fix) via an authenticated channel.
+
+== Next steps
+* Record the router in `Containerfile` as part of the automation perimeter and annotate the auth requirements in `docs/consent-aware-http.adoc` so consent events automatically trigger the correct `hybrid-automation-router` job.  
+* Keep the router’s tokens/secrets aligned with the Gitbot Fleet and feedback logs, storing them as part of the proven bundle so we can replay automation decisions in future audits.

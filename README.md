@@ -34,6 +34,10 @@ This repo is part of the `gitbot-fleet` quality automation suite; see `docs/gitb
 
 `http-capability-gateway` acts as the first gate for the hardened site, so see `docs/http-capability-gateway.adoc` for how we author Verb Governance specs, map them to consent-aware HTTP narratives, and forward enforcement logs into the feedback and audit trails.
 
+## Automation router
+
+To coordinate automation (consent audits, feedback reporting, manifest rebuilds), we plug into `hybrid-automation-router`; the new `docs/hybrid-automation-router.adoc` tells you which auth-protected workflows we call and how they pipe events back into the container proofs.
+
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.
