@@ -50,6 +50,10 @@ Encrypted overlay networking uses `zerotier-k8s-link`; `docs/zerotier-k8s-link.a
 
 The hardened WordPress runtime runs the `wp-sinople-theme`; see `docs/wp-sinople-theme.adoc` for build steps (WASM/ReScript), WCAG/IndieWeb certifications, and how its semantic APIs tie into the `cadre-router` front-end, consent controls, and feedback pipelines.
 
+## Well-known ecosystem
+
+`well-known-ecosystem` is the canonical source for `.well-known/` responses (AIBDP, security.txt, ai.txt, etc.) that our hardened site will eventually publish; we keep it on the roadmap so you can see how the entire stack will link up later (`docs/well-known-ecosystem.adoc`).
+
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.
