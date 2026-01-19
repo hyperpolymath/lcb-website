@@ -69,3 +69,7 @@ The repo follows the `rsr-template-repo`/`RSR_OUTLINE.adoc` scheme so the direct
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.
+
+## Robot Repo Automaton
+
+`robot-repo-automaton` orchestrates the automation policies and deployment gating for this repo; see `docs/robot-repo-automaton.adoc` to understand how its scripts hook into `just validate`, the ZeroTier stack, consent reports, and the feedback/automation workflows before the hardened WordPress bundle is released.

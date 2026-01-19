@@ -1,0 +1,13 @@
+= Robot Repo Automaton integration
+
+We include `robot-repo-automaton` as the automation orchestrator ensuring our repository operations obey robotic policies, trigger flows, and stay machine-reviewable.
+
+## Responsibilities
+- Robot tests ensure any new manifest or consent flow has a reproducible guard; the automaton repo offers scripts for policy compliance, deployment gating, and AI review so integrate their hooks into `just validate`/`just ci` recipes.
+- The automaton can provision containers and proofs; align its workflows with our ZeroTier, Svalinn, and Twingate components by reusing its state files when packaging the hardened WordPress artifact.
+- Use the automaton’s shared context to propagate new docs (consent, feedback, well-known) so the fleet bots automatically consume them without manual registration.
+
+## Next steps
+1. Link to `robot-repo-automaton/README.adoc` and relevant `scripts` so every automation recipe references the canonical policy.  
+2. Ensure triggers run after we build the hardened theme/masks in Containerfile and before we push to feedback or dispatch notifications.  
+3. Keep the integration doc updated with release-phase commands (just run automation recipes) and mention when we add new components triggered by the automaton.
