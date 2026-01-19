@@ -54,6 +54,10 @@ The hardened WordPress runtime runs the `wp-sinople-theme`; see `docs/wp-sinople
 
 `well-known-ecosystem` is the canonical source for `.well-known/` responses (AIBDP, security.txt, ai.txt, etc.) that our hardened site publishes; `docs/well-known-ecosystem-integration.adoc` explains how we pull its validated files into the site’s `.well-known/` directory before Cerro Torre packages the bundle.
 
+## IRC alerting
+
+`vext` powers our IRC alerting channel, feeding consent/capability events into `feedback-o-tron` and offering operators a Hybrid Automation Router hook for manual overrides; see `docs/vext-irc-support.adoc` for the workflow details and tie-ins with ZeroTier and capability logs.
+
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.
