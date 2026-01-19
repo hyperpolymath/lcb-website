@@ -26,6 +26,10 @@ Follow `docs/consent-aware-http.adoc` to see how the site enforces the consent-a
 
 When something goes wrong (manifest rejection, attestation error, consent failure), feed the incident into `feedback-o-tron`; see `docs/feedback-o-tron.adoc` for how we expose its MCP `submit_feedback` tool and include the audits in the Cerro Torre bundle so the issue is broadcast across every platform.
 
+## Quality automation
+
+This repo is part of the `gitbot-fleet` quality automation suite; see `docs/gitbot-fleet-support.adoc` for the checklist each bot (rhodibot, echidnabot, oikos, glambot, seambot, finishing-bot) uses to validate this project.
+
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.
