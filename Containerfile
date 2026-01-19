@@ -3,7 +3,7 @@
 This project will dogfood the same verified-container stack we maintain in the `svalinn`, `cerro-torre`, and `vordr` repositories. Treating those three components as the container + image foundation keeps the website aligned with the practical tooling that actually protects and runs the workloads we care about. Wherever possible we iterate inside this repo by connecting back to their docs, manifests, and commands.
 
 ## How the stack fits together
-1. **Svalinn** (edge gateway) validates every container request against the `verified-container-spec`, enforces policy/OAuth2 tokens, and exposes a Docker Compose-compatible `svalinn-compose` CLI.
+1. **Svalinn** (edge gateway) validates every container request against the `verified-container-spec`, enforces policy/OAuth2 tokens, and exposes a Compose-compatible `svalinn-compose` CLI.
 2. **Cerro Torre** (builder) packs images into `.ctp` bundles with Ada/SPARK verification, cryptographic provenance, and exporter hooks before any runtime consumes them.
 3. **Vörðr** (runtime) is the formally verified orchestrator that receives verified operations from Svalinn, interacts with attestation hooks, and records a reversible state journal.
 
