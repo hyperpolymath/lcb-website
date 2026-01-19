@@ -14,6 +14,14 @@ We use `asdf` to pin the runtimes that run behind this site, especially the Varn
 
 See `docs/hardened-wordpress.adoc` for the chosen Debian-based Hardened WordPress base, Sanctify/PHP-Aegis hardening workflow, and how Cerro Torre/Svalinn/Vörðr treat it as the verified container artifact.
 
+## Front-end routing
+
+We will leverage `cadre-router` for the client-side navigation and dashboard experience; refer to `docs/cadre-router.adoc` for the integration notes so the SPA can stay type-safe and aligned with the verified manifests.
+
+## AI/bot consent
+
+Follow `docs/consent-aware-http.adoc` to see how the site enforces the consent-aware HTTP/AIBDP requirements, returns HTTP 430 when bots do not consent, and coordinates the `.well-known/aibdp.json` declaration with the Cedar/Rust proxy layer before Svalinn/Vörðr execute any manifest.
+
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.
