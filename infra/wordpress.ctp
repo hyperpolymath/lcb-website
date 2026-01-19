@@ -13,9 +13,9 @@ maintainer = "lcb-site:ops"
 keywords = ["wordpress", "hardened", "sinople", "lcb"]
 
 [upstream]
-family = "dhi.io"
-section = "wordpress"
-snapshot_service = "dhi.io/hardened-images"
+family = "docker"
+section = "library/wordpress"
+snapshot_service = "registry-1.docker.io"
 snapshot_timestamp = 2026-01-09T00:00:00Z
 
 [provenance]
@@ -36,15 +36,15 @@ id = "ed25519"
 required = true
 
 [[inputs.sources]]
-id = "wordpress-dhi"
+id = "wordpress-base"
 type = "oci_image"
 name = "wordpress"
-version = "6.9-php8.5"
+version = "6.9.0-php8.5-apache"
 
 [[inputs.sources.artifacts]]
-filename = "dhi.io-wordpress-6.9-php8.5.oci"
-uri = "oci://dhi.io/wordpress:6.9-php8.5"
-sha256 = "TODO: fill in digest from DHI catalog"
+filename = "docker.io-wordpress-6.9.0-php8.5-apache.oci"
+uri = "oci://docker.io/library/wordpress:6.9.0-php8.5-apache"
+sha256 = "b00800d362f90cd1db803eaac8994b5353e9fdbf1d7386baa798e4f63110cdc3"
 
 [[inputs.sources]]
 id = "sinople-theme"
