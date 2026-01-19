@@ -1,0 +1,15 @@
+= Roadmap for lcb-website
+
+== Q1 2026
+* Build and verify the Cerro Torre manifest (`infra/wordpress.ctp`) using the accessible WordPress base; capture SBOM/in-toto artifacts.
+* Publish the `.well-known` assets, consent docs, and automation playbooks so the hardened stack can be audited.
+* Wire ZeroTier/Twingate overlay scripts and ensure `vext`/feedback flows log incidents into the shared provenance store.
+
+== Q2 2026
+* Switch the manifest to the Debian Hardened Images WordPress tag once DHI publishes it and share the update with the CT repo.
+* Expand the automation router + robot automaton triggers to include Bensunite/Chimichanga FFI inputs and the verified container spec.
+* Harden monitoring and observability (health dashboards, logs, metrics) and document them in `docs/`.
+
+== Handover readiness
+* Keep the `.machine_readable/6scm` metadata updated.
+* Ensure README, documentation, and roadmap explain how to run `just validate-rsr`, `ct pack`, and the consent/bot handoff requirements.
