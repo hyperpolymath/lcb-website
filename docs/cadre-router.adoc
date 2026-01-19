@@ -1,0 +1,24 @@
+= cadre-router integration for LCB
+
+`cadre-router` provides the type-safe routing layer we will use in the site’s front-end assets and dashboard SPA. Because the LCB experience is focused on hardened WordPress operations, the navigation must stay deterministic (variants instead of raw strings), so this library will power the React/Rescript navigation around manifests, security reports, and container metrics.
+
+== How we use it
+
+1. Define a `route` variant that mirrors the key sections (`Home`, `Manifest`, `SecurityReport`, `Dag`, `NotFound`). Each variant carries the typed IDs (e.g., `Manifest(ManifestId.t)`).
+2. Build a parser using `CadreRouter.Parser` combinators so any incoming URL is validated before rendering. Invalid routes are rejected at the router level and show a `NotFound` UI that directs users back to the Wharf controls.
+3. Serialize the current route via `CadreRouter.Route.toString` so the manifest/dashboards can update the browser history through `CadreRouter.Navigation` without reloading the hardened runtime.
+4. Optionally wrap certain links in `CadreRouter.Link` components so React renders route-aware anchors with the same logic as the parser.
+
+This keeps the UI synchronized with the backend invariants (Sanctify/PhpAegis security reports, DHI manifest IDs) and allows the Rust agent/Wharf controls to reference the same IDs when they call Vörðr operations.
+
+== Build notes
+
+* `cadre-router` lives in `/mnt/eclipse/repos/cadre-router` and can be built with `just build` or from `npm`/`deno` as described in its README.
+* Branch the minimal JS output into the LCB site’s `frontend/` bundle via our build pipeline so these navigators are available in the honed UI.
+* Keep `cadre-router` docs close to the app’s route definitions so new pages always follow the typed pattern.
+
+== Next actions
+
+* Sketch the SPA sections that need routing (manifests, attestation viewer, service details) and map them into the `route` variant.
+* Ensure the storyboard mentions `cadre-router` and copy its `Navigation.Make` helpers into the client bundle.
+* Document the route definitions alongside the hardened WordPress flows so developers can trace navigation back to the container/manifest it describes.

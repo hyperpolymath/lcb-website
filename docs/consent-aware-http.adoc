@@ -1,0 +1,21 @@
+= Consent-aware HTTP for LCB
+
+The LCB site follows the consent-aware HTTP (AIBDP) model so that bots and AI agents must declare their intent before interacting with the hardened runtime. We treat the protocol as a perimeter guard that sits in front of Svalinn/Vörðr operations: requests that do not present the required JSON policy (AIBDP) are rejected with HTTP 430 (Consent Required) and only human/consenting clients proceed.
+
+== Policy sources
+- Follow https://consent-aware-http.org for the specification, schema versions (e.g., `schemas/aibdp-v0.2.json`), and status codes. We keep one copy of the schema locally in `docs/consent-aware-http-schema-v0.2.json` (mirror from the canonical repo) so the Rust agent can validate incoming declarations.
+- The site publishes its own `.well-known/aibdp.json` describing what consent fields it accepts (purpose, data types, credential level). Update this file whenever the site’s data collection strategy changes.
+
+== Runtime behavior
+1. Requests without AIBDP headers/reports get a 430 response, plus a `Preference-Required` header pointing to `.well-known/aibdp.json`. No action is taken until the client supplies the consent JSON.
+2. Bots/AI that supply the AIBDP proof are routed through the Rust agent inside the Yacht; the agent logs the declaration and attaches it to the Vörðr operation record for future audits.
+3. The `cadre-router` front-end includes documentation links and pop-ups explaining why AI must consent before invoking manifests or checking policy status.
+
+== Enforcement
+- Integrate `consent-aware-http` middleware (see the repo’s `Justfile` for the latest reference impl) in the Rust proxy layer used in the Yacht; it inspects headers/JSON, responds with 430, and records the proof in the log store.
+- Use config from `consent-aware-http/docs/server-configurations.md` for CSP/permissive headers; we copy relevant snippets into `Containerfile`/`docs/hardened-wordpress.adoc` so policy statements match runtime behavior.
+- Whenever a new bot interface is added (API, GraphQL, CLI), append its consent requirements to `.well-known/aibdp.json` and update this doc so the AI handover knows which interactions can proceed.
+
+== Monitoring & auditing
+- Log all consent challenges alongside Vörðr traces so the next audit can show which requests were denied and why. Keep a rolling JSON log of failed attempts for folks tuning the policy.
+- Share the same policy text in the `cadre-router` UI (via route docs) so operators can quickly see what consent is required for each page/action.
