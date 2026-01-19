@@ -6,7 +6,7 @@ This site will run on the Debian-based hardened WordPress artifacts we pull thro
 We base every deployment on the Debian flavor of the Docker Hardened Images (DHI) WordPress catalog entry. The DHI catalog is now open source, Apache 2.0 licensed, and built on Debian/Alpine foundations, so it fits our Debian runtime without ever touching a Docker daemon. Treat the `dhi.io/wordpress:6.9-php8.5` or `dhi.io/wordpress:7.0-beta1-php8.5` tags as the “Yacht” runtime that Cerro Torre packages, signs, and verifies before Svalinn accepts any container operation request.
 
 == Manifest + packaging options
-We keep a concrete Cerro Torre manifest at `infra/wordpress.ctp`. It imports the Debian Hardened Image, overlays the Sinople theme plus php-aegis helpers, copies `.well-known` assets, and emits the signed OCI bundle that Vörðr executes.
+We keep a concrete Cerro Torre manifest at `infra/wordpress.ctp`, currently targeting `docker.io/library/wordpress:6.9.0-php8.5-apache` because the Debian Hardened Images catalog has not published a WordPress artifact yet. This manifest imports that image, overlays the Sinople theme plus php-aegis helpers, copies `.well-known` assets, and emits the signed OCI bundle that Vörðr executes. Swap the base to the DHI tag once it becomes available by adjusting the `inputs.sources.artifacts.uri` and digest.
 
 *Option A (single manifest)* – Everything described above lives in one `.ctp` file, making the wallet of provenance easier to follow: one manifest = SBOM + attestation + `ct pack` result.
 
