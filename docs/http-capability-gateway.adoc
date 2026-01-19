@@ -1,0 +1,18 @@
+= HTTP Capability Gateway for LCB defense
+
+`http-capability-gateway` enforces per-verb governance in front of the hardened WordPress Yacht. Its Verb Governance Spec (DSL v1) defines which HTTP methods and routes may surface, what stealth responses to give untrusted callers, and what narrative metadata is attached to each rule, giving us an auditable decision trail before Svalinn/Vörðr see the request.
+
+== Why we use it
+* Governs sensitive verbs (DELETE/PUT/PATCH) so bots or AI cannot accidentally trigger state changes—every capability is explicit instead of reactive.  
+* Logs every decision with structured provenance, feeding those logs into the Feedback-o-Tron audit chain and the consent-aware HTTP enforcement deck.  
+* Supports stealth profiles (405/404) so we can selectively hide vulnerable routes from unchecked clients before the Rust agent touches the container.
+
+== Integration points
+1. Deploy the gateway as the thin Elixir layer in front of OpenLiteSpeed (or whatever HTTP server the yacht uses). It reads `config/policy.yaml` and compiles rules into fast enforcement logic.  
+2. The same policy file includes AIBDP hints and verbs to guard; align it with the `.well-known/aibdp.json` statement so consent requirements and verb exposure stay synchronized.  
+3. Every log line (accept/deny) is sent to Svalinn’s logging plane and appended to the hardened bundle’s audit metadata so future audits can replay the capability decision before `ct pack` completes.
+
+== Next actions
+* Extend the Containerfile/infra documentation to call out the capability gateway as the first stage in the request path before consent/AIBDP/feedback.  
+* Keep the gateway policy versioned alongside the Tribune instructions (the YAML spec) and re-run `mix run --no-halt` whenever we modify verbs for new routes.  
+* Tie the enforcement logs into the `feedback-o-tron` pipeline so any denied capability is immediately reported.

@@ -30,6 +30,10 @@ When something goes wrong (manifest rejection, attestation error, consent failur
 
 This repo is part of the `gitbot-fleet` quality automation suite; see `docs/gitbot-fleet-support.adoc` for the checklist each bot (rhodibot, echidnabot, oikos, glambot, seambot, finishing-bot) uses to validate this project.
 
+## HTTP defense
+
+`http-capability-gateway` acts as the first gate for the hardened site, so see `docs/http-capability-gateway.adoc` for how we author Verb Governance specs, map them to consent-aware HTTP narratives, and forward enforcement logs into the feedback and audit trails.
+
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.
