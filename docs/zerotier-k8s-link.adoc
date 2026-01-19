@@ -1,0 +1,18 @@
+= ZeroTier K8s Link integration
+
+`zerotier-k8s-link` brings an encrypted overlay mesh to the hardened site: we use a ZeroTier DaemonSet to join Kubernetes nodes (including the Yacht runtime) to a private overlay so the consent-aware HTTP gateway, feedback streams, and automation routers can reach each other even in hostile networks.
+
+== Why it's important
+* Ensures the hardened path (capability gateway → Svalinn → Vörðr → feedback and automation) communicates over an encrypted overlay instead of the public internet.  
+* The ZeroTier network also carries IPFS and SurrealDB traffic, so proof artifacts and audit logs move between nodes regardless of the hosting provider’s network controls.  
+* Health metrics from `just mesh-status` feed into the same observability pipeline we already document (Svalinn logs + `feedback-o-tron`).
+
+== Integration steps
+1. Deploy the ZeroTier DaemonSet from `zerotier-k8s-link` and configure the `configs/network.ncl`/`routes.ncl` once the base hardened WordPress service is running.  
+2. MacGyver the overlay routes inside `Containerfile` so the capability gateway and automation router know their ZeroTier addresses (10.x.x.x or fd00::/8) before they advertise endpoints.  
+3. Share the `ZEROTIER_NETWORK_ID`/`API_TOKEN` secrets with the secure vault referenced by `poly-secret-mcp` so the site’s nodes can join the mesh and the agentic logs can trust the overlay’s provenance.
+
+== Next steps
+* Add `just deploy` and `just mesh-status` commands to the `Containerfile` plan so they run before the hardened WordPress manifests start.  
+* Keep the ZeroTier topology diagrams from the repo (IPv4/IPv6 ranges) near the consent and capability docs so we always know which overlay addresses to use inside `cadre-router` and `hybrid-automation-router` flows.  
+* Record ZeroTier health events in the `feedback-o-tron` audit log so any overlay failures create feedback incidents that the fleet can triage.
