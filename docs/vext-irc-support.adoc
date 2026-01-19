@@ -1,0 +1,13 @@
+= Vext IRC integration
+
+`vext` provides IRC gateway capabilities and automation hooks for the Hardened WordPress site. It can register the site into the IRC mesh, channel commands for consent/bot interactions, and monitor the overlay traffic through the ZeroTier mesh.
+
+## How we use it
+- Use `vext`’s IRC bridge (see `vext/tools/irc` or docs) to expose a channel where Svalinn reports kills/consent denials and where operators can issue automation commands (via Hybrid Automation Router) when feedback incidents occur.
+- Feed IRC alerts into `feedback-o-tron` so every urgent consent or capability failure triggers a multi-platform report; `vext` bots send summaries to the channel before the automated submission happens.
+- Use the IRC channel as a human-in-the-loop verification path: when `consent-aware-http` returns 430, post the request details to IRC and allow maintainers to approve/deny via commands linked to `hybrid-automation-router` workflows.
+
+## Next steps
+1. Document the IRC channel names and credentials in the secure vault referenced by `poly-secret-mcp` and keep them in sync with `vext`’s `config.ncl`.  
+2. Add the IRC alerts to the `Containerfile` workflow so they happen immediately after the ZeroTier mesh and capability gateway are online.  
+3. Keep `docs/vext-irc-support.adoc` updated when new commands/events are added, and make sure the IRC logs are stored as part of the audit trail recorded in `feedback-o-tron` and `well-known-ecosystem` metadata.
