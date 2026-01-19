@@ -38,6 +38,10 @@ This repo is part of the `gitbot-fleet` quality automation suite; see `docs/gitb
 
 To coordinate automation (consent audits, feedback reporting, manifest rebuilds), we plug into `hybrid-automation-router`; the new `docs/hybrid-automation-router.adoc` tells you which auth-protected workflows we call and how they pipe events back into the container proofs.
 
+## IndieWeb base
+
+The site’s inbound consent portal and provenance layer follow `indieweb2-bastion`; see `docs/indieweb2-bastion.adoc` for how the bastion’s consent-first GUI, Nickel/SurrealDB provenance, and GraphQL DNS policies seed the hardened WordPress stack and match the consent-aware HTTP specification.
+
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.
