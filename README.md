@@ -4,7 +4,7 @@ Website project for LCB. Track updates and assets for the hyperpolymath initiati
 
 ## Container Baseline
 
-The verified-container stack for this repo relies on `svalinn`, `cerro-torre`, and `vordr` as the gateway, builder, and runtime, respectively. See `CONTAINERS.md` for the immediate plan and references we will dogfood while developing the site.
+The verified-container stack for this repo relies on `svalinn`, `cerro-torre`, and `vordr` as the gateway, builder, and runtime, respectively. See `Containerfile` for the immediate plan and references we will dogfood while developing the site.
 
 ## License
 
