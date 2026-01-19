@@ -1,0 +1,17 @@
+= Feedback-o-Tron integration
+
+`feedback-o-tron` becomes our multi-platform feedback conduit for the hardened WordPress site. Whenever the Crane (Yacht) or Wharf agents detect a manifest discrepancy, consent failure, or container anomaly, they hand the report to `feedback-o-tron` so it transparently issues the same issue across GitHub/GitLab/Bitbucket/Codeberg and verifies network delivery before logging it.
+
+== Key touchpoints
+* The Rust agent or Svalinn policy engine can call `feedback-o-tron` via its Claude MCP tool (`submit_feedback`) with the manifest ID, error summary, and relevant URLs so the audit trail is automatically distributed to every upstream repo.
+* Deduplication ensures we do not flood maintainers with repeated consent or manifest 430 cases; `Deduplicator.check/1` runs before submission and `NetworkVerifier` ensures we received TLS/DNS+RPKI guarantees.
+* Feedback-o-Tron’s audit log (JSON lines) becomes part of the Santa Trail: we attach it to the Cerro Torre bundle metadata so the provenance chain records which reports were sent and when.
+
+== How to use
+1. Clone `/mnt/eclipse/repos/feedback-o-tron` and follow its `Quick Start`: `mix deps.get` and `mix run --no-halt` from `elixir-mcp` to start the MCP tool server.  
+2. When the hardened WP image rejects a request (consent or manifest), call the MCP `submit_feedback` tool. Include details like `platforms` (all four), `title` (e.g., “manifest attestation failure”), and the `repo` you want to notify.  
+3. Keep the environment secrets (GH, GL, etc.) in a secure vault; the repo’s `config`/`env` guidelines show how to rotate credentials and obey the credential rotation policy.
+4. Store the audit log output inside the proof bundle so future auditors can see that the issue was reported and verified before the incident chain reached Svalinn.
+
+## Why this matters
+Using `feedback-o-tron` ensures every bot/AI consent failure or manifest discrepancy triggers a synchronized, provable report across the federation. The hardened site thus stays transparent and accountable while still enforcing AI consent and container verification.
