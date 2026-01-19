@@ -66,6 +66,14 @@ The hardened stack will eventually run behind the Twingate SDP mesh; `docs/twing
 
 The repo follows the `rsr-template-repo`/`RSR_OUTLINE.adoc` scheme so the directory layout, `.well-known` assets, `justfile`, and `RSR_COMPLIANCE.adoc` structure remain compliant with the Rhodium Standard Repository template; see `docs/rsr-template-plan.adoc` for how we keep in sync and where to run `just validate-rsr`.
 
+## Machine-readable metadata
+
+Machine-readable metadata now lives under `.machine_readable/6scm`. These files (AGENTIC, ECOSYSTEM, META, NEUROSYM, PLAYBOOK, STATE) encode the AI agent config, ecosystem position, architectural practices, neurosymbolic hints, operational playbook, and project state so the next handover can load the repo context automatically.
+
+## Roadmap
+
+See `ROADMAP.adoc` for the quarterly plan that covers manifest/automation/consent/overlay milestones.
+
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.
