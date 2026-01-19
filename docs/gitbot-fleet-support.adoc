@@ -1,0 +1,20 @@
+= Gitbot Fleet Coverage
+
+This repo joins the Hyperpolymath Gitbot Fleet, so every quality automation bot in `gitbot-fleet` must be able to operate on it. Keep the squad informed by linking to the `gitbot-fleet` repo (https://github.com/hyperpolymath/gitbot-fleet) and feeding shared context when required.
+
+== Bot responsibilities
+
+[cols="1,3"]
+|===
+|Bot |What we do so the bot can succeed
+|rhodibot | Maintain RSR compliance: keep README, Containerfile, LICENSE/LEGAL.txt, docs, and AGENTIC references tidy so structural checks pass.
+|echidnabot | Document security proofs (Sanctify/php-aegis, consent-aware HTTP, DHI manifest metadata) so the formal fuzz outruns vulnerabilities.
+|oikos | Track eco/technical debt points around asdf toolchain, container specs, and hardened WordPress flows described in `docs/hardened-wordpress.adoc`.
+|glambot | Keep front-end assets (cadre-router docs, consent notifications) accessible, accessible, and properly documented so the presentation bot can verify accessibility/seo surfaces.
+|seambot | Ensure the integration docs (Svalinn/Vörðr flows, consent-aware HTTP, feedback-o-tron MCP) describe the end-to-end scenarios the integration health bot will replay.
+|finishing-bot | Provide release-ready metadata (licenses, ASDF instructions, container manifests, feedback pipeline) so the release bot can verify licensing/claims and mark the repo as ready.
+|===
+
+Share context updates via `gitbot-fleet/shared-context` when we add new doc assets (e.g., new `.adoc` references for consent, feedback, or routing). This keeps each bot’s shared configuration in sync, meaning the next run already knows the new doc exists and where to look.
+
+Refer to `gitbot-fleet/README.adoc` for the current roster and statuses so you can tell the automation team when to run each bot.
