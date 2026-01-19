@@ -62,6 +62,10 @@ The hardened WordPress runtime runs the `wp-sinople-theme`; see `docs/wp-sinople
 
 The hardened stack will eventually run behind the Twingate SDP mesh; `docs/twingate-k8s-integration.adoc` records the plan to align the K8s manifests with `twingate-helm-deploy` so the ZeroTier overlay, capability gateway, and consent portal are all behind the SDP path.
 
+## RSR template
+
+The repo follows the `rsr-template-repo`/`RSR_OUTLINE.adoc` scheme so the directory layout, `.well-known` assets, `justfile`, and `RSR_COMPLIANCE.adoc` structure remain compliant with the Rhodium Standard Repository template; see `docs/rsr-template-plan.adoc` for how we keep in sync and where to run `just validate-rsr`.
+
 ## License
 
 This repository is licensed under **PMPL-1.0-or-later** (the Palimpsest-MPL License 1.0 or later). See `LEGAL.txt` for the full legal text from the Palimpsest Stewardship Council.

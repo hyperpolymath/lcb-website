@@ -1,0 +1,13 @@
+= RSR template alignment
+
+This repo is being kept in sync with the `rsr-template-repo`/ `RSR_OUTLINE.adoc` scheme so every part of the stack (justfile, `.well-known`, docs, state) matches the Rhodium Standard Repository expectations.
+
+## Key commitments
+* Keep `.well-known/security.txt`, `.well-known/ai.txt`, and `.well-known/humans.txt` aligned with the canonical files from `well-known-ecosystem`, as the template mandates.  
+* Use the `justfile` for the standard recipes (`just build`, `just validate`, `just docs`, etc.) and keep the `RSR_COMPLIANCE.adoc` doc updated with the same checkpoints used in the template.
+* Mirror the template’s `STATE.scm` structure: record metadata (project name, updated date), position (phase, maturity), and ecosystem dependencies (e.g., `Svalinn`, `Cerro Torre`, `Vörðr`). Tag each commit with `just badges standard` when we update the state to keep the badge schema accurate.
+
+## Next steps
+1. Reference the template’s directory listing when adding new directories so we continue to match the expected layout (justfile, docs, config, `.well-known`, `Containerfile`, etc.).  
+2. When creating new automations (e.g., `vext`, `feedback`, `consent`), check the template’s `RSR_OUTLINE.adoc` to see if there is a recommended folder/responsibility, and keep the doc updated whenever we add new workflows.  
+3. Run `just validate-rsr` (from the template) whenever we change the repo structure to ensure we remain compliant before release.
