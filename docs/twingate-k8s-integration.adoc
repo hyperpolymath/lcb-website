@@ -1,0 +1,13 @@
+= Twingate + Kubernetes integration
+
+We will later investigate `twingate-helm-deploy` plus the Kubernetes manifests to gate access to the hardened WordPress site through the Twingate SDP mesh. For now this document captures the intention so we can revisit when the K8s/Twingate stack needs wiring.
+
+## What to examine
+* `twingate-helm-deploy` provides Helm charts and templates to place the Twingate connector behind the ZeroTier overlay; keep its `README`, `docs`, and `config` section handy when building the bastion firewall.  
+* The Kubernetes manifests in this repo (or others) define Pod/Service/Ingress/NetworkPolicy that the capability gateway and WordPress runtime use—we will map those to the ZeroTier mesh and Twingate ACLs later.  
+* Document the control-plane interactions: Twingate connectors talk to the Twingate controller over mutual TLS, so the K8s secrets/helm values we craft must be stored with `poly-secret-mcp` and share the same asdf-managed runtime versions.
+
+## Next steps
+1. Schedule a follow-up to read `twingate-helm-deploy/README.adoc`, `docs/CONNECTIONS.adoc`, and any Kubernetes overlay definitions so we know which services to protect with the SDP mesh.  
+2. Once the connectors are in place, update `Containerfile` and the docs (capability gateway, ZeroTier, consent) so they reference the Twingate-protected endpoints.  
+3. Re-open this doc with actual commands (helm install/upgrade) and link to the K8s manifests we eventually use.
