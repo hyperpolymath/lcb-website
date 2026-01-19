@@ -1,0 +1,5 @@
+= Well-Known Ecosystem placeholder
+
+We are cataloging the `well-known-ecosystem` repository as the long-term integration reference for standard HTTP resources, AI boundary declarations, and public metadata. This repo will eventually provide canonical `.well-known/` responses (AIBDP, security.txt, ai.txt, humans.txt, etc.) that our hardened WordPress site references.
+
+We’ll revisit this once the detailed mappings between the `well-known-ecosystem` artifacts and our consent/capability/feedback workflow are ready, but for now it remains a placeholder to show the downstream connection point.
