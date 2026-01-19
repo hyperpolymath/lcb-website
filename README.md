@@ -52,7 +52,7 @@ The hardened WordPress runtime runs the `wp-sinople-theme`; see `docs/wp-sinople
 
 ## Well-known ecosystem
 
-`well-known-ecosystem` is the canonical source for `.well-known/` responses (AIBDP, security.txt, ai.txt, etc.) that our hardened site will eventually publish; we keep it on the roadmap so you can see how the entire stack will link up later (`docs/well-known-ecosystem.adoc`).
+`well-known-ecosystem` is the canonical source for `.well-known/` responses (AIBDP, security.txt, ai.txt, etc.) that our hardened site publishes; `docs/well-known-ecosystem-integration.adoc` explains how we pull its validated files into the site’s `.well-known/` directory before Cerro Torre packages the bundle.
 
 ## License
 

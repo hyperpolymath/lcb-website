@@ -1,0 +1,18 @@
+= Well-Known ecosystem integration
+
+We now pull the canonical `.well-known/` resources from the `well-known-ecosystem` repo so the hardened site can serve AI boundary declarations, security metadata, and provenance files without duplicating policy logic.
+
+## What we import
+- `security.txt` (RFC 9116) from `well-known-ecosystem/docs/security.md` and `templates` so the site’s security page matches the official contact metadata.  
+- `ai.txt` and `aibdp.json` policies that live in `well-known-ecosystem/docs/aibdp` (or whichever directory houses the JSON schema).  
+- The `humans.txt` and `ai_usage.adoc` artifacts that describe people/AI policy (move into `.well-known/ai.txt` / `.well-known/humans.txt`).  
+- Any other well-known path listed in `well-known-ecosystem/docs` (e.g., `openid-configuration`, `webfinger`, `nodeinfo`) we plan to serve through Svalinn as part of the consent/provenance gating.
+
+## Integration steps
+1. Clone or reference `/mnt/eclipse/repos/well-known-ecosystem`. Use the `justfile` or `validator` directories to validate each resource before releasing.  
+2. Stage the relevant `.well-known` files into this repo’s deploy assets (e.g., `static/.well-known/security.txt`, `static/.well-known/ai.txt`, `static/.well-known/aibdp.json`). Keep these files under version control so the Hardened WordPress bundle always references the latest output.  
+3. Update `Containerfile` to copy the `.well-known` directory into the WordPress image, and align the consent-aware HTTP/feedback docs so they reference those canonical files.  
+4. When the well-known repo publishes new resources, re-run its `just build` or validation script, copy the updated files here, and push the new bundle. If the repo adds a new URI, document it in `docs/well-known-ecosystem-integration.adoc` so the consent/capability/feedback flows know how to handle it.
+
+## Why this matters
+Serving the canonical well-known resources keeps our consent portal transparent, ensures the AI boundary declarations are machine-readable, and ties the site’s metadata to the proven well-known specification maintained by Hyperpolymath.
