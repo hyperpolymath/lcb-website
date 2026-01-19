@@ -41,3 +41,8 @@ The LCB website will ride atop that trio: Cerro Torre will supply the signed ima
 - Capture the specific images and services you want to showcase in `/content` or `./services`, and attach `x-svalinn` metadata when posting compose files so we can replicate the same verification path.
 - Link to these component repos whenever we describe container flows on the site so readers understand the stack.
 - Iterate on simple Compose definitions before we add front-end pages: start with `svalinn-compose` for the base service graph and slowly layer on Cerro/Vörðr proofs.
+
+## Hardened WordPress
+- Use the Debian-based Docker Hardened Images WordPress tags (`dhi.io/wordpress:6.9-php8.5`, `dhi.io/wordpress:7.0-beta1-php8.5`) as the Yacht runtime. Document how Cerro Torre signs those bundles and run `ct pack`/`ct verify` before Vörðr executes them.
+- Apply `sanctify-php` over `wp-content` before each pack; export php.ini/nginx helpers for the runtime overlay and keep the reports with the artifact.
+- Use `php-aegis` for runtime sanitization, validation, and headers inside the WordPress code that resides under the justified containers. See `docs/hardened-wordpress.adoc` for the full pipeline (Sanctify + php-aegis + Docker Hardened Images + Svalinn/Vörðr/Cerro Torre).

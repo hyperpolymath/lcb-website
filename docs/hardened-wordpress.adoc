@@ -1,0 +1,25 @@
+= Hardened WordPress flow for LCB
+
+This site will run on the Debian-based hardened WordPress artifacts we pull through Cerro Torre, with Svalinn and Vörðr enforcing the verified-container workflow. The stack layers in three protection tracks: (1) a hardened base image, (2) static analysis/transformations to `wp-content`, and (3) runtime security code in PHP.
+
+== Hardened base artifact
+We base every deployment on the Debian flavor of the Docker Hardened Images (DHI) WordPress catalog entry. The DHI catalog is now open source, Apache 2.0 licensed, and built on Debian/Alpine foundations, so it fits our Debian runtime without ever touching a Docker daemon. Treat the `dhi.io/wordpress:6.9-php8.5` or `dhi.io/wordpress:7.0-beta1-php8.5` tags as the “Yacht” runtime that Cerro Torre packages, signs, and verifies before Svalinn accepts any container operation request.
+
+== Version trajectory
+* **WordPress 6.9 “Gene”** ships December 2, 2025; we pin staging/production to that release as soon as the DHI tag is available. Keep the previous 6.8 line for rollbacks.  
+* **WordPress 7.0** beta testing starts February 19, 2026 with RC1 on March 19, 2026 and final release around April 9, 2026; keep a beta manifest ready (`dhi.io/wordpress:7.0-beta1-php8.5`) so we can promote the beta stream as soon as we have validation and attestations.
+* **PHP 8.5** is transparent and available (Nov 20, 2025); configure the hosting stack to use the latest PHP 8.5 build so our hardened image and php-aegis runtime share the same language baseline.
+
+== Hardening pipeline
+1. **Sanctify-PHP** (`sanctify` CLI) runs across the WordPress theme/plugin code inside `wp-content`: analyze with `sanctify analyze`, fix safe changes (`sanctify fix`), and export infrastructure recommendations via `sanctify export --php-ini`/`--nginx`. The resulting report drives the Cerro Torre `.ctp` manifest metadata and gives us php.ini/nginx fragments we drop into the hardened runtime overlay.
+2. **php-aegis** is installed via Composer inside the theme/child-theme or mu-plugin that the pipeline injects. Use php-aegis helpers for headers (`Headers::secure()`), sanitizers (`Sanitizer::html()`), and validators (`Validator::email()`, `Validator::httpsUrl()`). This library brings strict PHP 8.1+ helpers, security headers, and semantic web escaping that mirror the container-level policies Svalinn enforces.
+3. **Cerro Torre manifest** references the chosen DHI WordPress tag, copies the php-aegis assets, and adds Varnish/OpenLiteSpeed configs from `sanctify export --guix`. Pack with `ct pack`, verify with `ct verify`, and sign so Vörðr only runs the proven artifact Svalinn validated.
+4. **Runtime**: Start Vörðr (Elixir + Rust) and run Svalinn Compose definitions that point to the signed `.ctp` bundle; the gateway enforces `x-svalinn` policies, OIDC tokens, and attestation requirements before letting the Yacht onto the network.
+
+== Observability & policy continuum
+The asset stack also captures: (1) the DHI SBOM/VEX artifacts alongside the `.ctp` bundle so future audits can prove the Debian/PHP 8.5 lineage, (2) the php-aegis header and sanitizer configuration so runtime behavior matches the static analysis, and (3) the Sanctify reports (HTML/SARIF/JSON) so defenders know what was fixed automatically versus what needs reviewer attention.
+
+== Next steps
+* Drop the DHI WordPress manifest(s) into `infra/` or `services/` and call them from `Containerfile` so the plan is executable.  
+* Keep `ASDF.md` in sync when we add other runtimes (varnish, OpenLiteSpeed) that support the hardened WordPress flows.  
+* Run `sanctify`/`php-aegis` whenever we update content to keep semantics proofed and the runtime security headers aligned with the container policies.
