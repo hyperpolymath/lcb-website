@@ -1,0 +1,21 @@
+Contact: mailto:security@hyperpolymath.org
+Expires: 2027-01-22T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://hyperpolymath.org/.well-known/security.txt
+Policy: https://github.com/hyperpolymath/lcb-website/blob/main/docs/hardened-wordpress.adoc
+Hiring: https://github.com/hyperpolymath
+
+# Security Policy
+# This hardened WordPress deployment uses verified container stack:
+# - Svalinn (gateway with OAuth2/policy enforcement)
+# - Cerro Torre (Ada/SPARK verified builder)
+# - Vörðr (formally verified runtime with reversible state journal)
+#
+# All security reports are routed through feedback-o-tron and
+# logged to the attestation chain for audit purposes.
+#
+# For vulnerability reports related to:
+# - Container manifest: cerro-torre repository
+# - Gateway/policy: svalinn repository
+# - Runtime execution: vordr repository
+# - WordPress hardening: php-aegis, sanctify-php repositories

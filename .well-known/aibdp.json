@@ -1,0 +1,59 @@
+{
+  "$schema": "https://consent-aware-http.org/schemas/aibdp-v0.2.json",
+  "version": "0.2",
+  "service": {
+    "name": "LCB Website",
+    "description": "Hardened WordPress deployment demonstrating verified container stack",
+    "url": "https://github.com/hyperpolymath/lcb-website",
+    "contact": {
+      "type": "email",
+      "value": "lcb-site:ops"
+    }
+  },
+  "consent_required": true,
+  "acceptable_purposes": [
+    "research",
+    "training-excluded",
+    "monitoring",
+    "security-audit"
+  ],
+  "data_types": {
+    "collected": [
+      "public-content",
+      "metadata",
+      "logs"
+    ],
+    "excluded": [
+      "personal-identifiable-information",
+      "authentication-credentials",
+      "private-content"
+    ]
+  },
+  "credential_requirements": {
+    "minimum_level": "declared",
+    "accepted_schemes": [
+      "bearer-token",
+      "oauth2",
+      "signed-request"
+    ]
+  },
+  "enforcement": {
+    "mode": "strict",
+    "response_code": 430,
+    "response_headers": {
+      "Preference-Required": "consent-aware-http",
+      "Link": "</.well-known/aibdp.json>; rel=\"consent-policy\""
+    }
+  },
+  "rate_limiting": {
+    "consenting_bots": {
+      "requests_per_hour": 1000,
+      "burst": 50
+    },
+    "non_consenting": {
+      "requests_per_hour": 0
+    }
+  },
+  "documentation_url": "https://consent-aware-http.org/",
+  "last_updated": "2026-01-22T00:00:00Z"
+}
