@@ -96,11 +96,11 @@ sub vcl_deliver {
 sub vcl_synth {
     # Custom 430 Consent Required response
     if (resp.status == 430) {
-        set resp.http.Content-Type = "application/json";
+        set resp.http.Content-Type = "text/plain";
         set resp.http.Preference-Required = "consent-aware-http";
-        set resp.http.Link = "</.well-known/aibdp.json>; rel=\"consent-policy\"";
+        set resp.http.Link = "/.well-known/aibdp.json; rel=consent-policy";
 
-        synthetic({"{"error": "Consent Required", "status": 430, "message": "This service requires AIBDP consent declaration", "policy": "/.well-known/aibdp.json", "documentation": "https://consent-aware-http.org/"}"});
+        synthetic("430 Consent Required: This service requires AIBDP consent declaration. See /.well-known/aibdp.json");
 
         return (deliver);
     }
