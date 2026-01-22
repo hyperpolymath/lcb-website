@@ -7,7 +7,7 @@ version: '3.8'
 
 services:
   wordpress:
-    image: wordpress:6.9.0-php8.5-apache
+    image: docker.io/library/wordpress:6.9.0-php8.5-apache
     container_name: lcb-wordpress-dev
     ports:
       - "8080:80"
@@ -25,7 +25,7 @@ services:
       - wordpress_data:/var/www/html
       - ./wp-content/themes:/var/www/html/wp-content/themes
       - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
-      - ./.well-known:/var/www/html/.well-known:ro
+      - ./.well-known:/var/www/html/.well-known:ro,z
     depends_on:
       - db
     restart: unless-stopped
@@ -36,7 +36,7 @@ services:
       - lcb-network
 
   db:
-    image: mariadb:11.2
+    image: docker.io/library/mariadb:11.2
     container_name: lcb-mariadb-dev
     environment:
       MYSQL_ROOT_PASSWORD: root_password
@@ -54,14 +54,15 @@ services:
 
   # Varnish cache layer (optional for dev)
   varnish:
-    image: varnish:7.4
+    image: docker.io/library/varnish:7.4
     container_name: lcb-varnish-dev
     ports:
-      - "8081:80"
+      - "8081:8080"
     environment:
       VARNISH_SIZE: 256M
+      VARNISH_HTTP_PORT: 8080
     volumes:
-      - ./services/varnish/default.vcl:/etc/varnish/default.vcl:ro
+      - ./services/varnish/default.vcl:/etc/varnish/default.vcl:ro,z
     depends_on:
       - wordpress
     restart: unless-stopped
@@ -70,7 +71,9 @@ services:
       - "com.hyperpolymath.component=cache"
     networks:
       - lcb-network
-    command: ["-a", "http=:80,HTTP", "-p", "feature=+http2", "-F", "-f", "/etc/varnish/default.vcl"]
+    user: "1000:1000"
+    entrypoint: ["/usr/sbin/varnishd"]
+    command: ["-F", "-f", "/etc/varnish/default.vcl", "-a", ":8080", "-s", "malloc,256M", "-p", "feature=+http2"]
 
 volumes:
   wordpress_data:

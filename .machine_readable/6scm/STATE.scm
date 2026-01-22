@@ -7,7 +7,7 @@
     (version "0.1.0")
     (schema-version "1.0")
     (created "2026-01-19")
-    (updated "2026-01-19")
+    (updated "2026-01-22")
     (project "lcb-website")
     (repo "github.com/hyperpolymath/lcb-website"))
 
@@ -18,9 +18,9 @@
 
   (current-position
     (phase "implementation")
-    (overall-completion 65)
-    (components ("container baseline" "manifest" "consent docs" "automation" "ci-cd" "docker-compose" "varnish-config"))
-    (working-features ("infra/wordpress.ctp" "justfile automation" "GitHub workflows" ".well-known/aibdp.json" "docker-compose.yml" "svalinn-compose.yml" "Varnish consent enforcement")))
+    (overall-completion 72)
+    (components ("container baseline" "manifest" "consent docs" "automation" "ci-cd" "docker-compose" "varnish-config" "asdf-tooling"))
+    (working-features ("infra/wordpress.ctp with checksums" "justfile automation" "GitHub workflows" ".well-known/aibdp.json" "docker-compose.yml tested locally" "svalinn-compose.yml" "Varnish consent enforcement" "ASDF varnish+openlitespeed plugins")))
 
   (route-to-mvp
     (milestones
@@ -30,14 +30,14 @@
 
   (blockers-and-issues
     (critical ())
-    (high ("DHI WordPress tag not published yet" "Component repos (svalinn, cerro-torre, vordr) need implementation"))
-    (medium ("ct binary not built locally" "Checksum TODOs in wordpress.ctp"))
-    (low ("Monitoring dashboards need docs" "ASDF varnish/openlitespeed plugins need creation")))
+    (high ("DHI WordPress tag not published yet" "Alire index version mismatch prevents ct binary build"))
+    (medium ("feedback-o-tron MCP integration needed" "ZeroTier/Twingate manifests need creation"))
+    (low ("Monitoring dashboards need docs" "Varnish container rootless port binding")))
 
   (critical-next-actions
-    (immediate ("Test docker-compose.yml locally" "Fill checksum TODOs in wordpress.ctp"))
-    (this-week ("Create stub implementations for svalinn/cerro-torre/vordr" "Set up ASDF plugins for varnish/openlitespeed"))
-    (this-month ("Build ct binary (requires alr)" "Wire ZeroTier/Twingate manifests" "Integrate feedback-o-tron")))
+    (immediate ("Fix Alire index version for ct build" "Fix Varnish container port binding"))
+    (this-week ("Wire feedback-o-tron MCP integration" "Create ZeroTier/Twingate K8s manifests"))
+    (this-month ("Deploy test stack on Eclipse drive" "Set up OpenLiteSpeed + Varnish via ASDF" "Integrate indieweb2-bastion")))
 
   (session-history
     ((date "2026-01-22")
@@ -51,4 +51,15 @@
         "Set up ASDF tooling (.tool-versions)"
         "Created MariaDB configuration"
         "Added .env.example and .gitignore"))
-     (next-session "Test compose stack, fill checksums, create component stubs")))))))
+     (next-session "Test compose stack, fill checksums, create component stubs"))
+    ((date "2026-01-22-evening")
+     (accomplishments
+       ("Tested docker-compose.yml locally (WordPress + MariaDB working)"
+        "Fixed docker-compose.yml for podman compatibility (fully qualified image names, SELinux contexts)"
+        "Filled all checksum TODOs in wordpress.ctp (wp-sinople-theme, php-aegis, .well-known)"
+        "Verified svalinn/cerro-torre/vordr repos have substantial implementations"
+        "Set up ASDF plugins for varnish and openlitespeed"
+        "Attempted cerro-torre ct binary build (blocked by Alire index version 1.4.0 vs 1.3.0 mismatch)"
+        "Identified ZeroTier/Twingate repos as template stubs needing implementation"
+        "Reviewed feedback-o-tron Elixir MCP integration requirements"))
+     (next-session "Fix Alire for ct build, wire feedback-o-tron MCP, create ZeroTier manifests")))))))

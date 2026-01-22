@@ -55,7 +55,7 @@ version = "0.1.0"
 [[inputs.sources.artifacts]]
 filename = "wp-sinople-theme"
 uri = "file://../wp-sinople-theme/wordpress"
-sha256 = "TODO: record checksum of theme tree"
+sha256 = "b358183f45f3232b0f2bf742a5ef3c033347a77fd05c0e6eee0684ddc68b4737"
 
 [[inputs.sources]]
 id = "php-aegis-mu"
@@ -66,7 +66,7 @@ version = "1.0.0"
 [[inputs.sources.artifacts]]
 filename = "php-aegis-mu"
 uri = "file://../php-aegis/src"
-sha256 = "TODO: record checksum of php-aegis helper files"
+sha256 = "35017a37f886ef9a139030a57d4dbbab975cd0f0e57afb2e84d961ffef5d019d"
 
 [[inputs.sources]]
 id = "well-known-assets"
@@ -77,7 +77,7 @@ version = "2026-01-09"
 [[inputs.sources.artifacts]]
 filename = "well-known"
 uri = "file://../.well-known"
-sha256 = "TODO: checksum the .well-known tree"
+sha256 = "e078a2bd2b181e1e8c31a8982e74aefa7f2d828aa233150103edf4b18ca68231"
 
 [build]
 system = "cerro_image"
