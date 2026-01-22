@@ -1,0 +1,76 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+name: RSR Validation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions: read-all
+
+jobs:
+  validate:
+    name: Validate RSR Compliance
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: Install just
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+
+      - name: Check required files exist
+        run: |
+          echo "Checking RSR required files..."
+          test -f README.md || (echo "❌ Missing README.md" && exit 1)
+          test -f LEGAL.txt || (echo "❌ Missing LEGAL.txt" && exit 1)
+          test -f .machine_readable/6scm/STATE.scm || (echo "❌ Missing STATE.scm" && exit 1)
+          test -f .machine_readable/6scm/ECOSYSTEM.scm || (echo "❌ Missing ECOSYSTEM.scm" && exit 1)
+          test -f .machine_readable/6scm/META.scm || (echo "❌ Missing META.scm" && exit 1)
+          echo "✅ All RSR files present"
+
+      - name: Run RSR validation
+        run: just validate-rsr
+
+      - name: Validate .well-known files
+        run: just validate-wellknown
+
+  wellknown-validation:
+    name: Validate Well-Known Files
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: Validate JSON files
+        run: |
+          echo "Validating .well-known JSON files..."
+          for file in .well-known/*.json; do
+            if [ -f "$file" ]; then
+              echo "Checking $file..."
+              jq empty "$file" && echo "✅ $file is valid JSON" || (echo "❌ $file is invalid JSON" && exit 1)
+            fi
+          done
+
+      - name: Check AIBDP schema compliance
+        run: |
+          echo "Checking AIBDP compliance..."
+          jq -e '.version' .well-known/aibdp.json >/dev/null || (echo "❌ Missing version field" && exit 1)
+          jq -e '.consent_required' .well-known/aibdp.json >/dev/null || (echo "❌ Missing consent_required field" && exit 1)
+          jq -e '.acceptable_purposes' .well-known/aibdp.json >/dev/null || (echo "❌ Missing acceptable_purposes field" && exit 1)
+          echo "✅ AIBDP compliance validated"
+
+      - name: Check security.txt format
+        run: |
+          echo "Validating security.txt..."
+          grep -q "Contact:" .well-known/security.txt || (echo "❌ Missing Contact field" && exit 1)
+          grep -q "Expires:" .well-known/security.txt || (echo "❌ Missing Expires field" && exit 1)
+          echo "✅ security.txt format validated"

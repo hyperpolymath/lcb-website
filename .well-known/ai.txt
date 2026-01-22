@@ -1,0 +1,30 @@
+# AI and Bot Access Policy
+# This site implements consent-aware HTTP (AIBDP)
+
+User-agent: *
+Disallow: /wp-admin/
+Disallow: /wp-includes/
+Disallow: /wp-content/uploads/private/
+
+# Consent Required
+# All AI agents and bots must:
+# 1. Present AIBDP declaration via HTTP headers
+# 2. Specify purpose from acceptable_purposes in /.well-known/aibdp.json
+# 3. Respect rate limits and credential requirements
+#
+# Non-consenting requests receive HTTP 430 (Consent Required)
+
+AI-Purpose: research, training-excluded, monitoring, security-audit
+AI-Consent-Policy: /.well-known/aibdp.json
+AI-Documentation: https://consent-aware-http.org/
+
+# Training Data Exclusion
+# The content on this site MUST NOT be used for:
+# - Training machine learning models
+# - Building datasets for AI training
+# - Fine-tuning language models
+# Without explicit written consent from hyperpolymath
+
+# Research Access
+# Researchers may access with proper AIBDP declaration
+# Contact: lcb-site:ops for research agreements

@@ -1,0 +1,85 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Docker Compose for LCB Website Development
+# This is a development-only configuration.
+# Production uses svalinn-compose.yml with verified container stack.
+
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress:6.9.0-php8.5-apache
+    container_name: lcb-wordpress-dev
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress_password
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: 1
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_ENVIRONMENT_TYPE', 'development');
+        define('WP_DEBUG_LOG', true);
+        define('WP_DEBUG_DISPLAY', false);
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./wp-content/themes:/var/www/html/wp-content/themes
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
+      - ./.well-known:/var/www/html/.well-known:ro
+    depends_on:
+      - db
+    restart: unless-stopped
+    labels:
+      - "com.hyperpolymath.stack=development"
+      - "com.hyperpolymath.component=wordpress"
+    networks:
+      - lcb-network
+
+  db:
+    image: mariadb:11.2
+    container_name: lcb-mariadb-dev
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress_password
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+    labels:
+      - "com.hyperpolymath.stack=development"
+      - "com.hyperpolymath.component=database"
+    networks:
+      - lcb-network
+
+  # Varnish cache layer (optional for dev)
+  varnish:
+    image: varnish:7.4
+    container_name: lcb-varnish-dev
+    ports:
+      - "8081:80"
+    environment:
+      VARNISH_SIZE: 256M
+    volumes:
+      - ./services/varnish/default.vcl:/etc/varnish/default.vcl:ro
+    depends_on:
+      - wordpress
+    restart: unless-stopped
+    labels:
+      - "com.hyperpolymath.stack=development"
+      - "com.hyperpolymath.component=cache"
+    networks:
+      - lcb-network
+    command: ["-a", "http=:80,HTTP", "-p", "feature=+http2", "-F", "-f", "/etc/varnish/default.vcl"]
+
+volumes:
+  wordpress_data:
+    driver: local
+  db_data:
+    driver: local
+
+networks:
+  lcb-network:
+    driver: bridge
+    labels:
+      - "com.hyperpolymath.environment=development"

@@ -18,9 +18,9 @@
 
   (current-position
     (phase "implementation")
-    (overall-completion 35)
-    (components ("container baseline" "manifest" "consent docs" "automation"))
-    (working-features ("infra/wordpress.ctp" "ASDF toolchain" "ZeroTier/Twingate notes")))
+    (overall-completion 65)
+    (components ("container baseline" "manifest" "consent docs" "automation" "ci-cd" "docker-compose" "varnish-config"))
+    (working-features ("infra/wordpress.ctp" "justfile automation" "GitHub workflows" ".well-known/aibdp.json" "docker-compose.yml" "svalinn-compose.yml" "Varnish consent enforcement")))
 
   (route-to-mvp
     (milestones
@@ -30,13 +30,25 @@
 
   (blockers-and-issues
     (critical ())
-    (high ("DHI WordPress tag not published yet"))
-    (medium ("ct binary not built locally"))
-    (low ("Monitoring dashboards need docs")))
+    (high ("DHI WordPress tag not published yet" "Component repos (svalinn, cerro-torre, vordr) need implementation"))
+    (medium ("ct binary not built locally" "Checksum TODOs in wordpress.ctp"))
+    (low ("Monitoring dashboards need docs" "ASDF varnish/openlitespeed plugins need creation")))
 
   (critical-next-actions
-    (immediate ("Build ct (requires alr)" "Capture SBOM/in-toto outputs"))
-    (this-week ("Wire ZeroTier/Twingate manifests" "Refresh well-known assets"))
-    (this-month ("Formalize automation hooks" "Hand over manifest to CT")))
+    (immediate ("Test docker-compose.yml locally" "Fill checksum TODOs in wordpress.ctp"))
+    (this-week ("Create stub implementations for svalinn/cerro-torre/vordr" "Set up ASDF plugins for varnish/openlitespeed"))
+    (this-month ("Build ct binary (requires alr)" "Wire ZeroTier/Twingate manifests" "Integrate feedback-o-tron")))
 
-  (session-history ()))))
+  (session-history
+    ((date "2026-01-22")
+     (accomplishments
+       ("Created justfile with validation and build commands"
+        "Set up GitHub workflows (CodeQL, security scanning, RSR validation)"
+        "Implemented .well-known structure with AIBDP, security.txt, ai.txt"
+        "Created docker-compose.yml for development environment"
+        "Created svalinn-compose.yml for production verified stack"
+        "Implemented Varnish VCL with consent-aware HTTP enforcement"
+        "Set up ASDF tooling (.tool-versions)"
+        "Created MariaDB configuration"
+        "Added .env.example and .gitignore"))
+     (next-session "Test compose stack, fill checksums, create component stubs")))))))
