@@ -2,3 +2,5 @@
 # Auto-generated - update as needed
 
 deno 2.1.5
+varnish 7.4.3
+openlitespeed 1.8.5

@@ -7,7 +7,7 @@ revision = 0
 kind = "container_image"
 summary = "Hardened LCB WordPress runtime (Sinople + php-aegis)"
 description = "Debian-based Hardened Images WordPress package, extended with the Sinople theme, php-aegis helpers, consent-aware HTTP/.well-known assets, and automation hooks."
-license = "MPL-2.0 OR LicenseRef-Palimpsest-0.4"
+license = "PMPL-1.0-or-later"
 homepage = "https://github.com/hyperpolymath/lcb-website"
 maintainer = "lcb-site:ops"
 keywords = ["wordpress", "hardened", "sinople", "lcb"]
@@ -38,13 +38,15 @@ required = true
 [[inputs.sources]]
 id = "wordpress-base"
 type = "oci_image"
-name = "wordpress"
-version = "6.9.0-php8.5-apache"
+name = "openlitespeed-wordpress"
+version = "1.8.3-lsphp84"
+comment = "Using OpenLiteSpeed as web server per ASDF.md spec. WordPress will be layered on top."
 
 [[inputs.sources.artifacts]]
-filename = "docker.io-wordpress-6.9.0-php8.5-apache.oci"
-uri = "oci://docker.io/library/wordpress:6.9.0-php8.5-apache"
-sha256 = "b00800d362f90cd1db803eaac8994b5353e9fdbf1d7386baa798e4f63110cdc3"
+filename = "docker.io-litespeedtech-openlitespeed-1.8.3-lsphp84.oci"
+uri = "oci://docker.io/litespeedtech/openlitespeed:1.8.3-lsphp84"
+sha256 = "CHECKSUM_NEEDED"
+comment = "Replace CHECKSUM_NEEDED with actual SHA256 after pulling image"
 
 [[inputs.sources]]
 id = "sinople-theme"
@@ -100,9 +102,12 @@ step = "assemble_rootfs"
 step = "emit_oci_image"
 
 [build.plan.image]
-entrypoint = ["/usr/local/bin/php", "-S", "0.0.0.0:8080", "-t", "/var/www/html"]
-cmd = ["-d", "variables_order=EGPCS"]
-labels = { "org.opencontainers.image.title" = "LCB WordPress" }
+entrypoint = ["/usr/local/lsws/bin/lswsctrl", "start"]
+cmd = []
+labels = {
+  "org.opencontainers.image.title" = "LCB WordPress with OpenLiteSpeed",
+  "org.opencontainers.image.description" = "Hardened WordPress runtime with OpenLiteSpeed, Sinople theme, and php-aegis"
+}
 
 [outputs]
 primary = "lcb-wordpress"
