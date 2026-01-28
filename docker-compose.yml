@@ -1,37 +1,47 @@
 # SPDX-License-Identifier: PMPL-1.0-or-later
-# Docker Compose for LCB Website Development
+# SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>
+#
+# Docker Compose for LCB Website Development with OpenLiteSpeed
 # This is a development-only configuration.
+# WARNING: EXPERIMENTAL - Use nuj-lcb-production for actual deployment
 # Production uses svalinn-compose.yml with verified container stack.
 
 version: '3.8'
 
 services:
   wordpress:
-    image: docker.io/library/wordpress:6.9.0-php8.5-apache
-    container_name: lcb-wordpress-dev
+    image: docker.io/litespeedtech/openlitespeed:1.8.3-lsphp84
+    container_name: lcb-wordpress-ols-dev
     ports:
       - "8080:80"
+      - "7080:7080"  # OLS admin console
     environment:
+      # Database connection
+      MYSQL_HOST: db
+      MYSQL_DB: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress_password
+      # WordPress settings
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress_password
       WORDPRESS_DB_NAME: wordpress
-      WORDPRESS_DEBUG: 1
       WORDPRESS_CONFIG_EXTRA: |
         define('WP_ENVIRONMENT_TYPE', 'development');
         define('WP_DEBUG_LOG', true);
         define('WP_DEBUG_DISPLAY', false);
     volumes:
-      - wordpress_data:/var/www/html
-      - ./wp-content/themes:/var/www/html/wp-content/themes
-      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
-      - ./.well-known:/var/www/html/.well-known:ro,z
+      - wordpress_data:/var/www/vhosts/localhost/html
+      - ./wp-content/themes:/var/www/vhosts/localhost/html/wp-content/themes:z
+      - ./wp-content/mu-plugins:/var/www/vhosts/localhost/html/wp-content/mu-plugins:z
+      - ./.well-known:/var/www/vhosts/localhost/html/.well-known:ro,z
     depends_on:
       - db
     restart: unless-stopped
     labels:
       - "com.hyperpolymath.stack=development"
       - "com.hyperpolymath.component=wordpress"
+      - "com.hyperpolymath.webserver=openlitespeed"
     networks:
       - lcb-network
 
@@ -52,7 +62,7 @@ services:
     networks:
       - lcb-network
 
-  # Varnish cache layer (optional for dev)
+  # Varnish cache layer
   varnish:
     image: docker.io/library/varnish:7.4
     container_name: lcb-varnish-dev

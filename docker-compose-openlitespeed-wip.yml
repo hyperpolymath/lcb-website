@@ -1,0 +1,96 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Docker Compose for LCB Website Development with OpenLiteSpeed
+# This is a development-only configuration.
+# Production uses svalinn-compose.yml with verified container stack.
+
+version: '3.8'
+
+services:
+  wordpress:
+    image: docker.io/litespeedtech/openlitespeed:1.8.3-lsphp84
+    container_name: lcb-wordpress-ols-dev
+    ports:
+      - "8080:80"
+      - "7080:7080"  # OLS admin console
+    environment:
+      # WordPress database settings
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress_password
+      WORDPRESS_DB_NAME: wordpress
+      # OpenLiteSpeed settings
+      OLS_USER: wordpress
+      OLS_GROUP: wordpress
+      OLS_ADMIN_USER: admin
+      OLS_ADMIN_PASSWORD: ${OLS_ADMIN_PASSWORD:-admin123}
+      # PHP settings
+      PHP_VERSION: lsphp84
+    volumes:
+      - wordpress_data:/var/www/vhosts/localhost/html
+      - ./wp-content/themes:/var/www/vhosts/localhost/html/wp-content/themes
+      - ./wp-content/mu-plugins:/var/www/vhosts/localhost/html/wp-content/mu-plugins
+      - ./.well-known:/var/www/vhosts/localhost/html/.well-known:ro,z
+      # Config files need to be writable for OpenLiteSpeed to start
+      - ./services/openlitespeed/httpd_config.conf:/usr/local/lsws/conf/httpd_config.conf:z
+      - ./services/openlitespeed/vhosts:/usr/local/lsws/conf/vhosts:z
+    depends_on:
+      - db
+    restart: unless-stopped
+    labels:
+      - "com.hyperpolymath.stack=development"
+      - "com.hyperpolymath.component=wordpress"
+      - "com.hyperpolymath.webserver=openlitespeed"
+    networks:
+      - lcb-network
+
+  db:
+    image: docker.io/library/mariadb:11.2
+    container_name: lcb-mariadb-dev
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress_password
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+    labels:
+      - "com.hyperpolymath.stack=development"
+      - "com.hyperpolymath.component=database"
+    networks:
+      - lcb-network
+
+  # Varnish cache layer (optional for dev)
+  varnish:
+    image: docker.io/library/varnish:7.4
+    container_name: lcb-varnish-dev
+    ports:
+      - "8081:8080"
+    environment:
+      VARNISH_SIZE: 256M
+      VARNISH_HTTP_PORT: 8080
+    volumes:
+      - ./services/varnish/default.vcl:/etc/varnish/default.vcl:ro,z
+    depends_on:
+      - wordpress
+    restart: unless-stopped
+    labels:
+      - "com.hyperpolymath.stack=development"
+      - "com.hyperpolymath.component=cache"
+    networks:
+      - lcb-network
+    user: "1000:1000"
+    entrypoint: ["/usr/sbin/varnishd"]
+    command: ["-F", "-f", "/etc/varnish/default.vcl", "-a", ":8080", "-s", "malloc,256M", "-p", "feature=+http2"]
+
+volumes:
+  wordpress_data:
+    driver: local
+  db_data:
+    driver: local
+
+networks:
+  lcb-network:
+    driver: bridge
+    labels:
+      - "com.hyperpolymath.environment=development"

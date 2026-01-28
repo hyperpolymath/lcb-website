@@ -1,6 +1,12 @@
-# lcb-website
+# ⚠️ lcb-website - EXPERIMENTAL TESTBED
 
-Website project for LCB. Track updates and assets for the hyperpolymath initiative.
+**WARNING: This is an EXPERIMENTAL repository. For production deployment, use `nuj-lcb-production` instead.**
+
+See [EXPERIMENTAL-TESTBED.md](EXPERIMENTAL-TESTBED.md) for full details.
+
+---
+
+This repo tests advanced container infrastructure (Vörðr, Cerro Torre, Svalinn) for the hyperpolymath initiative. Components are incomplete and NOT production-ready.
 
 ## Container Baseline
 
