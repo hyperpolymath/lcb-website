@@ -13,7 +13,7 @@
     (subcategory "hardened WordPress + consent stack")
     (unique-value "dogfooding Svalinn/Cerro Torre/Vörðr with documented consent automation"))
 
-  (related-projects ("svalinn" "cerro-torre" "vordr" "consent-aware-http" "feedback-o-tron" "twingate-helm-deploy" "zerotier-k8s-link" "well-known-ecosystem"))
+  (related-projects ("svalinn" "cerro-torre" "vordr" "consent-aware-http" "feedback-o-tron" "twingate-helm-deploy" "zerotier-k8s-link" "well-known-ecosystem" "verisimdb" "vql" "vql-dt" "sanctify-php" "http-capability-gateway" "proven" "eclexia-tea-framework" "cadre-tea-router" "eclexia-dom-mounter"))
 
   (what-this-is ("A coordinating repo for the hardened LCB site, linking container manifests, consent policy docs, automation instructions, and machine-readable metadata."))
 
