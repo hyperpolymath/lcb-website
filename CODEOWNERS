@@ -1,0 +1,66 @@
+# CODEOWNERS
+#
+# This file defines individuals or teams that are responsible for code in specific directories or files.
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# for more information.
+
+# Default owners for the entire repository
+* @hyperpolymath
+
+# ReScript-specific files and directories
+*.res @hyperpolymath
+/src/**/*.res @hyperpolymath
+/src/**/*.resi @hyperpolymath
+
+# Julia-specific files and directories
+*.jl @hyperpolymath
+/src/**/*.jl @hyperpolymath
+
+# WebAssembly (WASM) and proxy-related files
+/wasm/ @hyperpolymath
+/proxy/ @hyperpolymath
+
+# Security and automation tools
+/security/ @hyperpolymath
+/automation/ @hyperpolymath
+Hypatia/ @hyperpolymath
+php-aegis/ @hyperpolymath
+sactify-php/ @hyperpolymath
+proven-library/ @hyperpolymath
+robot-repo-automaton/ @hyperpolymath
+
+# Infrastructure and deployment
+/infra/ @hyperpolymath
+/terraform/ @hyperpolymath
+/ansible/ @hyperpolymath
+
+# Documentation
+/docs/ @hyperpolymath
+README.md @hyperpolymath
+CONTRIBUTING.md @hyperpolymath
+CODE_OF_CONDUCT.md @hyperpolymath
+
+# GitHub Actions and workflows
+.github/workflows/ @hyperpolymath
+.github/actions/ @hyperpolymath
+
+# Containerization and OCI standards
+Containerfile @hyperpolymath
+Dockerfile @hyperpolymath
+/k8s/ @hyperpolymath
+
+# Communication and community
+/community/ @hyperpolymath
+/discourse/ @hyperpolymath
+/zulip/ @hyperpolymath
+
+# LochNeSyBRAIn and AffineScript projects
+/LochNeSyBRAIn/ @hyperpolymath
+/AffineScript/ @hyperpolymath
+/QML/ @hyperpolymath
+
+# Julia libraries
+/ProvenCrypto.jl/ @hyperpolymath
+/Bowtie.jl/ @hyperpolymath
+/Exnovation.jl/ @hyperpolymath
+/Axiom.jl/ @hyperpolymath
