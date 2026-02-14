@@ -1,0 +1,24 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= K9 Contractiles — LCB Website
+:toc:
+
+K9 contractiles are self-validating configuration components using Nickel.
+
+== Security Levels ("The Leash")
+
+`'Kennel`:: Pure data — no side effects, no signature required.
+`'Yard`:: Validated config — Nickel evaluation only, signature recommended.
+`'Hunt`:: Full execution — Just recipes, signature *required*.
+
+== LCB Website K9 Files
+
+* `wordpress-config.k9.ncl` — Kennel-level WordPress configuration data (DB settings, cache TTLs, security constants).
+* `deployment-config.k9.ncl` — Yard-level deployment validation (Verpex settings, Cloudflare DNS, SSL mode).
+
+== Integration
+
+K9 contractiles complement the main contractiles (must/trust/dust/lust) by
+providing type-checked, self-validating configuration that can be consumed by
+the justfile, Containerfile, or deployment scripts.
+
+See `rsr-template-repo/contractiles/k9/` for the full K9 specification.

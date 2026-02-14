@@ -1,0 +1,45 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Intentfile - declared future intent for lcb-website
+# Roadmap towards verified container deployment via stapeln pipeline
+
+version: 1
+
+future:
+  stapeln-integration:
+    - "Build lcb-wordpress image via Containerfile with Chainguard wolfi-base."
+    - "Sign with cerro-torre (Ed25519 + Dilithium5-AES hybrid)."
+    - "Deploy via selur-compose.yml with svalinn gateway + vordr runtime."
+    - "Replace Verpex shared hosting with self-hosted verified container stack."
+
+  security-evolution:
+    - "Migrate policy hashes from SHA-256 to SHAKE3-512 (FIPS 202)."
+    - "Implement Ed448 + Dilithium5 hybrid signatures for CTP manifests."
+    - "Add Kyber-1024 (ML-KEM-1024) post-quantum key exchange for bundle transfer."
+    - "Enable SPHINCS+ fallback for all hybrid PQ signature systems."
+    - "Formal verification of crypto primitives via Coq/Isabelle."
+
+  consent-hardening:
+    - "Full AIBDP enforcement at svalinn gateway level (HTTP 430)."
+    - "Cedar policy engine integration for fine-grained consent rules."
+    - "Consent audit trail in feedback-o-tron with in-toto attestations."
+
+  accessibility:
+    - "WCAG 2.3 AAA certification for Sinople theme."
+    - "ARIA landmark audit with axe-core in CI."
+    - "Semantic XML validation in build pipeline."
+
+  members-platform:
+    - "Self-service NUJ membership verification via API integration."
+    - "Encrypted member communications channel."
+    - "Privacy-preserving member directory (opt-in only)."
+
+  monitoring:
+    - "UptimeRobot integration for availability monitoring."
+    - "Wordfence alerting pipeline into feedback-o-tron."
+    - "LiteSpeed Cache hit-rate dashboards."
+    - "Security header compliance monitoring (securityheaders.com API)."
+
+  content-pipeline:
+    - "WP-CLI automated content deployment from content/ markdown files."
+    - "GitOps-style content updates: merge to main triggers WP-CLI sync."
+    - "Markdown-to-WordPress block converter for content/pages/."

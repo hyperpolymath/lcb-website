@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= LCB Website Contractiles
+:toc:
+:sectnums:
+
+This directory contains the contractiles for the NUJ London Central Branch website deployment. These establish the operational, validation, trust, recovery, and intent framework for the hardened WordPress stack.
+
+== Fill-In Instructions
+
+1. `must/Mustfile` validates lcb-website invariants: Sinople theme, .well-known files, robots.txt, security headers, SPDX headers.
+2. `trust/Trustfile.hs` embeds the full cryptographic specification and verifies policy hashes, schema signatures, PQ signatures, and migration provenance.
+3. `dust/Dustfile` defines WordPress-specific rollback and recovery: database restores, theme rollback, plugin rollback, .htaccess recovery.
+4. `lust/Intentfile` declares the stapeln integration roadmap: Cerro Torre verified builds, Selur orchestration, Vordr runtime.
+
+== Contents
+
+* `must/Mustfile` - WordPress deployment invariant checks.
+* `trust/Trustfile.hs` - Cryptographic verification with full security requirements spec.
+* `dust/Dustfile` - WordPress rollback and recovery semantics.
+* `lust/Intentfile` - Future intent: stapeln pipeline, verified containers.
+* `k9/` - K9 contractiles for self-validating configuration.

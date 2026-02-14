@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# .htaccess rules for .well-known/ directory
+# Ensures aibdp.json, security.txt, and ai.txt are served correctly,
+# bypassing WordPress routing.
+#
+# Add these rules BEFORE the WordPress rewrite block in .htaccess
+
+# === Serve .well-known directly, bypass WordPress ===
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^\.well-known/ - [L]
+</IfModule>
+
+# === AIBDP consent policy ===
+<Files "aibdp.json">
+    <IfModule mod_headers.c>
+        Header set Content-Type "application/json"
+        Header set Access-Control-Allow-Origin "*"
+        Header set Cache-Control "public, max-age=3600"
+    </IfModule>
+</Files>
+
+# === Security.txt ===
+<Files "security.txt">
+    <IfModule mod_headers.c>
+        Header set Content-Type "text/plain; charset=utf-8"
+        Header set Cache-Control "public, max-age=86400"
+    </IfModule>
+</Files>
+
+# === AI.txt ===
+<Files "ai.txt">
+    <IfModule mod_headers.c>
+        Header set Content-Type "text/plain; charset=utf-8"
+        Header set Cache-Control "public, max-age=86400"
+    </IfModule>
+</Files>
+
+# === AIBDP consent enforcement (basic) ===
+# Blocks known AI training bots that haven't declared consent.
+# HTTP 430 is non-standard; LiteSpeed may not support it.
+# Fallback: robots.txt block + PHP-level enforcement in Sinople theme.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTP:X-AIBDP-Consent} !^accepted$ [NC]
+RewriteCond %{HTTP_USER_AGENT} (GPTBot|ChatGPT-User|CCBot|anthropic-ai|Claude-Web|cohere-ai|Google-Extended|Bytespider|PetalBot) [NC]
+RewriteRule .* - [F,L]
+</IfModule>
+# Note: Using 403 Forbidden instead of 430 for maximum compatibility.
+# The Sinople theme PHP layer returns proper 430 with JSON error body.

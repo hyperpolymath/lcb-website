@@ -1,0 +1,203 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# selur-compose.yml — stapeln orchestration for LCB Website Production
+# Runtime: selur (svalinn + vordr) with lcb-wordpress .ctp bundle
+#
+# Requires: selur CLI, cerro-torre manifests, vordr runtime
+# Build the image first: podman build -f Containerfile -t lcb-wordpress:6.9.0 .
+# Sign: cerro-torre sign lcb-wordpress:6.9.0
+# Deploy: selur-compose up -d
+#
+# Status: TEMPLATE — requires stapeln component repos to be functional
+
+version: '3.8'
+
+x-svalinn-policy: &default-policy
+  verification:
+    require_manifest: true
+    require_attestation: true
+    require_signature: true
+  security:
+    selinux_enforcing: true
+    seccomp_profile: runtime/default
+    capabilities_drop:
+      - ALL
+    capabilities_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETGID
+      - SETUID
+  consent:
+    enforce_aibdp: true
+    aibdp_policy_url: "/.well-known/aibdp.json"
+    reject_non_consenting: true
+
+services:
+  # Svalinn gateway — HTTP gateway with policy enforcement
+  selur-sv:
+    image: ghcr.io/hyperpolymath/selur-sv:latest
+    container_name: lcb-selur-sv
+    ports:
+      - "443:8000"
+      - "80:8080"
+    environment:
+      SELUR_BACKEND: "wordpress:8080"
+      SELUR_TLS_CERT: /etc/selur/tls/cert.pem
+      SELUR_TLS_KEY: /etc/selur/tls/key.pem
+      CONSENT_HTTP_ENABLED: 1
+      AIBDP_POLICY_PATH: "/.well-known/aibdp.json"
+    volumes:
+      - selur-trust:/etc/selur
+      - selur-data:/var/lib/selur-sv
+    depends_on:
+      - wordpress
+    restart: unless-stopped
+    labels:
+      - "com.hyperpolymath.stack=production"
+      - "com.hyperpolymath.component=gateway"
+    networks:
+      - lcb-network
+    x-svalinn:
+      <<: *default-policy
+      consent:
+        enforce_aibdp: true
+        return_430: true
+        rate_limit:
+          consenting_bots: 1000
+          burst: 50
+          non_consenting: 0
+
+  # WordPress application
+  wordpress:
+    image: lcb-wordpress:6.9.0
+    container_name: lcb-wordpress-prod
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: wordpress
+      PHP_AEGIS_ENABLED: 1
+      CONSENT_HTTP_ENABLED: 1
+    volumes:
+      - wordpress_data:/var/www/html
+      - wordpress_logs:/var/www/html/wp-content/logs
+    depends_on:
+      - mariadb
+      - redis
+    restart: unless-stopped
+    labels:
+      - "com.hyperpolymath.stack=production"
+      - "com.hyperpolymath.component=wordpress"
+      - "com.hyperpolymath.manifest=infra/wordpress.ctp"
+      - "com.hyperpolymath.verified=true"
+    networks:
+      - lcb-network
+    x-svalinn:
+      <<: *default-policy
+      attestation:
+        require:
+          - source-signature
+          - reproducible-build
+          - sbom-complete
+        recommend:
+          - security-audit
+          - pq-signature
+      provenance:
+        sbom_path: sbom/spdx/lcb-wordpress.sbom.spdx.json
+        provenance_log: in_toto/lcb-wordpress.provenance.jsonl
+
+  # MariaDB database
+  mariadb:
+    image: cgr.dev/chainguard/mariadb:latest
+    container_name: lcb-mariadb-prod
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./services/mariadb/my.cnf:/etc/mysql/conf.d/custom.cnf:ro
+    restart: unless-stopped
+    labels:
+      - "com.hyperpolymath.stack=production"
+      - "com.hyperpolymath.component=database"
+    networks:
+      - lcb-network
+    x-svalinn:
+      <<: *default-policy
+      verification:
+        require_manifest: false
+        require_attestation: false
+      network:
+        internal: true
+        expose_only_to:
+          - wordpress
+
+  # Redis object cache
+  redis:
+    image: cgr.dev/chainguard/redis:latest
+    container_name: lcb-redis-prod
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    labels:
+      - "com.hyperpolymath.stack=production"
+      - "com.hyperpolymath.component=cache"
+    networks:
+      - lcb-network
+    x-svalinn:
+      <<: *default-policy
+      verification:
+        require_manifest: false
+      network:
+        internal: true
+        expose_only_to:
+          - wordpress
+
+volumes:
+  selur-trust:
+    driver: local
+  selur-data:
+    driver: local
+  wordpress_data:
+    driver: local
+  wordpress_logs:
+    driver: local
+  db-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  lcb-network:
+    driver: bridge
+    labels:
+      - "com.hyperpolymath.environment=production"
+      - "com.hyperpolymath.verified-stack=true"
+
+# Svalinn Gateway Configuration
+# This section is consumed by selur-compose CLI
+x-svalinn-gateway:
+  version: "1.0"
+  runtime: vordr
+  gateway:
+    address: 0.0.0.0
+    port: 8000
+    tls:
+      enabled: true
+      cert: /etc/selur/tls/cert.pem
+      key: /etc/selur/tls/key.pem
+  verification:
+    cerro_torre_path: /opt/cerro-torre/bin/ct
+    manifest_cache: /var/cache/svalinn/manifests
+    attestation_store: /var/lib/svalinn/attestations
+  vordr:
+    endpoint: http://localhost:8080/rpc
+    auth_token: ${VORDR_AUTH_TOKEN}
+  logging:
+    level: info
+    format: json
+    destinations:
+      - stdout
+      - file:///var/log/svalinn/gateway.log
+      - feedback-o-tron:///api/v1/submit

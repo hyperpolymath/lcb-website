@@ -1,19 +1,19 @@
-# ⚠️ STOP - CRITICAL READING REQUIRED
+# STOP - CRITICAL READING REQUIRED
 
 **THIS FILE MUST BE READ FIRST BY ALL AI AGENTS**
 
 ## WHAT IS THIS?
 
-This is the AI manifest for **lcb-website**. It declares:
+This is the AI manifest for **lcb-website** — the NUJ London Central Branch website (nuj-lcb.org.uk). It declares:
 - Canonical file locations (where things MUST be, and nowhere else)
 - Critical invariants (rules that must NEVER be violated)
 - Repository structure and organization
 
 ## CANONICAL LOCATIONS (UNIVERSAL RULE)
 
-### Machine-Readable Metadata: `.machine_readable/` ONLY
+### Machine-Readable Metadata: `.machine_readable/6scm/` ONLY
 
-These 6 SCM files MUST exist in `.machine_readable/` directory ONLY:
+These 6 SCM files MUST exist in `.machine_readable/6scm/` directory ONLY:
 1. **STATE.scm** - Project state, progress, blockers
 2. **META.scm** - Architecture decisions, governance
 3. **ECOSYSTEM.scm** - Position in ecosystem, relationships
@@ -25,13 +25,14 @@ These 6 SCM files MUST exist in `.machine_readable/` directory ONLY:
 
 ### Bot Directives: `.bot_directives/` ONLY
 
-Bot-specific instructions for:
-- rhodibot - Git operations
-- echidnabot - Code quality
+Bot-specific instructions for the gitbot-fleet:
+- rhodibot - Git operations and documentation
+- echidnabot - Formal verification and fuzzing
 - sustainabot - Dependency updates
-- glambot - Documentation
-- seambot - Integration
+- glambot - Documentation formatting
+- seambot - Integration testing
 - finishbot - Task completion
+- robot-repo-automaton - Automated fixes
 
 ### Agent Instructions
 
@@ -41,63 +42,83 @@ Bot-specific instructions for:
 ## CORE INVARIANTS
 
 1. **No SCM duplication** - Root must NOT contain STATE.scm, META.scm, etc.
-2. **Single source of truth** - `.machine_readable/` is authoritative
-3. **No stale metadata** - If root SCMs exist, they are OUT OF DATE
-4. **License consistency** - All code PMPL-1.0-or-later unless platform requires MPL-2.0
-5. **Author attribution** - Always "Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>"
+2. **Single source of truth** - `.machine_readable/6scm/` is authoritative
+3. **License consistency** - All code PMPL-1.0-or-later unless platform requires MPL-2.0
+4. **Author attribution** - Always "Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>"
+5. **Container standards** - Chainguard wolfi-base images, Containerfile (never Dockerfile), Podman (never Docker)
+6. **Security requirements** - Full crypto spec in `contractiles/trust/Trustfile.hs`
+7. **AI bot blocking** - robots.txt MUST block training bots, .well-known/aibdp.json MUST enforce consent
 
 ## REPOSITORY STRUCTURE
 
-<!-- CUSTOMIZE THIS SECTION FOR YOUR REPO -->
-
-This repo contains:
-
 ```
 lcb-website/
-├── 0-AI-MANIFEST.a2ml         # THIS FILE (start here)
-├── README.md                   # Project overview
-├── [your source files]         # Main code
-├── .machine_readable/          # SCM files (6 files)
+├── 0-AI-MANIFEST.a2ml              # THIS FILE (start here)
+├── README.md                        # Project overview + deployment quick-ref
+├── TOPOLOGY.md                      # Architecture diagram + completion dashboard
+├── Containerfile                    # Multi-stage Chainguard wolfi-base build
+├── selur-compose.yml                # Stapeln orchestration (svalinn+vordr)
+├── docker-compose.yml               # Local dev stack (OLS+MariaDB+Varnish)
+├── robots.txt                       # AI bot blocks
+├── infra/
+│   └── wordpress.ctp                # Cerro Torre manifest (Ed25519+Dilithium5)
+├── content/
+│   ├── pages/                       # Markdown source for WP pages
+│   ├── policies/                    # AI usage policy, legal
+│   └── mockups/                     # HTML mockups
+├── wp-content/
+│   ├── themes/sinople/              # Sinople theme + php-aegis
+│   └── mu-plugins/                  # Must-use plugins
+├── templates/
+│   ├── wp-config-security.php       # Security constants for wp-config
+│   ├── htaccess-well-known          # .well-known serving rules
+│   └── htaccess-security            # Security headers + CSP
+├── .well-known/
+│   ├── aibdp.json                   # AIBDP consent policy
+│   ├── security.txt                 # Security contacts
+│   └── ai.txt                       # AI/bot access rules
+├── contractiles/
+│   ├── must/Mustfile                # Invariant checks (13 checks)
+│   ├── trust/Trustfile.hs           # Crypto verification + security spec
+│   ├── dust/Dustfile                # WordPress rollback/recovery
+│   ├── lust/Intentfile              # Future intent (stapeln pipeline)
+│   └── k9/                          # K9 self-validating config
+├── .machine_readable/6scm/          # SCM files (6 files)
 │   ├── STATE.scm
 │   ├── META.scm
 │   ├── ECOSYSTEM.scm
 │   ├── AGENTIC.scm
 │   ├── NEUROSYM.scm
 │   └── PLAYBOOK.scm
-└── .bot_directives/            # Bot instructions
+├── .bot_directives/                 # Gitbot-fleet directives (8 bots)
+├── .github/workflows/               # 17 CI/CD workflows
+├── docs/                            # AsciiDoc documentation
+├── services/                        # Service configs (mariadb, OLS, varnish)
+└── hooks/                           # Git hooks
 ```
 
 ## SESSION STARTUP CHECKLIST
 
-✅ Read THIS file (0-AI-MANIFEST.a2ml) first
-✅ Understand canonical locations (.machine_readable/, .bot_directives/)
-✅ Know the invariants (no SCM duplication, etc.)
-✅ Check for MCP enforcement (if applicable)
-✅ Read `.machine_readable/STATE.scm` for current status
-✅ Read `.machine_readable/AGENTIC.scm` for interaction patterns
+1. Read THIS file (0-AI-MANIFEST.a2ml) first
+2. Understand canonical locations (.machine_readable/6scm/, .bot_directives/)
+3. Know the invariants (no SCM duplication, Chainguard images, etc.)
+4. Read `.machine_readable/6scm/STATE.scm` for current status
+5. Read `TOPOLOGY.md` for architecture overview + completion dashboard
+6. Read `.machine_readable/6scm/AGENTIC.scm` for interaction patterns
 
 ## LIFECYCLE HOOKS
 
 ### on-enter (Session Start)
 
-When starting a new session:
-
 1. Read and acknowledge this manifest
-2. Log session start (optional but recommended)
-   - Format: `[YYYY-MM-DD HH:MM:SS] Session started: [agent-name]`
-   - Location: `.machine_readable/session-log.txt`
-3. Read `.machine_readable/STATE.scm`
-4. Check for blockers
-5. State understanding of canonical locations
+2. Read `.machine_readable/6scm/STATE.scm`
+3. Check for blockers
+4. State understanding of canonical locations
 
 ### on-exit (Session End)
 
-When ending a session:
-
-1. Update `.machine_readable/STATE.scm` if changes made
-2. Log session end (optional but recommended)
-   - Format: `[YYYY-MM-DD HH:MM:SS] Session ended: [summary]`
-   - Location: `.machine_readable/session-log.txt`
+1. Update `.machine_readable/6scm/STATE.scm` if changes made
+2. Update `TOPOLOGY.md` completion dashboard if components changed
 3. Document new blockers
 4. Summarize outcomes
 
@@ -105,12 +126,13 @@ When ending a session:
 
 After reading this file, demonstrate understanding by stating:
 
-**"I have read the AI manifest. SCM files are located in `.machine_readable/` ONLY, bot directives in `.bot_directives/`, and I will not create duplicate files in the root directory."**
+**"I have read the AI manifest. SCM files are located in `.machine_readable/6scm/` ONLY, bot directives in `.bot_directives/`, and I will not create duplicate files in the root directory."**
 
 ## META
 
-- **Format Version:** 1.0.0
-- **Created:** [DATE]
-- **Maintained By:** [YOUR-NAME/ORG]
+- **Format Version:** 1.1.0
+- **Created:** 2026-01-19
+- **Updated:** 2026-02-14
+- **Maintained By:** Jonathan D.A. Jewell (hyperpolymath)
 - **License:** PMPL-1.0-or-later
 - **Protocol:** https://github.com/hyperpolymath/0-ai-gatekeeper-protocol

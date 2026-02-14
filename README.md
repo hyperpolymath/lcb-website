@@ -17,6 +17,21 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for local Docker setup,
 [VERPEX-DEPLOYMENT.md](VERPEX-DEPLOYMENT.md) for cPanel hosting, or
 [WORDPRESS-DEPLOYMENT-PLAN.md](WORDPRESS-DEPLOYMENT-PLAN.md) for full VPS deployment.
 
+## Deployment Quick-Reference
+
+| Path | Target |
+|------|--------|
+| **Production (now)** | Verpex cPanel + LiteSpeed Enterprise + PHP 8.4 + Cloudflare DNS |
+| **Container (future)** | `podman build -f Containerfile` → `cerro-torre sign` → `selur-compose up` |
+| **Dev (local)** | `docker compose up -d` (MariaDB + OpenLiteSpeed + Varnish) |
+
+**Key files:**
+- `Containerfile` — Multi-stage Chainguard wolfi-base build
+- `selur-compose.yml` — Stapeln orchestration (svalinn + vordr + redis + mariadb)
+- `infra/wordpress.ctp` — Cerro Torre manifest (Ed25519 + Dilithium5 sigs)
+- `templates/` — wp-config security, .htaccess well-known, security headers
+- `TOPOLOGY.md` — Architecture diagram + completion dashboard
+
 ## Content
 
 All website pages live in `content/`:
