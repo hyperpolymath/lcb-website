@@ -1,0 +1,41 @@
+#!/bin/bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Pre-push hook
+
+echo "Running pre-push checks..."
+
+# Check for large files
+echo "Checking for large files..."
+large_files=$(find . -type f -size +10M -not -path "./.git/*" -not -path "./node_modules/*" 2>/dev/null)
+if [ -n "$large_files" ]; then
+  echo "⚠️  Warning: Found large files (>10MB):"
+  echo "$large_files"
+  echo "Consider using Git LFS for large files"
+  read -p "Continue with push? (y/N) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    exit 1
+  fi
+fi
+
+# Check branch name
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$current_branch" = "main" ] || [ "$current_branch" = "master" ]; then
+  echo "Pushing to $current_branch branch"
+fi
+
+# Verify remote is correct
+remote=$(git remote -v | grep push | awk '{print $2}')
+if [[ "$remote" == *"github.com/hyperpolymath/nuj-lcb-production"* ]]; then
+  echo "✓ Pushing to correct remote: $remote"
+else
+  echo "⚠️  Remote: $remote"
+  read -p "Is this correct? (y/N) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    exit 1
+  fi
+fi
+
+echo "✅ Pre-push checks passed"
+exit 0

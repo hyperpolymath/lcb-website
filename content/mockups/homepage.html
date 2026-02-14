@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: PMPL-1.0-or-later -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NUJ London Central Branch - Homepage Mockup</title>
+  <style>
+    /* NUJ Brand Colors */
+    :root {
+      --nuj-green-dark: #006747;
+      --nuj-green: #008559;
+      --nuj-green-light: #00a572;
+      --nuj-green-pale: #e6f4f0;
+      --nuj-grey-dark: #2b2b2b;
+      --nuj-grey: #4c4c4c;
+      --nuj-grey-medium: #6e6e6e;
+      --nuj-grey-light: #a0a0a0;
+      --nuj-grey-pale: #f5f5f5;
+      --nuj-white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--nuj-grey);
+      background: var(--nuj-white);
+    }
+
+    h1, h2, h3, h4 {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--nuj-grey-dark);
+      line-height: 1.3;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--nuj-green-dark);
+      color: var(--nuj-white);
+      padding: 1rem 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-circle {
+      width: 60px;
+      height: 60px;
+      background: var(--nuj-white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--nuj-green-dark);
+      font-size: 1.5rem;
+    }
+
+    .site-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .site-tagline {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+
+    .main-nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .main-nav a {
+      color: var(--nuj-white);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 0;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .main-nav a:hover {
+      border-bottom-color: var(--nuj-green-light);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--nuj-green-dark) 0%, var(--nuj-green) 100%);
+      color: var(--nuj-white);
+      padding: 4rem 1rem;
+      text-align: center;
+    }
+
+    .hero-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--nuj-white);
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      min-height: 44px;
+      line-height: 1.5;
+    }
+
+    .btn-primary {
+      background: var(--nuj-white);
+      color: var(--nuj-green-dark);
+      border: 2px solid var(--nuj-white);
+    }
+
+    .btn-primary:hover {
+      background: var(--nuj-green-pale);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--nuj-white);
+      border: 2px solid var(--nuj-white);
+      margin-left: 1rem;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Section */
+    .section {
+      padding: 4rem 0;
+    }
+
+    .section-alt {
+      background: var(--nuj-grey-pale);
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: var(--nuj-green-dark);
+    }
+
+    /* Quick Links */
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .quick-link-card {
+      background: var(--nuj-white);
+      padding: 2rem;
+      border-radius: 8px;
+      text-align: center;
+      border: 2px solid var(--nuj-grey-light);
+      transition: all 0.2s;
+      text-decoration: none;
+      color: var(--nuj-grey);
+    }
+
+    .quick-link-card:hover {
+      border-color: var(--nuj-green-dark);
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 103, 71, 0.15);
+    }
+
+    .quick-link-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--nuj-green-pale);
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--nuj-green-dark);
+    }
+
+    .quick-link-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--nuj-grey-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    /* News Grid */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .news-card {
+      background: var(--nuj-white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .news-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .news-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, var(--nuj-green-pale), var(--nuj-grey-pale));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--nuj-grey-medium);
+      font-size: 3rem;
+    }
+
+    .news-content {
+      padding: 1.5rem;
+    }
+
+    .news-date {
+      color: var(--nuj-grey-medium);
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .news-title {
+      font-size: 1.25rem;
+      color: var(--nuj-grey-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .news-excerpt {
+      color: var(--nuj-grey);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .news-link {
+      color: var(--nuj-green-dark);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .news-link:hover {
+      color: var(--nuj-green);
+    }
+
+    /* Events */
+    .event-card {
+      background: var(--nuj-white);
+      border-left: 4px solid var(--nuj-green-dark);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .event-date {
+      color: var(--nuj-green-dark);
+      font-weight: 700;
+      font-size: 1.125rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .event-title {
+      font-size: 1.25rem;
+      color: var(--nuj-grey-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .event-location {
+      color: var(--nuj-grey-medium);
+      font-size: 0.875rem;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: var(--nuj-green-dark);
+      color: var(--nuj-white);
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+
+    .cta-title {
+      font-size: 2rem;
+      color: var(--nuj-white);
+      margin-bottom: 1rem;
+    }
+
+    .cta-text {
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--nuj-grey-dark);
+      color: var(--nuj-white);
+      padding: 3rem 0 1rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-section h3 {
+      color: var(--nuj-white);
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a {
+      color: var(--nuj-grey-light);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-section a:hover {
+      color: var(--nuj-green-light);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--nuj-grey-medium);
+      padding-top: 1rem;
+      text-align: center;
+      color: var(--nuj-grey-light);
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .main-nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 1.75rem;
+      }
+
+      .btn-secondary {
+        margin-left: 0;
+        margin-top: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="site-logo">
+        <div class="logo-circle">NUJ</div>
+        <div>
+          <div class="site-title">NUJ London Central Branch</div>
+          <div class="site-tagline">Journalists United for Fair Work</div>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#news">News</a></li>
+          <li><a href="#events">Events</a></li>
+          <li><a href="#join">Join Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <h1>Standing Together for Journalists' Rights</h1>
+      <p>Representing media workers across London's central districts. Join us in the fight for fair pay, safe working conditions, and press freedom.</p>
+      <div>
+        <a href="#join" class="btn btn-primary">Become a Member</a>
+        <a href="#about" class="btn btn-secondary">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Links -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Quick Access</h2>
+      <div class="quick-links">
+        <a href="#join" class="quick-link-card">
+          <div class="quick-link-icon">✊</div>
+          <div class="quick-link-title">Join the Union</div>
+          <p>Become a member today and access support, training, and solidarity</p>
+        </a>
+        <a href="#support" class="quick-link-card">
+          <div class="quick-link-icon">💼</div>
+          <div class="quick-link-title">Get Support</div>
+          <p>Legal advice, workplace issues, and member assistance</p>
+        </a>
+        <a href="#training" class="quick-link-card">
+          <div class="quick-link-icon">📚</div>
+          <div class="quick-link-title">Training & Events</div>
+          <p>Professional development and networking opportunities</p>
+        </a>
+        <a href="#forum" class="quick-link-card">
+          <div class="quick-link-icon">💬</div>
+          <div class="quick-link-title">Member Forum</div>
+          <p>Connect with fellow members on our Zulip forum</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest News -->
+  <section class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Latest News</h2>
+      <div class="news-grid">
+        <article class="news-card">
+          <div class="news-image">📰</div>
+          <div class="news-content">
+            <div class="news-date">28 January 2026</div>
+            <h3 class="news-title">Pay Victory at Major Publisher</h3>
+            <p class="news-excerpt">Branch members secure 8% pay rise and improved working conditions after successful negotiations.</p>
+            <a href="#" class="news-link">Read more →</a>
+          </div>
+        </article>
+
+        <article class="news-card">
+          <div class="news-image">🎓</div>
+          <div class="news-content">
+            <div class="news-date">25 January 2026</div>
+            <h3 class="news-title">New Training Programme Launches</h3>
+            <p class="news-excerpt">Free digital journalism courses now available to all members, covering AI tools and data investigation.</p>
+            <a href="#" class="news-link">Read more →</a>
+          </div>
+        </article>
+
+        <article class="news-card">
+          <div class="news-image">🏆</div>
+          <div class="news-content">
+            <div class="news-date">20 January 2026</div>
+            <h3 class="news-title">Branch Wins National Award</h3>
+            <p class="news-excerpt">London Central Branch recognized for excellence in member engagement and organizing.</p>
+            <a href="#" class="news-link">Read more →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming Events -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Upcoming Events</h2>
+
+      <div class="event-card">
+        <div class="event-date">📅 Saturday, 1 February 2026 • 10:00-16:00</div>
+        <h3 class="event-title">AI in Journalism Workshop</h3>
+        <p class="event-location">📍 Conway Hall, Red Lion Square • Online option available</p>
+        <p style="margin-top: 0.5rem;">Learn ethical AI usage, fact-checking tools, and protecting your work from unauthorized training.</p>
+      </div>
+
+      <div class="event-card">
+        <div class="event-date">📅 Thursday, 6 February 2026 • 18:30-20:30</div>
+        <h3 class="event-title">Branch General Meeting</h3>
+        <p class="event-location">📍 Online via Jitsi (convene.nuj-lcb.org.uk)</p>
+        <p style="margin-top: 0.5rem;">Monthly meeting for all members. Discuss branch business, campaigns, and upcoming actions.</p>
+      </div>
+
+      <div class="event-card">
+        <div class="event-date">📅 Monday, 10 February 2026 • 12:00-13:00</div>
+        <h3 class="event-title">Freelancer Support Drop-In</h3>
+        <p class="event-location">📍 Online forum (forum.nuj-lcb.org.uk)</p>
+        <p style="margin-top: 0.5rem;">Get advice on contracts, late payments, and building your freelance career.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta-section">
+    <div class="container">
+      <h2 class="cta-title">Ready to Make a Difference?</h2>
+      <p class="cta-text">Join over 500 journalists in London Central Branch fighting for better pay, safer workplaces, and a stronger media industry.</p>
+      <a href="#join" class="btn btn-primary">Join NUJ London Central</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>About Us</h3>
+          <ul>
+            <li><a href="#about">About the Branch</a></li>
+            <li><a href="#officers">Branch Officers</a></li>
+            <li><a href="#meetings">Meetings & Minutes</a></li>
+            <li><a href="#constitution">Constitution</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>For Members</h3>
+          <ul>
+            <li><a href="#support">Get Support</a></li>
+            <li><a href="#training">Training & Events</a></li>
+            <li><a href="#resources">Resources</a></li>
+            <li><a href="https://forum.nuj-lcb.org.uk">Member Forum</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Get Involved</h3>
+          <ul>
+            <li><a href="#join">Join the Union</a></li>
+            <li><a href="#volunteer">Volunteer</a></li>
+            <li><a href="#campaigns">Current Campaigns</a></li>
+            <li><a href="#donate">Support Our Work</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Legal & Policies</h3>
+          <ul>
+            <li><a href="#privacy">Privacy Policy</a></li>
+            <li><a href="#cookies">Cookie Policy</a></li>
+            <li><a href="#ai-policy">AI Usage Policy</a></li>
+            <li><a href="#imprint">Imprint</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 NUJ London Central Branch. Part of the National Union of Journalists.</p>
+        <p>Website respects your privacy and follows consent-aware HTTP standards.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

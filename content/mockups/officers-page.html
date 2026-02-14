@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: PMPL-1.0-or-later -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Branch Officers - NUJ London Central Branch</title>
+  <style>
+    /* NUJ Brand Colors */
+    :root {
+      --nuj-green-dark: #006747;
+      --nuj-green: #008559;
+      --nuj-green-light: #00a572;
+      --nuj-green-pale: #e6f4f0;
+      --nuj-grey-dark: #2b2b2b;
+      --nuj-grey: #4c4c4c;
+      --nuj-grey-medium: #6e6e6e;
+      --nuj-grey-light: #a0a0a0;
+      --nuj-grey-pale: #f5f5f5;
+      --nuj-white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--nuj-grey);
+      background: var(--nuj-grey-pale);
+    }
+
+    h1, h2, h3 {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--nuj-grey-dark);
+      line-height: 1.3;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--nuj-green-dark);
+      color: var(--nuj-white);
+      padding: 1rem 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-circle {
+      width: 50px;
+      height: 50px;
+      background: var(--nuj-white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--nuj-green-dark);
+      font-size: 1.25rem;
+    }
+
+    .site-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, var(--nuj-green-dark), var(--nuj-green));
+      color: var(--nuj-white);
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--nuj-white);
+    }
+
+    .page-subtitle {
+      font-size: 1.125rem;
+      opacity: 0.95;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1rem;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      color: var(--nuj-green-dark);
+      margin-bottom: 2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--nuj-green-dark);
+    }
+
+    /* Officers Grid */
+    .officers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Officer Card */
+    .officer-card {
+      background: var(--nuj-white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .officer-card:hover {
+      border-color: var(--nuj-green-dark);
+      box-shadow: 0 4px 16px rgba(0, 103, 71, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .officer-card.expanded {
+      border-color: var(--nuj-green-dark);
+      box-shadow: 0 6px 20px rgba(0, 103, 71, 0.25);
+    }
+
+    .officer-header {
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .officer-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--nuj-green-pale), var(--nuj-green-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+      border: 3px solid var(--nuj-green-dark);
+    }
+
+    .officer-info {
+      flex: 1;
+    }
+
+    .officer-role {
+      font-size: 0.875rem;
+      color: var(--nuj-green-dark);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.25rem;
+    }
+
+    .officer-name {
+      font-size: 1.25rem;
+      color: var(--nuj-grey-dark);
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .officer-pronouns {
+      font-size: 0.875rem;
+      color: var(--nuj-grey-medium);
+      font-style: italic;
+    }
+
+    .expand-indicator {
+      color: var(--nuj-green-dark);
+      font-size: 1.5rem;
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    .officer-card.expanded .expand-indicator {
+      transform: rotate(180deg);
+    }
+
+    /* Officer Details (Hidden by default) */
+    .officer-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 1.5rem;
+    }
+
+    .officer-card.expanded .officer-details {
+      max-height: 1000px;
+      padding: 0 1.5rem 1.5rem;
+    }
+
+    .officer-bio {
+      color: var(--nuj-grey);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .officer-contact {
+      background: var(--nuj-grey-pale);
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--nuj-grey);
+      font-size: 0.875rem;
+    }
+
+    .contact-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .contact-icon {
+      color: var(--nuj-green-dark);
+      font-weight: bold;
+    }
+
+    .officer-responsibilities {
+      margin-top: 1rem;
+    }
+
+    .responsibilities-title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--nuj-grey-dark);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .responsibilities-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .responsibilities-list li {
+      padding-left: 1.5rem;
+      position: relative;
+      margin-bottom: 0.25rem;
+      color: var(--nuj-grey);
+      font-size: 0.875rem;
+    }
+
+    .responsibilities-list li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--nuj-green-dark);
+      font-weight: bold;
+    }
+
+    /* Job Share Badge */
+    .job-share-badge {
+      display: inline-block;
+      background: var(--nuj-green-pale);
+      color: var(--nuj-green-dark);
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.25rem;
+    }
+
+    /* Auditors Section */
+    .auditors-section {
+      background: var(--nuj-white);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .auditors-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .officers-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .officers-grid,
+      .auditors-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page-title {
+        font-size: 1.75rem;
+      }
+
+      .officer-header {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="site-logo">
+        <div class="logo-circle">NUJ</div>
+        <div>
+          <div class="site-title">NUJ London Central Branch</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Branch Officers</h1>
+    <p class="page-subtitle">Meet the team working for you. Click any officer to see their full details.</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+
+    <!-- Executive Officers -->
+    <section class="section">
+      <h2 class="section-title">Executive Officers</h2>
+      <div class="officers-grid">
+
+        <!-- Chair -->
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">👔</div>
+            <div class="officer-info">
+              <div class="officer-role">Chair</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(they/them)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Leading the branch with over 15 years of journalism experience. Passionate about press freedom, fair pay, and supporting freelancers in the digital age.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:chair@nuj-lcb.org.uk">chair@nuj-lcb.org.uk</a>
+              </div>
+              <div class="contact-item">
+                <span class="contact-icon">💬</span>
+                Available on member forum
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Chair branch meetings and AGMs</li>
+                <li>Represent branch at national meetings</li>
+                <li>Lead branch strategy and campaigns</li>
+                <li>Coordinate with other officers</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vice Chair -->
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">🎯</div>
+            <div class="officer-info">
+              <div class="officer-role">Vice Chair</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(she/her)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Deputy to the Chair, focusing on membership engagement and digital organizing. Background in broadcast journalism and union organizing.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:vicechair@nuj-lcb.org.uk">vicechair@nuj-lcb.org.uk</a>
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Support the Chair in leadership duties</li>
+                <li>Stand in for Chair when unavailable</li>
+                <li>Lead specific campaigns as assigned</li>
+                <li>Engage with members and build community</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Treasurer -->
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">💰</div>
+            <div class="officer-info">
+              <div class="officer-role">Treasurer</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(he/him)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Managing branch finances with transparency and accountability. Former financial journalist with expertise in union budgeting.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:treasurer@nuj-lcb.org.uk">treasurer@nuj-lcb.org.uk</a>
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Manage branch accounts and budget</li>
+                <li>Present financial reports at meetings</li>
+                <li>Process payments and reimbursements</li>
+                <li>Ensure financial compliance</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deputy Treasurer -->
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">💳</div>
+            <div class="officer-info">
+              <div class="officer-role">Deputy Treasurer</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(she/her)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Supporting the Treasurer and ensuring continuity in financial management. Experienced in nonprofit accounting and financial oversight.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:deputytreasurer@nuj-lcb.org.uk">deputytreasurer@nuj-lcb.org.uk</a>
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Assist Treasurer with financial duties</li>
+                <li>Stand in for Treasurer when unavailable</li>
+                <li>Help prepare financial reports</li>
+                <li>Support budget planning</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Secretary -->
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">📋</div>
+            <div class="officer-info">
+              <div class="officer-role">Secretary</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(they/them)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Keeping the branch organized and ensuring smooth operations. Background in newsroom management and administrative coordination.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:secretary@nuj-lcb.org.uk">secretary@nuj-lcb.org.uk</a>
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Take and distribute meeting minutes</li>
+                <li>Manage branch correspondence</li>
+                <li>Maintain membership records</li>
+                <li>Coordinate communications</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assistant Secretary -->
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">📝</div>
+            <div class="officer-info">
+              <div class="officer-role">Assistant Secretary</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(he/him)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Supporting the Secretary in administrative duties and ensuring no task falls through the cracks. Detail-oriented and organized.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:assistantsecretary@nuj-lcb.org.uk">assistantsecretary@nuj-lcb.org.uk</a>
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Assist Secretary with administrative tasks</li>
+                <li>Stand in for Secretary when unavailable</li>
+                <li>Help with meeting preparation</li>
+                <li>Support record-keeping</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Specialist Officers -->
+    <section class="section">
+      <h2 class="section-title">Specialist Officers</h2>
+      <div class="officers-grid">
+
+        <!-- Welfare Officer -->
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">🤝</div>
+            <div class="officer-info">
+              <div class="officer-role">Welfare Officer</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(she/her)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Supporting member wellbeing and mental health. Trained in mental health first aid and conflict resolution. Confidential support available.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:welfare@nuj-lcb.org.uk">welfare@nuj-lcb.org.uk</a>
+              </div>
+              <div class="contact-item">
+                <span class="contact-icon">🔒</span>
+                All contacts confidential
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Provide confidential welfare support</li>
+                <li>Signpost to professional services</li>
+                <li>Monitor member wellbeing issues</li>
+                <li>Organize wellbeing events</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Membership Recruitment & Retention Officer (Job Share) -->
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">🌟</div>
+            <div class="officer-info">
+              <div class="officer-role">Membership Recruitment & Retention</div>
+              <div class="officer-name">[Name 1] & [Name 2]</div>
+              <div class="job-share-badge">Job Share</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              <strong>[Name 1]</strong> (they/them): Focuses on recruiting new members and outreach to non-unionized workplaces.<br><br>
+              <strong>[Name 2]</strong> (she/her): Specializes in member retention, engagement, and onboarding programs.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:membership@nuj-lcb.org.uk">membership@nuj-lcb.org.uk</a>
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Recruit new members across London Central</li>
+                <li>Engage with existing members</li>
+                <li>Run onboarding programs for new joiners</li>
+                <li>Track membership trends and retention</li>
+                <li>Organize recruitment campaigns</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Equalities Officer -->
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">🏳️‍🌈</div>
+            <div class="officer-info">
+              <div class="officer-role">Equalities Officer</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(he/him)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Championing diversity, inclusion, and equality in the workplace. Experienced in anti-discrimination work and inclusive organizing.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:equalities@nuj-lcb.org.uk">equalities@nuj-lcb.org.uk</a>
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Promote equality and diversity</li>
+                <li>Support members facing discrimination</li>
+                <li>Organize equalities training</li>
+                <li>Monitor branch equality practices</li>
+                <li>Liaise with NUJ equality councils</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Learning & Training Officer -->
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">📚</div>
+            <div class="officer-info">
+              <div class="officer-role">Learning & Training Officer</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(she/her)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Developing skills and careers through training programs. Former journalism trainer with expertise in digital and investigative journalism.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:training@nuj-lcb.org.uk">training@nuj-lcb.org.uk</a>
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Organize training workshops and courses</li>
+                <li>Coordinate with NUJ Training</li>
+                <li>Identify member training needs</li>
+                <li>Promote professional development</li>
+                <li>Secure funding for training programs</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Officers Without Portfolio (3) -->
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">⚙️</div>
+            <div class="officer-info">
+              <div class="officer-role">Officer Without Portfolio</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(they/them)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Supporting the branch with flexible duties as needed. Available for special projects and campaign support.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:officer1@nuj-lcb.org.uk">officer1@nuj-lcb.org.uk</a>
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Support special projects and campaigns</li>
+                <li>Assist other officers as needed</li>
+                <li>Bring fresh perspectives to branch work</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">⚙️</div>
+            <div class="officer-info">
+              <div class="officer-role">Officer Without Portfolio</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(he/him)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Supporting the branch with flexible duties as needed. Available for special projects and campaign support.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:officer2@nuj-lcb.org.uk">officer2@nuj-lcb.org.uk</a>
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Support special projects and campaigns</li>
+                <li>Assist other officers as needed</li>
+                <li>Bring fresh perspectives to branch work</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="officer-card" onclick="toggleCard(this)">
+          <div class="officer-header">
+            <div class="officer-avatar">⚙️</div>
+            <div class="officer-info">
+              <div class="officer-role">Officer Without Portfolio</div>
+              <div class="officer-name">[Name Here]</div>
+              <div class="officer-pronouns">(she/her)</div>
+            </div>
+            <div class="expand-indicator">▼</div>
+          </div>
+          <div class="officer-details">
+            <p class="officer-bio">
+              Supporting the branch with flexible duties as needed. Available for special projects and campaign support.
+            </p>
+            <div class="officer-contact">
+              <div class="contact-item">
+                <span class="contact-icon">✉</span>
+                <a href="mailto:officer3@nuj-lcb.org.uk">officer3@nuj-lcb.org.uk</a>
+              </div>
+            </div>
+            <div class="officer-responsibilities">
+              <div class="responsibilities-title">Responsibilities</div>
+              <ul class="responsibilities-list">
+                <li>Support special projects and campaigns</li>
+                <li>Assist other officers as needed</li>
+                <li>Bring fresh perspectives to branch work</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Branch Auditors (Separate Section) -->
+    <section class="section">
+      <div class="auditors-section">
+        <h2 class="section-title">Branch Auditors</h2>
+        <p style="margin-bottom: 1.5rem; color: var(--nuj-grey);">
+          Independent auditors ensuring financial transparency and accountability. Separated from executive roles to maintain oversight integrity.
+        </p>
+        <div class="auditors-grid">
+
+          <div class="officer-card" onclick="toggleCard(this)">
+            <div class="officer-header">
+              <div class="officer-avatar">🔍</div>
+              <div class="officer-info">
+                <div class="officer-role">Branch Auditor</div>
+                <div class="officer-name">[Name Here]</div>
+                <div class="officer-pronouns">(she/her)</div>
+              </div>
+              <div class="expand-indicator">▼</div>
+            </div>
+            <div class="officer-details">
+              <p class="officer-bio">
+                Experienced in financial oversight and audit procedures. Ensures branch finances are managed correctly and transparently.
+              </p>
+              <div class="officer-contact">
+                <div class="contact-item">
+                  <span class="contact-icon">✉</span>
+                  <a href="mailto:auditor1@nuj-lcb.org.uk">auditor1@nuj-lcb.org.uk</a>
+                </div>
+              </div>
+              <div class="officer-responsibilities">
+                <div class="responsibilities-title">Responsibilities</div>
+                <ul class="responsibilities-list">
+                  <li>Review branch financial records</li>
+                  <li>Ensure compliance with union rules</li>
+                  <li>Report findings to AGM</li>
+                  <li>Maintain financial independence</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="officer-card" onclick="toggleCard(this)">
+            <div class="officer-header">
+              <div class="officer-avatar">🔍</div>
+              <div class="officer-info">
+                <div class="officer-role">Branch Auditor</div>
+                <div class="officer-name">[Name Here]</div>
+                <div class="officer-pronouns">(he/him)</div>
+              </div>
+              <div class="expand-indicator">▼</div>
+            </div>
+            <div class="officer-details">
+              <p class="officer-bio">
+                Background in accounting and financial management. Works with co-auditor to ensure thorough financial oversight.
+              </p>
+              <div class="officer-contact">
+                <div class="contact-item">
+                  <span class="contact-icon">✉</span>
+                  <a href="mailto:auditor2@nuj-lcb.org.uk">auditor2@nuj-lcb.org.uk</a>
+                </div>
+              </div>
+              <div class="officer-responsibilities">
+                <div class="responsibilities-title">Responsibilities</div>
+                <ul class="responsibilities-list">
+                  <li>Review branch financial records</li>
+                  <li>Ensure compliance with union rules</li>
+                  <li>Report findings to AGM</li>
+                  <li>Maintain financial independence</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="section">
+      <div style="background: var(--nuj-green-dark); color: var(--nuj-white); padding: 3rem; border-radius: 8px; text-align: center;">
+        <h2 style="color: var(--nuj-white); margin-bottom: 1rem;">Get in Touch</h2>
+        <p style="margin-bottom: 2rem; opacity: 0.95;">
+          Our officers are here to support you. Reach out via email or join our member forum to connect with the team.
+        </p>
+        <a href="mailto:contact@nuj-lcb.org.uk" style="display: inline-block; background: var(--nuj-white); color: var(--nuj-green-dark); padding: 0.75rem 2rem; border-radius: 6px; text-decoration: none; font-weight: 600;">Contact Us</a>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    function toggleCard(card) {
+      // Close all other cards
+      const allCards = document.querySelectorAll('.officer-card');
+      allCards.forEach(c => {
+        if (c !== card) {
+          c.classList.remove('expanded');
+        }
+      });
+
+      // Toggle clicked card
+      card.classList.toggle('expanded');
+    }
+  </script>
+</body>
+</html>
