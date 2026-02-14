@@ -1,0 +1,31 @@
+#!/bin/bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Commit message validation hook
+
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+# Allow merge commits
+if echo "$commit_msg" | grep -qE "^Merge"; then
+  exit 0
+fi
+
+# Check minimum length
+if [ ${#commit_msg} -lt 10 ]; then
+  echo "❌ Commit message too short (minimum 10 characters)"
+  exit 1
+fi
+
+# Check for common typos/issues
+if echo "$commit_msg" | grep -qE "^(fixup|squash|wip|WIP)"; then
+  echo "⚠️  Warning: Commit message suggests work in progress"
+  echo "Consider squashing before pushing"
+fi
+
+# Check for Co-Authored-By if message is long (multi-contributor work)
+if [ ${#commit_msg} -gt 200 ] && ! echo "$commit_msg" | grep -q "Co-Authored-By:"; then
+  echo "💡 Tip: For substantial contributions, consider adding:"
+  echo "Co-Authored-By: Name <email@example.com>"
+fi
+
+exit 0

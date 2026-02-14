@@ -1,12 +1,29 @@
-# ⚠️ lcb-website - EXPERIMENTAL TESTBED
+# lcb-website — NUJ London Central Branch
 
-**WARNING: This is an EXPERIMENTAL repository. For production deployment, use `nuj-lcb-production` instead.**
+Production repository for the NUJ London Central Branch website (nuj-lcb.org.uk).
 
-See [EXPERIMENTAL-TESTBED.md](EXPERIMENTAL-TESTBED.md) for full details.
+This repo contains the full website: WordPress theme (Sinople), page content,
+deployment guides, security documentation, and the experimental container
+infrastructure (Vörðr, Cerro Torre, Svalinn) being dogfooded alongside it.
 
----
+## Quick Start
 
-This repo tests advanced container infrastructure (Vörðr, Cerro Torre, Svalinn) for the hyperpolymath initiative. Components are incomplete and NOT production-ready.
+```bash
+cp .env.example .env  # Edit with real credentials
+docker compose up -d  # OpenLiteSpeed + MariaDB + Varnish
+```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for local Docker setup,
+[VERPEX-DEPLOYMENT.md](VERPEX-DEPLOYMENT.md) for cPanel hosting, or
+[WORDPRESS-DEPLOYMENT-PLAN.md](WORDPRESS-DEPLOYMENT-PLAN.md) for full VPS deployment.
+
+## Content
+
+All website pages live in `content/`:
+- `content/pages/` — About, Contact, Join, Members Area, LinkedIn Feed
+- `content/policies/` — AI Usage Policy, Imprint/Impressum
+- `content/mockups/` — HTML mockups (homepage, officers page)
+- `content/nuj-lcb-shareable-site.html` — Self-contained offline demo (1072 lines)
 
 ## Container Baseline
 

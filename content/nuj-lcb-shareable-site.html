@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: PMPL-1.0-or-later -->
+<!-- Self-contained shareable website for NUJ London Central Branch -->
+<!-- Share this file via email - it works offline in any browser! -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NUJ London Central Branch - Website Preview</title>
+  <style>
+    /* NUJ Brand Colors */
+    :root {
+      --nuj-green-dark: #006747;
+      --nuj-green: #008559;
+      --nuj-green-light: #00a572;
+      --nuj-green-pale: #e6f4f0;
+      --nuj-grey-dark: #2b2b2b;
+      --nuj-grey: #4c4c4c;
+      --nuj-grey-medium: #6e6e6e;
+      --nuj-grey-light: #a0a0a0;
+      --nuj-grey-pale: #f5f5f5;
+      --nuj-white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--nuj-grey);
+      background: var(--nuj-grey-pale);
+    }
+
+    h1, h2, h3, h4 {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--nuj-grey-dark);
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--nuj-green-dark);
+      color: var(--nuj-white);
+      padding: 1rem 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .site-logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-circle {
+      width: 50px;
+      height: 50px;
+      background: var(--nuj-white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--nuj-green-dark);
+      font-size: 1.25rem;
+    }
+
+    .site-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .site-tagline {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+
+    .main-nav ul {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .main-nav a {
+      color: var(--nuj-white);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+      cursor: pointer;
+    }
+
+    .main-nav a:hover,
+    .main-nav a.active {
+      border-bottom-color: var(--nuj-green-light);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* Page Content */
+    .page-content {
+      background: var(--nuj-white);
+      padding: 3rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      min-height: 60vh;
+    }
+
+    .page-content img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .page-content a {
+      color: var(--nuj-green-dark);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .page-content a:hover {
+      color: var(--nuj-green);
+    }
+
+    .page-content ul, .page-content ol {
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .page-content li {
+      margin-bottom: 0.5rem;
+    }
+
+    .page-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    .page-content th,
+    .page-content td {
+      border: 1px solid var(--nuj-grey-light);
+      padding: 0.75rem;
+      text-align: left;
+    }
+
+    .page-content th {
+      background: var(--nuj-green-pale);
+      font-weight: 600;
+    }
+
+    /* Comment Section */
+    .comment-section {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--nuj-grey-pale);
+    }
+
+    .comment-form {
+      background: var(--nuj-grey-pale);
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+
+    .comment-form h3 {
+      color: var(--nuj-green-dark);
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--nuj-grey-dark);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--nuj-grey-light);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--nuj-green-dark);
+      box-shadow: 0 0 0 3px rgba(0, 103, 71, 0.2);
+    }
+
+    .form-group textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: 2px solid;
+      background: var(--nuj-green-dark);
+      color: var(--nuj-white);
+      border-color: var(--nuj-green-dark);
+    }
+
+    .btn:hover {
+      background: var(--nuj-green);
+      border-color: var(--nuj-green);
+      transform: translateY(-2px);
+    }
+
+    /* Alert Box */
+    .alert {
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      border-left: 4px solid;
+    }
+
+    .alert-info {
+      background: #e3f2fd;
+      border-color: #2196f3;
+      color: #0d47a1;
+    }
+
+    .alert-success {
+      background: var(--nuj-green-pale);
+      border-color: var(--nuj-green-dark);
+      color: var(--nuj-green-dark);
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--nuj-grey-dark);
+      color: var(--nuj-white);
+      padding: 2rem 0 1rem;
+      margin-top: 4rem;
+    }
+
+    .footer-text {
+      text-align: center;
+      color: var(--nuj-grey-light);
+      font-size: 0.875rem;
+    }
+
+    /* Hidden pages */
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .main-nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+        width: 100%;
+      }
+
+      .page-content {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="site-logo">
+        <div class="logo-circle">NUJ</div>
+        <div>
+          <div class="site-title">NUJ London Central Branch</div>
+          <div class="site-tagline">Website Preview - Share & Comment</div>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a onclick="showPage('home')" data-page="home" class="active">Home</a></li>
+          <li><a onclick="showPage('about')" data-page="about">About</a></li>
+          <li><a onclick="showPage('join')" data-page="join">Join Us</a></li>
+          <li><a onclick="showPage('officers')" data-page="officers">Officers</a></li>
+          <li><a onclick="showPage('contact')" data-page="contact">Contact</a></li>
+          <li><a onclick="showPage('social')" data-page="social">LinkedIn</a></li>
+          <li><a onclick="showPage('policies')" data-page="policies">Policies</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+      <div class="page-content">
+        <div class="alert alert-info">
+          <strong>📧 Shareable Preview</strong> - This is a self-contained website preview. You can email this file to others for feedback. They can navigate it offline and send comments via email!
+        </div>
+
+        <h1>Welcome to NUJ London Central Branch</h1>
+
+        <p style="font-size: 1.125rem; color: var(--nuj-green-dark); font-weight: 600;">
+          Standing together for journalists' rights across London's central districts.
+        </p>
+
+        <h2>What We Do</h2>
+        <ul>
+          <li><strong>Workplace Support</strong> - Legal advice, contract negotiation, dispute resolution</li>
+          <li><strong>Training & Development</strong> - Free courses, workshops, and professional development</li>
+          <li><strong>Campaigns</strong> - Fighting for fair pay, press freedom, and safer workplaces</li>
+          <li><strong>Community</strong> - Connect with 500+ journalists across London</li>
+        </ul>
+
+        <h2>Quick Links</h2>
+        <p>
+          <a href="#" onclick="showPage('join'); return false;">Join the Union</a> |
+          <a href="#" onclick="showPage('about'); return false;">Learn About Us</a> |
+          <a href="#" onclick="showPage('officers'); return false;">Meet Our Officers</a> |
+          <a href="#" onclick="showPage('contact'); return false;">Get in Touch</a>
+        </p>
+
+        <h2>Latest News</h2>
+        <p><strong>28 January 2026</strong> - Pay Victory at Major Publisher: Branch members secure 8% pay rise and improved working conditions.</p>
+        <p><strong>25 January 2026</strong> - New Training Programme Launches: Free digital journalism courses now available covering AI tools and data investigation.</p>
+
+        <h2>Upcoming Events</h2>
+        <p><strong>1 February 2026</strong> - AI in Journalism Workshop (10:00-16:00, Conway Hall)</p>
+        <p><strong>6 February 2026</strong> - Branch General Meeting (18:30-20:30, Online)</p>
+
+        <div style="margin-top: 2rem; padding: 2rem; background: var(--nuj-green-dark); color: var(--nuj-white); border-radius: 8px; text-align: center;">
+          <h2 style="color: var(--nuj-white);">Ready to Join?</h2>
+          <p>Over 500 journalists in London Central Branch. Be part of something bigger.</p>
+          <a href="#" onclick="showPage('join'); return false;" style="display: inline-block; background: var(--nuj-white); color: var(--nuj-green-dark); padding: 0.75rem 2rem; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 1rem;">Join NUJ London Central</a>
+        </div>
+      </div>
+
+      <!-- Comments -->
+      <div class="comment-section">
+        <h3>Comments & Feedback</h3>
+        <div class="comment-form">
+          <h3>Leave a Comment</h3>
+          <form id="commentForm-home">
+            <div class="form-group">
+              <label for="name-home">Your Name *</label>
+              <input type="text" id="name-home" required>
+            </div>
+            <div class="form-group">
+              <label for="email-home">Your Email *</label>
+              <input type="email" id="email-home" required>
+            </div>
+            <div class="form-group">
+              <label for="comment-home">Comment *</label>
+              <textarea id="comment-home" required placeholder="Share your thoughts about the homepage..."></textarea>
+            </div>
+            <button type="submit" class="btn">Send Comment via Email</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+      <div class="page-content">
+        <h1>About NUJ London Central Branch</h1>
+
+        <h2>Who We Are</h2>
+        <p>NUJ London Central Branch represents journalists, photographers, and media workers across London's central districts. We're part of the National Union of Journalists, the UK's largest union for journalists and media professionals.</p>
+
+        <p>We represent over 500 journalists working across national newspapers, online publications, broadcast media, magazines, and as freelancers.</p>
+
+        <h2>What We Do</h2>
+
+        <h3>Workplace Support</h3>
+        <ul>
+          <li>Advice on pay negotiations and contracts</li>
+          <li>Support with workplace disputes</li>
+          <li>Legal representation when needed</li>
+          <li>Collective bargaining with employers</li>
+        </ul>
+
+        <h3>Professional Development</h3>
+        <ul>
+          <li>Free and subsidized training courses</li>
+          <li>Networking events</li>
+          <li>Mentoring programmes</li>
+          <li>Skills workshops (AI tools, data journalism, multimedia)</li>
+        </ul>
+
+        <h3>Campaigns and Organizing</h3>
+        <p>We're actively campaigning for:</p>
+        <ul>
+          <li>Living wage for all journalists</li>
+          <li>Protection for freelancers from late payment</li>
+          <li>Stronger whistleblower protections</li>
+          <li>Greater diversity in newsrooms</li>
+          <li>Safety for journalists covering protests and conflicts</li>
+        </ul>
+
+        <h2>Our Structure</h2>
+        <p>The branch is run democratically by elected officers who serve the membership. We hold:</p>
+        <ul>
+          <li><strong>Monthly branch meetings</strong> - Open to all members</li>
+          <li><strong>Annual General Meeting (AGM)</strong> - Elections and major decisions</li>
+          <li><strong>Special meetings</strong> - Called as needed for urgent issues</li>
+        </ul>
+
+        <p><a href="#" onclick="showPage('officers'); return false;">Meet our officers →</a></p>
+      </div>
+
+      <!-- Comments -->
+      <div class="comment-section">
+        <h3>Comments & Feedback</h3>
+        <div class="comment-form">
+          <h3>Leave a Comment</h3>
+          <form id="commentForm-about">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input type="text" class="comment-name" required>
+            </div>
+            <div class="form-group">
+              <label>Your Email *</label>
+              <input type="email" class="comment-email" required>
+            </div>
+            <div class="form-group">
+              <label>Comment *</label>
+              <textarea class="comment-text" required placeholder="Feedback about the About page..."></textarea>
+            </div>
+            <button type="submit" class="btn">Send Comment via Email</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Join Page -->
+    <div id="join" class="page">
+      <div class="page-content">
+        <h1>Join NUJ London Central Branch</h1>
+
+        <h2>Why Join a Union?</h2>
+        <p>Journalism can be precarious. A union gives you:</p>
+        <ul>
+          <li><strong>Workplace Power</strong> - Collective bargaining for better pay</li>
+          <li><strong>Professional Support</strong> - Free legal advice on contracts</li>
+          <li><strong>Career Development</strong> - Training and networking</li>
+          <li><strong>Community</strong> - Connect with 500+ London journalists</li>
+        </ul>
+
+        <h2>Membership Rates</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Annual Income</th>
+              <th>Monthly Fee</th>
+              <th>Annual Fee</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Under £15,000</td>
+              <td>£7.50</td>
+              <td>£90</td>
+            </tr>
+            <tr>
+              <td>£15,000-£19,999</td>
+              <td>£11.92</td>
+              <td>£143</td>
+            </tr>
+            <tr>
+              <td>£20,000-£24,999</td>
+              <td>£14.17</td>
+              <td>£170</td>
+            </tr>
+            <tr>
+              <td>£25,000-£29,999</td>
+              <td>£16.42</td>
+              <td>£197</td>
+            </tr>
+            <tr>
+              <td>£30,000-£39,999</td>
+              <td>£20.92</td>
+              <td>£251</td>
+            </tr>
+            <tr>
+              <td>£40,000+</td>
+              <td>£25.42</td>
+              <td>£305</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><strong>Students</strong>: Special reduced rates available</p>
+
+        <h2>What's Included?</h2>
+        <ul>
+          <li>✅ Free legal advice on employment issues</li>
+          <li>✅ Access to NUJ Training courses</li>
+          <li>✅ Public liability insurance (up to £1M)</li>
+          <li>✅ Member forum and networking events</li>
+          <li>✅ Contract checking and negotiation support</li>
+        </ul>
+
+        <h2>How to Join</h2>
+        <p><strong>Online</strong>: <a href="https://www.nuj.org.uk/join" target="_blank">www.nuj.org.uk/join</a></p>
+        <p><strong>By Email</strong>: contact@nuj-lcb.org.uk</p>
+        <p><strong>At an Event</strong>: Come to one of our meetings</p>
+
+        <div style="margin-top: 2rem; padding: 2rem; background: var(--nuj-green-dark); color: var(--nuj-white); border-radius: 8px;">
+          <h3 style="color: var(--nuj-white);">Ready to Join?</h3>
+          <p>Stronger together. Join NUJ London Central Branch today.</p>
+        </div>
+      </div>
+
+      <!-- Comments -->
+      <div class="comment-section">
+        <h3>Comments & Feedback</h3>
+        <div class="comment-form">
+          <h3>Leave a Comment</h3>
+          <form id="commentForm-join">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input type="text" class="comment-name" required>
+            </div>
+            <div class="form-group">
+              <label>Your Email *</label>
+              <input type="email" class="comment-email" required>
+            </div>
+            <div class="form-group">
+              <label>Comment *</label>
+              <textarea class="comment-text" required placeholder="Questions about joining..."></textarea>
+            </div>
+            <button type="submit" class="btn">Send Comment via Email</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Officers Page -->
+    <div id="officers" class="page">
+      <div class="page-content">
+        <h1>Branch Officers</h1>
+        <p>Our branch is led by elected officers who serve the membership. Contact them for support in their areas of responsibility.</p>
+
+        <h2>Executive Officers</h2>
+        <ul>
+          <li><strong>Chair</strong> - [Name] (chair@nuj-lcb.org.uk)</li>
+          <li><strong>Vice Chair</strong> - [Name] (vicechair@nuj-lcb.org.uk)</li>
+          <li><strong>Treasurer</strong> - [Name] (treasurer@nuj-lcb.org.uk)</li>
+          <li><strong>Deputy Treasurer</strong> - [Name] (deputytreasurer@nuj-lcb.org.uk)</li>
+          <li><strong>Secretary</strong> - [Name] (secretary@nuj-lcb.org.uk)</li>
+          <li><strong>Assistant Secretary</strong> - [Name] (assistantsecretary@nuj-lcb.org.uk)</li>
+        </ul>
+
+        <h2>Specialist Officers</h2>
+        <ul>
+          <li><strong>Welfare Officer</strong> - [Name] (welfare@nuj-lcb.org.uk) - Confidential support</li>
+          <li><strong>Membership Recruitment & Retention</strong> - [Name 1] & [Name 2] (Job Share) (membership@nuj-lcb.org.uk)</li>
+          <li><strong>Equalities Officer</strong> - [Name] (equalities@nuj-lcb.org.uk)</li>
+          <li><strong>Learning & Training Officer</strong> - [Name] (training@nuj-lcb.org.uk)</li>
+          <li><strong>Officers Without Portfolio</strong> - [3 officers]</li>
+        </ul>
+
+        <h2>Branch Auditors</h2>
+        <p>Independent auditors ensuring financial transparency:</p>
+        <ul>
+          <li><strong>Branch Auditor</strong> - [Name] (auditor1@nuj-lcb.org.uk)</li>
+          <li><strong>Branch Auditor</strong> - [Name] (auditor2@nuj-lcb.org.uk)</li>
+        </ul>
+
+        <p style="margin-top: 2rem; padding: 1rem; background: var(--nuj-grey-pale); border-radius: 6px;">
+          <strong>📸 Visual Mockup:</strong> See the full interactive officers page with expandable profiles in the <code>officers-page.html</code> file included with this preview.
+        </p>
+      </div>
+
+      <!-- Comments -->
+      <div class="comment-section">
+        <h3>Comments & Feedback</h3>
+        <div class="comment-form">
+          <h3>Leave a Comment</h3>
+          <form id="commentForm-officers">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input type="text" class="comment-name" required>
+            </div>
+            <div class="form-group">
+              <label>Your Email *</label>
+              <input type="email" class="comment-email" required>
+            </div>
+            <div class="form-group">
+              <label>Comment *</label>
+              <textarea class="comment-text" required placeholder="Feedback about the officers page..."></textarea>
+            </div>
+            <button type="submit" class="btn">Send Comment via Email</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+      <div class="page-content">
+        <h1>Contact Us</h1>
+
+        <h2>General Inquiries</h2>
+        <p><strong>Email</strong>: <a href="mailto:contact@nuj-lcb.org.uk">contact@nuj-lcb.org.uk</a></p>
+
+        <h2>Member Platforms</h2>
+        <p><strong>Forum</strong>: <a href="https://forum.nuj-lcb.org.uk" target="_blank">forum.nuj-lcb.org.uk</a> (Zulip)</p>
+        <p><strong>Video Meetings</strong>: <a href="https://convene.nuj-lcb.org.uk" target="_blank">convene.nuj-lcb.org.uk</a> (Jitsi)</p>
+
+        <h2>Branch Officers</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Officer</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Chair</td>
+              <td><a href="mailto:chair@nuj-lcb.org.uk">chair@nuj-lcb.org.uk</a></td>
+            </tr>
+            <tr>
+              <td>Secretary</td>
+              <td><a href="mailto:secretary@nuj-lcb.org.uk">secretary@nuj-lcb.org.uk</a></td>
+            </tr>
+            <tr>
+              <td>Welfare Officer</td>
+              <td><a href="mailto:welfare@nuj-lcb.org.uk">welfare@nuj-lcb.org.uk</a></td>
+            </tr>
+            <tr>
+              <td>Membership</td>
+              <td><a href="mailto:membership@nuj-lcb.org.uk">membership@nuj-lcb.org.uk</a></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Meetings</h2>
+        <p><strong>In-Person</strong>: Conway Hall, 25 Red Lion Square, London WC1R 4RL</p>
+        <p><strong>Virtual</strong>: All meetings offer remote attendance via Jitsi</p>
+
+        <h2>National NUJ Office</h2>
+        <p>Headland House, 308-312 Gray's Inn Road, London WC1X 8DP</p>
+        <p>Phone: 020 7843 3700</p>
+      </div>
+
+      <!-- Comments -->
+      <div class="comment-section">
+        <h3>Comments & Feedback</h3>
+        <div class="comment-form">
+          <h3>Leave a Comment</h3>
+          <form id="commentForm-contact">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input type="text" class="comment-name" required>
+            </div>
+            <div class="form-group">
+              <label>Your Email *</label>
+              <input type="email" class="comment-email" required>
+            </div>
+            <div class="form-group">
+              <label>Comment *</label>
+              <textarea class="comment-text" required placeholder="Feedback about contact information..."></textarea>
+            </div>
+            <button type="submit" class="btn">Send Comment via Email</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Media / LinkedIn Page -->
+    <div id="social" class="page">
+      <div class="page-content">
+        <h1>LinkedIn Updates</h1>
+
+        <p style="margin-bottom: 2rem;">
+          Follow our latest news, campaigns, and events on LinkedIn. We post 2-3 times per week with updates on workplace victories, training opportunities, and press freedom issues.
+        </p>
+
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <a href="https://www.linkedin.com/company/nuj-london-central" target="_blank"
+             style="display: inline-block; background: #0077b5; color: white; padding: 0.75rem 2rem; border-radius: 6px; text-decoration: none; font-weight: 600;">
+            Follow Us on LinkedIn
+          </a>
+        </div>
+
+        <h2>Recent Posts</h2>
+
+        <!-- Post 1 -->
+        <div style="background: white; border: 2px solid #0077b5; border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="width: 50px; height: 50px; background: #0077b5; color: white; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem;">in</div>
+            <div>
+              <strong>NUJ London Central Branch</strong>
+              <div style="color: #666; font-size: 0.875rem;">2 days ago</div>
+            </div>
+          </div>
+          <p style="color: #333; line-height: 1.6; margin-bottom: 1rem;">
+            🎉 Pay victory! Our members at [Major Publisher] have secured an 8% pay rise plus improved working conditions after successful negotiations. This is what collective action looks like!
+          </p>
+          <p style="color: #333; line-height: 1.6; margin-bottom: 1rem;">
+            Solidarity to all members who stood together. Your union working for you. 💪
+          </p>
+          <p style="color: #666; font-size: 0.875rem;">
+            #NUJ #Journalism #UnionStrong #FairPay #CollectiveBargaining
+          </p>
+          <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee; display: flex; gap: 2rem; color: #666; font-size: 0.875rem;">
+            <span>👍 42 reactions</span>
+            <span>💬 8 comments</span>
+            <span>↗️ 15 shares</span>
+          </div>
+        </div>
+
+        <!-- Post 2 -->
+        <div style="background: white; border: 2px solid #0077b5; border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="width: 50px; height: 50px; background: #0077b5; color: white; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem;">in</div>
+            <div>
+              <strong>NUJ London Central Branch</strong>
+              <div style="color: #666; font-size: 0.875rem;">5 days ago</div>
+            </div>
+          </div>
+          <p style="color: #333; line-height: 1.6; margin-bottom: 1rem;">
+            📚 New training programme launching! Free courses on AI in journalism for all NUJ members.
+          </p>
+          <p style="color: #333; line-height: 1.6; margin-bottom: 1rem;">
+            Topics include: Using AI tools ethically, protecting your work from AI training, fact-checking AI-generated content, and data investigation techniques.
+          </p>
+          <p style="color: #333; line-height: 1.6; margin-bottom: 1rem;">
+            First workshop: Saturday, Feb 1st at Conway Hall (hybrid - in-person + online).
+          </p>
+          <p style="color: #333; line-height: 1.6; margin-bottom: 1rem;">
+            Register: [link in bio] or email training@nuj-lcb.org.uk
+          </p>
+          <p style="color: #666; font-size: 0.875rem;">
+            #AIJournalism #Training #ProfessionalDevelopment #MediaEthics
+          </p>
+          <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee; display: flex; gap: 2rem; color: #666; font-size: 0.875rem;">
+            <span>👍 67 reactions</span>
+            <span>💬 12 comments</span>
+            <span>↗️ 23 shares</span>
+          </div>
+        </div>
+
+        <!-- Post 3 -->
+        <div style="background: white; border: 2px solid #0077b5; border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="width: 50px; height: 50px; background: #0077b5; color: white; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem;">in</div>
+            <div>
+              <strong>NUJ London Central Branch</strong>
+              <div style="color: #666; font-size: 0.875rem;">1 week ago</div>
+            </div>
+          </div>
+          <p style="color: #333; line-height: 1.6; margin-bottom: 1rem;">
+            🏆 Proud to announce London Central Branch has won the NUJ National Award for Excellence in Member Engagement!
+          </p>
+          <p style="color: #333; line-height: 1.6; margin-bottom: 1rem;">
+            Thank you to our incredible officers and members who make this branch so vibrant. This award belongs to all of you.
+          </p>
+          <p style="color: #333; line-height: 1.6; margin-bottom: 1rem;">
+            Special recognition for our new member forum and hybrid meeting system that's made participation more accessible than ever.
+          </p>
+          <p style="color: #666; font-size: 0.875rem;">
+            #NUJAwards #UnionOrganizing #MemberEngagement
+          </p>
+          <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee; display: flex; gap: 2rem; color: #666; font-size: 0.875rem;">
+            <span>👍 156 reactions</span>
+            <span>💬 34 comments</span>
+            <span>↗️ 45 shares</span>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="https://www.linkedin.com/company/nuj-london-central" target="_blank"
+             style="display: inline-block; background: #0077b5; color: white; padding: 0.75rem 2rem; border-radius: 6px; text-decoration: none; font-weight: 600;">
+            Follow for More Updates
+          </a>
+        </div>
+      </div>
+
+      <!-- Comments -->
+      <div class="comment-section">
+        <h3>Comments & Feedback</h3>
+        <div class="comment-form">
+          <h3>Leave a Comment</h3>
+          <form id="commentForm-social">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input type="text" class="comment-name" required>
+            </div>
+            <div class="form-group">
+              <label>Your Email *</label>
+              <input type="email" class="comment-email" required>
+            </div>
+            <div class="form-group">
+              <label>Comment *</label>
+              <textarea class="comment-text" required placeholder="Feedback about LinkedIn integration..."></textarea>
+            </div>
+            <button type="submit" class="btn">Send Comment via Email</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Policies Page -->
+    <div id="policies" class="page">
+      <div class="page-content">
+        <h1>Policies & Legal</h1>
+
+        <h2>Our Policies</h2>
+        <ul>
+          <li><a href="#" onclick="showPolicyDetail('ai'); return false;"><strong>AI Usage Policy</strong></a> - How we protect content from unauthorized AI training</li>
+          <li><a href="#" onclick="showPolicyDetail('privacy'); return false;"><strong>Privacy Policy</strong></a> - How we handle your personal data</li>
+          <li><a href="#" onclick="showPolicyDetail('cookies'); return false;"><strong>Cookie Policy</strong></a> - Our use of cookies</li>
+          <li><a href="#" onclick="showPolicyDetail('imprint'); return false;"><strong>Imprint/Impressum</strong></a> - Legal information (EU compliance)</li>
+          <li><a href="#" onclick="showPolicyDetail('terms'); return false;"><strong>Terms of Service</strong></a> - Website usage terms</li>
+        </ul>
+
+        <div id="policy-detail" style="display: none; margin-top: 2rem; padding: 2rem; background: var(--nuj-grey-pale); border-radius: 8px;">
+          <h3 id="policy-title"></h3>
+          <div id="policy-content"></div>
+          <button onclick="document.getElementById('policy-detail').style.display='none'" class="btn" style="margin-top: 1rem;">Close</button>
+        </div>
+
+        <h2>Compliance</h2>
+        <p>Our website complies with:</p>
+        <ul>
+          <li>UK Data Protection Act 2018</li>
+          <li>UK GDPR</li>
+          <li>Equality Act 2010 (accessibility)</li>
+          <li>Consent-Aware HTTP standards</li>
+        </ul>
+
+        <h2>Accessibility</h2>
+        <p>We aim for WCAG 2.1 AAA compliance. Report issues: <a href="mailto:contact@nuj-lcb.org.uk">contact@nuj-lcb.org.uk</a></p>
+
+        <h2>Contact for Legal Matters</h2>
+        <p>Email: <a href="mailto:secretary@nuj-lcb.org.uk">secretary@nuj-lcb.org.uk</a></p>
+      </div>
+
+      <!-- Comments -->
+      <div class="comment-section">
+        <h3>Comments & Feedback</h3>
+        <div class="comment-form">
+          <h3>Leave a Comment</h3>
+          <form id="commentForm-policies">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input type="text" class="comment-name" required>
+            </div>
+            <div class="form-group">
+              <label>Your Email *</label>
+              <input type="email" class="comment-email" required>
+            </div>
+            <div class="form-group">
+              <label>Comment *</label>
+              <textarea class="comment-text" required placeholder="Feedback about our policies..."></textarea>
+            </div>
+            <button type="submit" class="btn">Send Comment via Email</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-text">
+        <p>&copy; 2026 NUJ London Central Branch. Part of the National Union of Journalists.</p>
+        <p style="margin-top: 0.5rem;">This is a preview website for feedback purposes.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Page navigation
+    function showPage(pageId) {
+      // Hide all pages
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(p => p.classList.remove('active'));
+
+      // Show selected page
+      document.getElementById(pageId).classList.add('active');
+
+      // Update nav
+      const navLinks = document.querySelectorAll('.main-nav a');
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('data-page') === pageId) {
+          link.classList.add('active');
+        }
+      });
+
+      // Scroll to top
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    // Policy detail viewer
+    function showPolicyDetail(policyType) {
+      const policyData = {
+        ai: {
+          title: 'AI Usage Policy',
+          content: `
+            <p><strong>Our Commitment:</strong> We respect content creators' rights and maintain strict boundaries around AI usage.</p>
+            <h4>Permitted Uses:</h4>
+            <ul>
+              <li>✅ Index for search engines</li>
+              <li>✅ Short summaries (under 100 words)</li>
+              <li>✅ Accessibility features</li>
+            </ul>
+            <h4>Prohibited Uses:</h4>
+            <ul>
+              <li>❌ Train language models (LLMs)</li>
+              <li>❌ Generate derivative works</li>
+              <li>❌ Commercial AI training datasets</li>
+            </ul>
+            <p><strong>Technical Implementation:</strong> HTTP Status Code 430 (Consent Required) and AIBDP manifest at <code>/.well-known/aibdp.json</code></p>
+            <p>Read full policy in the separate AI-usage-policy.md file included with this preview.</p>
+          `
+        },
+        privacy: {
+          title: 'Privacy Policy',
+          content: `
+            <p><strong>Data Controller:</strong> National Union of Journalists</p>
+            <p>We collect only essential information for membership and communication purposes.</p>
+            <h4>What We Collect:</h4>
+            <ul>
+              <li>Contact information (name, email)</li>
+              <li>Membership details</li>
+              <li>Communication preferences</li>
+            </ul>
+            <h4>Your Rights:</h4>
+            <ul>
+              <li>Access your data</li>
+              <li>Rectify incorrect data</li>
+              <li>Request deletion</li>
+              <li>Object to processing</li>
+            </ul>
+            <p>Contact: <a href="mailto:dpo@nuj.org.uk">dpo@nuj.org.uk</a></p>
+          `
+        },
+        cookies: {
+          title: 'Cookie Policy',
+          content: `
+            <p>We use minimal cookies for essential functionality only.</p>
+            <h4>Cookies We Use:</h4>
+            <ul>
+              <li><strong>Session cookies</strong> - Keep you logged in</li>
+              <li><strong>Preference cookies</strong> - Remember your settings</li>
+            </ul>
+            <h4>No Tracking:</h4>
+            <p>We do NOT use:</p>
+            <ul>
+              <li>❌ Google Analytics</li>
+              <li>❌ Advertising cookies</li>
+              <li>❌ Third-party tracking</li>
+            </ul>
+          `
+        },
+        imprint: {
+          title: 'Imprint / Impressum',
+          content: `
+            <p><strong>Organization:</strong> NUJ London Central Branch</p>
+            <p><strong>Address:</strong> c/o National Union of Journalists, Headland House, 308-312 Gray's Inn Road, London WC1X 8DP</p>
+            <p><strong>Contact:</strong> contact@nuj-lcb.org.uk</p>
+            <p><strong>Responsible for Content:</strong> Branch Secretary</p>
+            <p>Full imprint details in separate imprint-impressum.md file.</p>
+          `
+        },
+        terms: {
+          title: 'Terms of Service',
+          content: `
+            <p>By using this website, you agree to:</p>
+            <ul>
+              <li>Use the site for lawful purposes only</li>
+              <li>Respect intellectual property rights</li>
+              <li>Not attempt to harm or disrupt the site</li>
+              <li>Abide by our AI Usage Policy</li>
+            </ul>
+            <p>We reserve the right to refuse service or remove content that violates these terms.</p>
+          `
+        }
+      };
+
+      const policy = policyData[policyType];
+      document.getElementById('policy-title').textContent = policy.title;
+      document.getElementById('policy-content').innerHTML = policy.content;
+      document.getElementById('policy-detail').style.display = 'block';
+      document.getElementById('policy-detail').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Comment form handling
+    document.addEventListener('DOMContentLoaded', function() {
+      const forms = document.querySelectorAll('form[id^="commentForm"]');
+
+      forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          const pageName = form.id.replace('commentForm-', '');
+          const name = form.querySelector('input[type="text"], .comment-name').value;
+          const email = form.querySelector('input[type="email"], .comment-email').value;
+          const comment = form.querySelector('textarea, .comment-text').value;
+
+          const subject = encodeURIComponent(`NUJ LCB Website Feedback: ${pageName} page`);
+          const body = encodeURIComponent(
+            `Page: ${pageName}\n` +
+            `From: ${name} (${email})\n\n` +
+            `Comment:\n${comment}\n\n` +
+            `---\n` +
+            `Sent via NUJ LCB Website Preview\n` +
+            `Date: ${new Date().toLocaleString()}`
+          );
+
+          window.location.href = `mailto:contact@nuj-lcb.org.uk?subject=${subject}&body=${body}`;
+
+          alert('Your default email client will open with the comment ready to send. If it doesn\'t open automatically, please email contact@nuj-lcb.org.uk with your feedback.');
+
+          form.reset();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

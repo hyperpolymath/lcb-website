@@ -46,3 +46,13 @@ Thumbs.db
 *.pem
 *.crt
 secrets/
+.env.production-reference
+
+# Database backups
+*.sql.gz
+*.sql
+
+# Common junk
+ai-cli-crash-capture/
+.directory
+sync_report*.txt

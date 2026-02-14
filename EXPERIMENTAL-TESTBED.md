@@ -1,98 +1,38 @@
-# ⚠️ EXPERIMENTAL TESTBED - NOT PRODUCTION
+# Infrastructure Experiment Notes
 
-**This repository is for EXPERIMENTS ONLY. Do NOT use for production.**
+This file records the experimental container infrastructure that this repo
+is also used to dogfood. These components are **not required** for production
+deployment — the site deploys fine with the standard Docker Compose stack
+(see `DEPLOYMENT.md` and `VERPEX-DEPLOYMENT.md`).
 
-## What This Repo Is
+## Experimental Components
 
-This is an **experimental testbed** for testing advanced container infrastructure:
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Vörðr (verified runtime) | 70% (Ada stubs) | Not blocking deployment |
+| Cerro Torre (build system) | 0% (specs only) | Not blocking deployment |
+| Svalinn (network gateway) | Unverified | Not blocking deployment |
+| Consent-aware HTTP | Experimental | HTTP 430 not standardized yet |
+| wp-sinople-theme | Functional PHP | Custom theme, usable now |
 
-- Vörðr (formally verified runtime) - **70% complete, uses Ada stubs**
-- Cerro Torre (build system) - **0% complete, specs only**
-- Svalinn (network gateway) - **Not verified to work**
-- Consent-aware HTTP - **Bleeding edge, HTTP 430 not standardized**
-- ZeroTier overlay networking
-- Formal verification with Idris2
-- eBPF monitoring
-- wp-sinople-theme (custom WordPress theme)
+## Deployment Without Experimental Stack
 
-## Status: NOT READY FOR PRODUCTION
+The standard path uses:
+- `docker-compose.yml` — WordPress 6.9 + MariaDB + Varnish (works today)
+- `VERPEX-DEPLOYMENT.md` — cPanel deployment (step-by-step)
+- `WORDPRESS-DEPLOYMENT-PLAN.md` — VPS with Docker (3 services)
 
-- **Job requirement:** Use `nuj-lcb-production` instead
-- **Actual deployment:** Use `nuj-lcb-production` instead
-- **Reliable site:** Use `nuj-lcb-production` instead
+## When Experimental Components Mature
 
-## Purpose
+As Vörðr, Cerro Torre, and Svalinn reach production quality, they can
+replace the standard Docker stack. See `svalinn-compose.yml` for the
+verified-container compose file (template only, not yet functional).
 
-This repo exists to:
+## What Gemini Sold vs Reality
 
-1. **Test** container infrastructure before it's production-ready
-2. **Experiment** with formal verification and security tools
-3. **Dogfood** hyperpolymath projects (when they're ready)
-4. **Learn** without risking production
-
-## When To Use This Repo
-
-- ✅ You want to test Vörðr/Svalinn/Cerro Torre
-- ✅ You're developing container security tooling
-- ✅ You're okay with things breaking
-- ✅ You understand this is research, not production
-
-## When NOT To Use This Repo
-
-- ❌ You need a working WordPress site
-- ❌ You have a deadline
-- ❌ Your job depends on it working
-- ❌ You want something proven and stable
-
-## The Production Alternative
-
-**For actual NUJ LCB website deployment:**
-
-Use `nuj-lcb-production` repo:
-- ✅ Standard WordPress Docker stack
-- ✅ Proven, reliable, documented
-- ✅ No experimental dependencies
-- ✅ Can deploy within days
-- ✅ Thousands of tutorials available
-
-## Relationship to Production
-
-```
-nuj-lcb-production/  ← Use this for your job
-    │
-    │ (completely separate)
-    │
-lcb-website/         ← This repo (experiments only)
-    │
-    │ (may feed back if experiments succeed)
-    │
-    └─→ Future: Maybe some components proven and moved to production
-```
-
-## Dependencies Status
-
-| Component | Status | Production Ready? |
-|-----------|--------|-------------------|
-| Vörðr | 70% (Ada stubs) | ❌ No |
-| Cerro Torre | 0% (specs only) | ❌ No |
-| Svalinn | Unknown | ❌ No |
-| Consent-aware HTTP | Experimental | ❌ No |
-| wp-sinople-theme | Design needs work | ❌ No |
-| Standard WordPress | Proven | ✅ Yes (in nuj-lcb-production) |
-
-## What Gemini Promised vs Reality
-
-See `../nuj-lcb-production/WHAT-GEMINI-SOLD-VS-REALITY.md` for details on what was promised vs what actually exists.
-
-**Summary:** Gemini created an impressive-looking stack that references many components that don't actually work yet.
+See `WHAT-GEMINI-SOLD-VS-REALITY.md` for a critical analysis of AI-generated
+architecture claims that turned out to be spec-driven fantasy.
 
 ## License
 
 PMPL-1.0-or-later
-
-## Questions?
-
-- **"Should I use this for production?"** → NO. Use `nuj-lcb-production`
-- **"When will this be ready?"** → Unknown. Maybe 6 months, maybe never
-- **"Can I test things here?"** → YES! That's what it's for
-- **"Will this break?"** → YES! Expect it to break often
