@@ -1,0 +1,72 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Security headers for .htaccess
+# Supplements the PHP-level headers set by the Sinople theme.
+# Add to .htaccess in the document root.
+
+# === Force HTTPS ===
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# === Security Headers ===
+<IfModule mod_headers.c>
+    # HSTS — tell browsers to only use HTTPS (1 year, include subdomains, preload-ready)
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # Prevent MIME-type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Clickjacking protection
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Referrer policy — send origin only on cross-origin, full on same-origin
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Permissions policy — disable unnecessary browser features
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+
+    # Content Security Policy — restrictive baseline
+    # Adjust as needed for WordPress plugins (some require inline styles/scripts)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+
+    # Cross-Origin policies
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+    Header always set Cross-Origin-Resource-Policy "same-origin"
+</IfModule>
+
+# === Disable XML-RPC ===
+# Prevents brute-force and DDoS via xmlrpc.php
+<Files xmlrpc.php>
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</Files>
+
+# === Protect wp-config.php ===
+<Files wp-config.php>
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</Files>
+
+# === Protect .htaccess itself ===
+<Files .htaccess>
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</Files>
+
+# === Block directory browsing ===
+Options -Indexes
+
+# === Block access to hidden files (except .well-known) ===
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{REQUEST_URI} "!(^|/)\.well-known(/|$)"
+RewriteRule "(^|/)\." - [F]
+</IfModule>
+
+# === Disable server signature ===
+ServerSignature Off

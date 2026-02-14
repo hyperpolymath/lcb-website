@@ -1,15 +1,44 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
 = Roadmap for lcb-website
+:toc:
 
-== Q1 2026
-* Build and verify the Cerro Torre manifest (`infra/wordpress.ctp`) using the accessible WordPress base; capture SBOM/in-toto artifacts.
-* Publish the `.well-known` assets, consent docs, and automation playbooks so the hardened stack can be audited.
-* Wire ZeroTier/Twingate overlay scripts and ensure `vext`/feedback flows log incidents into the shared provenance store.
+== Current Status (2026-02-14)
 
-== Q2 2026
-* Switch the manifest to the Debian Hardened Images WordPress tag once DHI publishes it and share the update with the CT repo.
-* Expand the automation router + robot automaton triggers to include Bensunite/Chimichanga FFI inputs and the verified container spec.
-* Harden monitoring and observability (health dashboards, logs, metrics) and document them in `docs/`.
+Phase 1 (repo preparation) is **complete**. The repo contains all contractiles, templates, security configs, container build files, and 17 CI/CD workflows. Phase 2 (Verpex deployment) is next.
 
-== Handover readiness
-* Keep the `.machine_readable/6scm` metadata updated.
-* Ensure README, documentation, and roadmap explain how to run `just validate-rsr`, `ct pack`, and the consent/bot handoff requirements.
+See `TOPOLOGY.md` for the architecture diagram and completion dashboard.
+
+== Q1 2026 — Go Live on Verpex
+
+* **Deploy WordPress 6.9** on Verpex cPanel with Sinople theme, php-aegis, and all plugins.
+* **Configure Cloudflare** DNS (A records), SSL (Full Strict), WAF, Bot Fight Mode, HTTP/3.
+* **Create all WordPress pages** from `content/pages/` and `content/policies/` markdown.
+* **Security hardening**: Wordfence 2FA, security headers (A+ on securityheaders.com), encrypted backups.
+* **Members area**: bbPress forum (4 forums), Members plugin with `nuj_member` role, privacy-first defaults.
+* **LiteSpeed Cache**: TTLs matching Varnish VCL rules, Redis object cache if available, WebP image optimisation.
+* **Email**: WP Mail SMTP via Verpex SMTP or transactional service.
+* **.well-known** files served correctly with AIBDP consent enforcement.
+
+== Q2 2026 — Stapeln Container Path
+
+* Build and verify the Cerro Torre manifest (`infra/wordpress.ctp`) using Chainguard wolfi-base; capture SBOM/in-toto artifacts.
+* Switch to signed containers: `cerro-torre sign` with Ed25519 (Dilithium5 when available).
+* Deploy via `selur-compose.yml` with svalinn gateway + vordr runtime.
+* Wire feedback-o-tron MCP integration for incident pipeline.
+* Expand automation router + robot automaton triggers.
+
+== Q3 2026 — Post-Quantum & Monitoring
+
+* Migrate policy hashes from SHA-256 to SHAKE3-512 (FIPS 202).
+* Implement Ed448 + Dilithium5 hybrid signatures for CTP manifests.
+* Add Kyber-1024 (ML-KEM-1024) post-quantum key exchange.
+* Harden monitoring: UptimeRobot, Wordfence alerting pipeline, LiteSpeed Cache dashboards.
+* Security audit: panic-attack assail + echidna proofing.
+
+== Handover Readiness
+
+* Keep `.machine_readable/6scm/` metadata updated after every session.
+* Update `TOPOLOGY.md` completion dashboard when components change.
+* Ensure `contractiles/must/Mustfile` passes all checks before releases.
+* Run `runhaskell contractiles/trust/Trustfile.hs` for crypto verification.
+* Document how to run `just validate`, `ct pack`, and the consent/bot handoff requirements.

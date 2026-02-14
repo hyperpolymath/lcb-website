@@ -1,0 +1,64 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Mustfile - declarative state contract for lcb-website
+# See: https://github.com/hyperpolymath/mustfile
+
+version: 1
+
+metadata:
+  name: lcb-website-state-contract
+  spec: v1.0.0
+  description: "Invariant checks for the NUJ LCB WordPress deployment."
+
+parameters:
+  wordpress_version: "6.9"
+  php_version: "8.4"
+  domain: "nuj-lcb.org.uk"
+
+checks:
+  - name: sinople-theme-valid
+    description: "Sinople theme must have a valid style.css with theme headers."
+    run: "test -f wp-content/themes/sinople/style.css && head -20 wp-content/themes/sinople/style.css | grep -q 'Theme Name'"
+
+  - name: well-known-aibdp
+    description: ".well-known/aibdp.json must exist and be valid JSON."
+    run: "jq -e '.' .well-known/aibdp.json >/dev/null"
+
+  - name: well-known-security-txt
+    description: ".well-known/security.txt must exist with Contact field."
+    run: "test -f .well-known/security.txt && grep -q '^Contact:' .well-known/security.txt"
+
+  - name: well-known-ai-txt
+    description: ".well-known/ai.txt must exist."
+    run: "test -f .well-known/ai.txt"
+
+  - name: robots-txt-blocks-ai
+    description: "robots.txt must block known AI training bots."
+    run: "test -f robots.txt && grep -q 'GPTBot' robots.txt && grep -q 'CCBot' robots.txt"
+
+  - name: security-headers-template
+    description: "Security headers .htaccess template must exist."
+    run: "test -f templates/htaccess-security"
+
+  - name: wp-config-security-template
+    description: "wp-config security template must exist with DISALLOW_FILE_EDIT."
+    run: "test -f templates/wp-config-security.php && grep -q 'DISALLOW_FILE_EDIT' templates/wp-config-security.php"
+
+  - name: containerfile-chainguard
+    description: "Containerfile must use Chainguard wolfi-base, not Docker Hub."
+    run: "grep -q 'cgr.dev/chainguard/wolfi-base' Containerfile"
+
+  - name: ctp-manifest-exists
+    description: "Cerro Torre manifest must exist."
+    run: "test -f infra/wordpress.ctp"
+
+  - name: spdx-headers
+    description: "Key PHP files must have SPDX license headers."
+    run: "bash -uc 'for f in templates/wp-config-security.php; do grep -q \"SPDX-License-Identifier\" \"$f\" || exit 1; done'"
+
+  - name: topology-current
+    description: "TOPOLOGY.md must exist for project architecture visibility."
+    run: "test -f TOPOLOGY.md"
+
+  - name: contractiles-complete
+    description: "All four contractile types must be present."
+    run: "test -f contractiles/must/Mustfile && test -f contractiles/trust/Trustfile.hs && test -f contractiles/dust/Dustfile && test -f contractiles/lust/Intentfile"

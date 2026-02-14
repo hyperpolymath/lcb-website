@@ -1,163 +1,108 @@
 # SPDX-License-Identifier: PMPL-1.0-or-later
-# SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>
+# SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell (hyperpolymath) <jonathan.jewell@open.ac.uk>
 #
 # NUJ LCB Site Configuration Status
 
-**Last Updated:** 2026-01-28
+**Last Updated:** 2026-02-14
 
-## ✅ WordPress Installation
+## Current Phase: Repo Preparation COMPLETE, Deployment PENDING
 
-- **Version:** 6.9 (latest)
-- **PHP:** 8.3.20
-- **Database:** MariaDB 11.2
-- **URL (local):** http://localhost:8080
-- **URL (production):** https://nuj-lcb.org.uk
+See `TOPOLOGY.md` for the full architecture diagram and completion dashboard.
 
-## ✅ Theme
+## Target Stack
 
-- **Active Theme:** Newspaperup 1.6.1
-- **Status:** Activated and ready
-- **Design:** Professional news/magazine layout (same as nuj-prc.org.uk)
+| Component | Version | Status |
+|-----------|---------|--------|
+| **WordPress** | 6.9 | Ready to install on Verpex |
+| **PHP** | 8.4 | Available on Verpex |
+| **Theme** | Sinople (+ php-aegis) | In repo, ready to upload |
+| **Database** | MariaDB (cPanel managed) | Not created yet |
+| **Cache** | LiteSpeed Cache 7.7 | Not installed yet |
+| **Hosting** | Verpex cPanel + LiteSpeed Enterprise | Account exists |
+| **DNS/CDN** | Cloudflare | Domain registered, DNS not configured |
+| **SSL** | AutoSSL + Cloudflare Full Strict | Waiting on DNS |
+| **URL** | https://nuj-lcb.org.uk | Not live yet |
 
-**Theme Customization Needed:**
-- [ ] Set primary color to #461cfb (purple) - do via Appearance → Customize in admin
-- [ ] Upload NUJ LCB logo
-- [ ] Configure typography if needed
+## Pages (from content/)
 
-## ✅ Pages Created
+| Page | Source File | Slug | Status |
+|------|-----------|------|--------|
+| Homepage | `content/mockups/homepage.html` | `/` | Content ready |
+| About Us | `content/pages/about-us.md` | `/about-us/` | Content ready |
+| Contact | `content/pages/contact.md` | `/contact/` | Content ready |
+| Join the NUJ | `content/pages/join-us.md` | `/join/` | Content ready |
+| Members Area | `content/pages/members-area.md` | `/members/` | Content ready |
+| News & Updates | `content/pages/linkedin-feed.md` | `/news/` | Content ready |
+| AI Usage Policy | `content/policies/ai-usage-policy.md` | `/ai-policy/` | Content ready |
+| Legal Information | `content/policies/imprint-impressum.md` | `/legal/` | Content ready |
 
-| Page | Slug | Purpose |
-|------|------|---------|
-| Home | `/` | Front page - welcome message |
-| About | `/about` | Branch information and officers |
-| News | `/news` | Blog posts and updates |
-| Events & Training | `/events-training` | Meetings, workshops, training |
-| Contact | `/contact` | Contact details and address |
-| Member Resources | `/member-resources` | Resources for members |
+## Plugins (to be installed)
 
-## ✅ Navigation Menu
+| Plugin | Purpose | Priority |
+|--------|---------|----------|
+| **Wordfence Security** | WAF, malware scan, 2FA, login security | Day 1 |
+| **LiteSpeed Cache** | Server-level cache, image optimisation, CDN | Day 1 |
+| **bbPress** | Forum (General, Freelance, Events, Branch) | Day 1 |
+| **Members** | Custom roles (nuj_member), content restriction | Day 1 |
+| **WP Mail SMTP** | Reliable email delivery | Day 1 |
+| **UpdraftPlus** | Encrypted backups | Day 1 |
+| **Contact Form 7** | Contact forms | Day 1 |
+| **WP Activity Log** | Audit trail for all admin actions | Week 1 |
+| **WP GDPR Compliance** | GDPR consent, data requests | Week 1 |
+| **Download Monitor** | Secure PDF/file downloads | Week 1 |
+| **Redirection** | URL redirects, 404 monitoring | Week 1 |
+| **Yoast SEO** | SEO, sitemaps, Open Graph | Week 1 |
 
-**Main Navigation** (assigned to primary location):
-1. Home
-2. About
-3. News
-4. Events & Training
-5. Member Resources
-6. Contact
+## Security Configuration
 
-## ✅ Plugins Installed
+### Templates Ready (in `templates/`)
+- `wp-config-security.php` — 12 security constants (DISALLOW_FILE_EDIT, FORCE_SSL, etc.)
+- `htaccess-security` — HSTS, CSP, X-Frame-Options, XML-RPC block, directory listing off
+- `htaccess-well-known` — .well-known bypass rules, AIBDP enforcement
 
-| Plugin | Version | Purpose | Status |
-|--------|---------|---------|--------|
-| **Wordfence Security** | 8.1.4 | Firewall, malware scanning | ✅ Active |
-| **UpdraftPlus** | 1.26.1 | Automated backups | ✅ Active |
-| **Contact Form 7** | 6.1.4 | Contact forms | ✅ Active |
-| **WP Mail SMTP** | 4.7.1 | Email configuration | ✅ Active |
-| **Redirection** | 5.6.1 | 301 redirects management | Inactive (activate if needed) |
+### robots.txt
+Blocks 11 AI training bots (GPTBot, ChatGPT-User, CCBot, anthropic-ai, Claude-Web, cohere-ai, Google-Extended, Bytespider, PetalBot, Amazonbot, FacebookBot).
 
-## ✅ Settings Configured
+### .well-known Files
+- `aibdp.json` — AIBDP consent policy (strict mode, HTTP 430 for non-consent)
+- `security.txt` — Security contacts (expires 2027-02-14)
+- `ai.txt` — AI/bot access rules
 
-- **Site Title:** NUJ London Central Branch
-- **Tagline:** National Union of Journalists - London Central Branch
-- **Timezone:** Europe/London
-- **Date Format:** j F Y (e.g., "28 January 2026")
-- **Time Format:** H:i (24-hour, e.g., "14:30")
-- **Permalinks:** /%postname%/ (SEO-friendly)
-- **Comments:** Disabled by default
-- **User Registration:** Disabled (security)
-- **Front Page:** Static page (Home)
-- **Posts Page:** News
+## Container Path (Future)
 
-## 🔧 Configuration To Do After Deployment
+| Component | File | Status |
+|-----------|------|--------|
+| Build | `Containerfile` | Multi-stage wolfi-base + PHP 8.4 + LiteSpeed |
+| Manifest | `infra/wordpress.ctp` | Chainguard base, Ed25519 + Dilithium5 spec |
+| Orchestration | `selur-compose.yml` | Svalinn gateway + Vordr runtime + MariaDB + Redis |
+| Dev Stack | `docker-compose.yml` | Tested locally (OLS + MariaDB + Varnish) |
 
-### In WordPress Admin:
+## Repo Infrastructure
 
-1. **Change Admin Password:**
-   - Current: `ChangeMeAfterSetup123!`
-   - Go to Users → Your Profile → Generate new password
+| Component | Status |
+|-----------|--------|
+| Contractiles (must/trust/dust/lust/k9) | Complete |
+| .machine_readable/6scm/ (6 files) | Updated 2026-02-14 |
+| .bot_directives/ (8 bots) | Complete |
+| .github/workflows/ (17 workflows) | Complete |
+| TOPOLOGY.md | Complete |
+| justfile (7080 lines) | Complete |
+| Git hooks | Complete |
 
-2. **Customize Theme Colors:**
-   - Appearance → Customize → Colors
-   - Primary: #461cfb (purple, matching nuj-prc.org.uk)
+## Deployment Guides
 
-3. **Upload Logo:**
-   - Appearance → Customize → Site Identity
-   - Upload NUJ LCB logo
+1. **VERPEX-DEPLOYMENT.md** — Step-by-step cPanel deployment
+2. **DEPLOYMENT.md** — Local Docker setup
+3. **WORDPRESS-DEPLOYMENT-PLAN.md** — Full VPS deployment
+4. **SECURITY-IMPLEMENTATION.md** — Security hardening guide
 
-4. **Configure SMTP Email:**
-   - Settings → WP Mail SMTP
-   - Use Verpex SMTP details:
-     - Host: `mail.nuj-lcb.org.uk` (or Verpex SMTP server)
-     - Port: `587` (TLS) or `465` (SSL)
-     - Create email: `noreply@nuj-lcb.org.uk` in cPanel first
+## Next Steps
 
-5. **Configure Wordfence:**
-   - Wordfence → Dashboard
-   - Run initial scan
-   - Set firewall to "Enabled and Protecting"
-
-6. **Configure UpdraftPlus:**
-   - Settings → UpdraftPlus Backups
-   - Set backup schedule (recommended: Daily database, Weekly files)
-   - Configure remote storage (optional: Dropbox, Google Drive)
-
-7. **Create Contact Form:**
-   - Contact Form 7 → Add New
-   - Create simple contact form
-   - Add shortcode to Contact page
-
-### In cPanel (After Upload):
-
-8. **Set File Permissions:**
-   - wp-config.php: 600 (read/write owner only)
-   - Directories: 755
-   - Files: 644
-
-9. **Cron Jobs:**
-   - Add WordPress cron: `*/15 * * * * wget -q -O - https://nuj-lcb.org.uk/wp-cron.php?doing_wp_cron >/dev/null 2>&1`
-
-## 🔒 Security Status
-
-- ✅ Strong database passwords generated
-- ✅ Admin username is "admin" (⚠️ consider changing to something less obvious)
-- ✅ Comments disabled by default (prevents spam)
-- ✅ User registration disabled
-- ✅ Wordfence installed (firewall + malware scanner)
-- ✅ UpdraftPlus installed (backup recovery)
-- ✅ HTTPS will be enforced (via .htaccess)
-- ⏳ File edit disabled - add to wp-config.php: `define('DISALLOW_FILE_EDIT', true);`
-
-## 📊 Site Statistics
-
-- **Pages:** 6 pages created
-- **Posts:** 0 (clean slate for news)
-- **Menu Items:** 6 items in Main Navigation
-- **Themes:** 1 (Newspaperup only - no bloat)
-- **Plugins:** 5 active, 1 inactive (Redirection - optional)
-- **Database Size:** ~2-3 MB (minimal, clean install)
-
-## 🚀 Ready for Deployment
-
-The site is configured and ready to export to Verpex. Follow these guides:
-
-1. **Export:** Run `./export-for-verpex.sh`
-2. **Deploy:** Follow `VERPEX-DEPLOYMENT.md` step-by-step
-3. **Test:** Verify all pages load correctly
-4. **Finalize:** Complete post-deployment configurations above
-
-## Admin Access
-
-**Local (Development):**
-- URL: http://localhost:8080/wp-admin
-- Username: `admin`
-- Password: `ChangeMeAfterSetup123!`
-
-**Production (After Deployment):**
-- URL: https://nuj-lcb.org.uk/wp-admin
-- Username: `admin`
-- Password: **CHANGE IMMEDIATELY AFTER FIRST LOGIN**
-
----
-
-**Configured by:** Claude Sonnet 4.5
-**Date:** 2026-01-28
+1. Configure Verpex cPanel (addon domain + MySQL database + PHP 8.4)
+2. Configure Cloudflare DNS (A records pointing to Verpex IP)
+3. Install WordPress 6.9 (WP-CLI or Softaculous)
+4. Upload Sinople theme + .well-known files + robots.txt
+5. Install and configure plugins
+6. Create WordPress pages from content/ markdown
+7. Security hardening (Wordfence 2FA, headers, backups)
+8. Test and launch

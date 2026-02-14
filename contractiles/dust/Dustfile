@@ -1,0 +1,76 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Dustfile - recovery and rollback semantics for lcb-website
+# WordPress-specific recovery procedures for Verpex cPanel deployment
+
+version: 1
+
+recovery:
+  database:
+    - name: database-restore
+      description: "Restore MariaDB from most recent UpdraftPlus backup."
+      path: "wp-content/updraft/"
+      handler: "wp db import wp-content/updraft/latest-backup.sql"
+      notes: "UpdraftPlus stores encrypted backups. Decrypt first if using remote storage."
+
+    - name: database-rollback-migration
+      description: "Revert a failed search-replace or URL migration."
+      event: "migration.failure"
+      undo: "wp db import nuj-lcb-backup.sql.gz"
+      notes: "Keep pre-migration backup before running fix-urls.php or WP-CLI search-replace."
+
+  theme:
+    - name: sinople-rollback
+      description: "Roll back Sinople theme to previous version."
+      path: "wp-content/themes/sinople/"
+      rollback: "git checkout HEAD~1 -- wp-content/themes/sinople/"
+      notes: "Activates Newspaperup as fallback if Sinople causes fatal error."
+
+    - name: theme-fallback-activation
+      description: "Switch to safe fallback theme if active theme crashes."
+      event: "theme.crash"
+      undo: "wp theme activate twentytwentyfour"
+      notes: "WordPress core themes are always safe. Re-investigate Sinople before reactivating."
+
+  plugins:
+    - name: plugin-deactivation
+      description: "Emergency deactivation of all plugins."
+      event: "site.white-screen"
+      undo: "wp plugin deactivate --all"
+      notes: "Reactivate one-by-one to find the culprit. Start with Wordfence, then LiteSpeed Cache."
+
+    - name: plugin-rollback
+      description: "Rollback a specific plugin to previous version."
+      path: "wp-content/plugins/"
+      rollback: "wp plugin install $PLUGIN_SLUG --version=$PREVIOUS_VERSION --force"
+      notes: "Check plugin changelog before rolling back. Some downgrades require DB migration."
+
+  htaccess:
+    - name: htaccess-recovery
+      description: "Restore .htaccess from template if corrupted by plugin."
+      path: ".htaccess"
+      rollback: "cp templates/htaccess-well-known .htaccess && wp rewrite flush"
+      notes: "Plugins (especially caching and security) may corrupt .htaccess. Template is the known-good baseline."
+
+  wp-config:
+    - name: wp-config-recovery
+      description: "Restore wp-config.php security constants."
+      path: "wp-config.php"
+      rollback: "Apply templates/wp-config-security.php constants manually."
+      notes: "Never automate wp-config.php overwrites — contains unique salts and DB credentials."
+
+  full-site:
+    - name: full-restore
+      description: "Complete site restore from UpdraftPlus backup."
+      event: "site.catastrophic-failure"
+      undo: |
+        1. Download latest UpdraftPlus backup from remote storage
+        2. Upload via cPanel File Manager to wp-content/updraft/
+        3. WordPress admin > UpdraftPlus > Restore (select all components)
+        4. If admin inaccessible: manual restore via cPanel phpMyAdmin + File Manager
+      notes: "Test restore procedure monthly. Document remote storage credentials in password manager."
+
+  dust-events:
+    - name: deployment-to-dust
+      source: "infra/provenance.json"
+      transform: "Record each deployment as a reversible dust event with timestamp, commit SHA, and rollback command."
+      notes: "Provenance chain ensures every deployment can be traced and reversed."
