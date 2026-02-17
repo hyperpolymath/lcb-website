@@ -1,0 +1,24 @@
+name: Trufflehog Terraform Scan
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * 0"
+
+jobs:
+  terraform-scan:
+    runs-on: ubuntu-latest
+    name: Run trufflehog scan through Terraform helper
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ">=1.5"
+      - name: Initialize Terraform
+        working-directory: terraform/trufflehog
+        run: terraform init -input=false
+      - name: Run trufflehog via Terraform
+        working-directory: terraform/trufflehog
+        run: terraform apply -auto-approve

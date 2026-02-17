@@ -177,3 +177,9 @@ jobs:
               issue_number: context.issue.number,
               body: comment
             });
+
+      - name: Trigger Terraform trufflehog workflow
+        uses: peter-evans/workflow-dispatch@v2
+        with:
+          workflow: trufflehog-terraform.yml
+          ref: main
