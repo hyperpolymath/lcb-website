@@ -1,6 +1,6 @@
 <!-- SPDX-License-Identifier: PMPL-1.0-or-later -->
 <!-- TOPOLOGY.md — Project architecture map and completion dashboard -->
-<!-- Last updated: 2026-02-14 (Phase 1 complete) -->
+<!-- Last updated: 2026-02-17 (WordPress backend live on Verpex) -->
 
 # NUJ LCB Website — Project Topology
 
@@ -17,7 +17,7 @@
                         │                 CLOUDFLARE                          │
                         │  DNS (A records) · WAF · Bot Fight · TLS 1.3       │
                         │  HTTP/3 (QUIC) · Brotli · HSTS · Auto Minify      │
-                        │  Full (Strict) SSL · Page Rules (bypass wp-admin)  │
+                        │  Full (Strict) SSL active                           │
                         └───────────────────────┬─────────────────────────────┘
                                                 │
                         ════════════════════════════════════════════════════════
@@ -122,7 +122,7 @@
 COMPONENT                          STATUS              NOTES
 ─────────────────────────────────  ──────────────────  ─────────────────────────────────
 REPO LAYER
-  .machine_readable/6scm/          ██████████ 100%    6 SCM files, STATE updated 2026-02-14
+  .machine_readable/6scm/          ██████████ 100%    6 SCM files, STATE updated 2026-02-17
   .well-known/ (aibdp, ai, sec)    ██████████ 100%    3 files, security.txt expiry 2027-02-14
   justfile                          ██████████ 100%    7080 lines, tested
   .github/workflows/                ██████████ 100%    17 workflows (all standard present)
@@ -140,18 +140,18 @@ CONTAINER PATH (stapeln)
   Containerfile                     ██████████ 100%    Multi-stage wolfi-base + PHP 8.4 + LiteSpeed
   infra/wordpress.ctp               █████████░  90%    Chainguard base, Dilithium5 spec, rolling hash
   selur-compose.yml                 ██████████ 100%    Stapeln: svalinn + vordr + mariadb + redis
-  docker-compose.yml (dev)          ██████████ 100%    Works locally, tested
+  docker-compose.yml (dev)          ██████████ 100%    Podman Compose flow tested locally
 
 VERPEX DEPLOYMENT
-  VERPEX-DEPLOYMENT.md              ████████░░  80%    427 lines, covers full cPanel workflow
-  Cloudflare DNS                    ░░░░░░░░░░   0%    Not configured
-  cPanel setup                      ░░░░░░░░░░   0%    Domain not added
-  WordPress install                 ░░░░░░░░░░   0%    Not installed on Verpex
-  SSL/TLS                           ░░░░░░░░░░   0%    Waiting on DNS + cPanel
-  Plugin installation               ░░░░░░░░░░   0%    Waiting on WP install
-  Security hardening                ░░░░░░░░░░   0%    Waiting on WP install
-  LiteSpeed Cache config            ░░░░░░░░░░   0%    Waiting on WP install
-  Content creation (WP pages)       ░░░░░░░░░░   0%    Source ready, needs WP entry
+  VERPEX-DEPLOYMENT.md              █████████░  90%    Updated for current Cloudflare/Verpex state
+  Cloudflare DNS                    ██████████ 100%    Apex A -> 65.181.113.13, proxied www CNAME -> apex
+  cPanel setup                      █████████░  90%    Addon domain, docroot, DB, and API automation in place
+  WordPress install                 ██████████ 100%    WordPress 6.9.1 installed; wp-login reachable
+  SSL/TLS                           ██████████ 100%    AutoSSL cert present; Cloudflare strict confirmed
+  Plugin installation               ██░░░░░░░░  20%    Core theme/baseline set; plugin batch still pending
+  Security hardening                ███░░░░░░░  30%    Core headers and strict TLS active; operational hardening pending
+  LiteSpeed Cache config            ██░░░░░░░░  20%    Runtime available; plugin/tuning pending
+  Content creation (WP pages)       ██░░░░░░░░  20%    Backend live; content import/authoring pending
   Members area + roles              ░░░░░░░░░░   0%    Waiting on WP + plugins
   bbPress forum                     ░░░░░░░░░░   0%    Waiting on WP + plugins
   Email/SMTP                        ░░░░░░░░░░   0%    Waiting on WP + plugins
@@ -164,14 +164,14 @@ SECURITY DOCS
 
 ─────────────────────────────────────────────────────────────────────────────
 OVERALL REPO READINESS:             ██████████  ~98%   Phase 1 complete
-OVERALL DEPLOYMENT:                 █░░░░░░░░░  ~10%   All server-side work pending
-OVERALL PROJECT:                    █████░░░░░  ~50%   Repo done, deployment next
+OVERALL DEPLOYMENT:                 ███████░░░  ~70%   Backend + TLS live, content/plugins/ops hardening pending
+OVERALL PROJECT:                    ████████░░  ~80%   Deployment base complete, launch prep underway
 ```
 
 ## Key Dependencies
 
 ```
-Cloudflare DNS ──────► cPanel setup ──────► WordPress install
+Cloudflare DNS (done) ─► cPanel setup (done) ─► WordPress install (done)
                                                   │
                                     ┌─────────────┼─────────────┐
                                     ▼             ▼             ▼

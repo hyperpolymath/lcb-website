@@ -9,7 +9,23 @@
 <?php wp_body_open(); ?>
 <div id="page" class="site">
     <header id="masthead" class="site-header" role="banner">
+        <div class="site-branding">
+            <p class="site-title">
+                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+                    <?php bloginfo( 'name' ); ?>
+                </a>
+            </p>
+        </div>
         <nav id="nav" class="main-navigation" role="navigation" aria-label="<?php esc_attr_e( 'Primary Navigation', 'sinople' ); ?>">
-            <?php wp_nav_menu( array( 'theme_location' => 'primary' ) ); ?>
+            <?php
+            wp_nav_menu(
+                array(
+                    'theme_location' => 'primary',
+                    'container'      => false,
+                    'menu_class'     => 'primary-menu',
+                    'fallback_cb'    => 'wp_page_menu',
+                )
+            );
+            ?>
         </nav>
     </header>

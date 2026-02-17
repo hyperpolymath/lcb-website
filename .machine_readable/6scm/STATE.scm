@@ -7,7 +7,7 @@
     (version "0.2.0")
     (schema-version "1.0")
     (created "2026-01-19")
-    (updated "2026-02-14")
+    (updated "2026-02-17")
     (project "lcb-website")
     (repo "github.com/hyperpolymath/lcb-website"))
 
@@ -18,11 +18,12 @@
                  "Cerro Torre" "Svalinn" "Vörðr" "consent-aware HTTP" "Chainguard wolfi-base")))
 
   (current-position
-    (phase "phase-1-repo-preparation")
-    (overall-completion 80)
+    (phase "phase-2-verpex-deployment")
+    (overall-completion 93)
     (components ("container baseline" "manifest" "consent docs" "automation" "ci-cd"
                  "docker-compose" "contractiles" "templates" "robots-txt" "selur-compose"
-                 "well-known" "security-docs" "content" "bot-directives" "topology"))
+                 "well-known" "security-docs" "content" "bot-directives" "topology"
+                 "cloudflare-dns-cutover" "wordpress-live-backend"))
     (working-features
       ("infra/wordpress.ctp with Chainguard wolfi-base + Dilithium5 signature spec"
        "Containerfile multi-stage build (wolfi-base + PHP 8.4 + LiteSpeed)"
@@ -38,7 +39,11 @@
        "docker-compose.yml tested locally"
        "All content pages written in markdown"
        "Sinople theme with php-aegis + WCAG AAA"
-       "Full security documentation suite")))
+       "Full security documentation suite"
+       "Cloudflare DNS cutover complete (A apex -> 65.181.113.13, proxied CNAME www -> apex)"
+       "WordPress 6.9.1 backend installed on Verpex and reachable at /wp-login.php"
+       "Cloudflare strict SSL restored successfully after AutoSSL cert validation"
+       "Sinople activation flow patched for Verpex compatibility (avoid delete_plugins fatal path)")))
 
   (route-to-mvp
     (milestones
@@ -51,19 +56,18 @@
 
   (blockers-and-issues
     (critical ())
-    (high ("Verpex cPanel setup not started — needs domain addon + database creation"
-           "Cloudflare DNS not configured — A records needed"))
+    (high ("Plugin baseline not yet installed (Wordfence, LiteSpeed Cache, bbPress, Members, SMTP, backups)"
+           "Content pages/policies still need import or authoring in WordPress"))
     (medium ("security.txt well-known hash in wordpress.ctp needs recalculation after expiry update"
              "Container path blocked: cerro-torre ct binary needs Alire index fix"))
-    (low ("svalinn-compose.yml kept for reference — can delete after selur-compose.yml verified")))
+    (low ("svalinn-compose.yml kept for reference — can delete after selur-compose.yml verified"
+          "Initial admin credentials were generated during automated install and must be rotated immediately")))
 
   (critical-next-actions
-    (immediate ("Configure Verpex cPanel (addon domain, MySQL database, PHP 8.4)"
-                "Configure Cloudflare DNS (A records → Verpex IP)"
-                "Install WordPress 6.9 on Verpex"))
-    (this-week ("Upload Sinople theme and .well-known files"
-                "Install and configure plugins (Wordfence, LiteSpeed Cache, bbPress, Members)"
-                "Create WordPress pages from content/ markdown"
+    (immediate ("Rotate WordPress admin password and verify administrator login flow"
+                "Install and configure plugin baseline (Wordfence, LiteSpeed Cache, bbPress, Members, SMTP, backups)"
+                "Validate Sinople theme behavior in wp-admin and production pages"))
+    (this-week ("Import/create WordPress pages from content/ markdown"
                 "Security hardening (2FA, headers, encrypted backups)"))
     (this-month ("Configure LiteSpeed Cache (TTLs, Redis, WebP)"
                  "Set up members area with nuj_member role"
@@ -72,6 +76,22 @@
                  "Launch and verify (securityheaders.com A+, ssllabs.com A+)")))
 
   (session-history
+    ((date "2026-02-17")
+     (accomplishments
+       ("Configured Cloudflare zone + DNS cutover for nuj-lcb.org.uk"
+        "Set apex A to 65.181.113.13 and proxied www CNAME to apex"
+        "Enabled Cloudflare HTTPS hardening settings (Always Use HTTPS, automatic rewrites, min TLS 1.2, HTTP/3, Brotli)"
+        "Verified external reachability and diagnosed Cloudflare 526 root cause as origin TLS mismatch"
+        "Set temporary Cloudflare SSL mode to Full to unblock WordPress deployment path"
+        "Provisioned cPanel API deployment identity and automated Verpex setup"
+        "Created dedicated WordPress database/user (nujprcor_lcbwp26 / nujprcor_lcbu26)"
+        "Deployed WordPress 6.9.1 core, generated wp-config.php, and completed installer flow"
+        "Published .well-known policy files and robots.txt to live docroot"
+        "Patched Sinople activation logic to avoid shared-host filesystem credential fatal"
+        "Re-deployed Sinople patch and verified homepage + wp-login with strict TLS"
+        "Restored Cloudflare SSL mode to strict successfully"
+        "Updated deployment docs and topology/status dashboards to reflect live Cloudflare state and remaining WordPress work"))
+     (next-session "Install plugin baseline, import content pages, configure SMTP/backups, and complete launch hardening"))
     ((date "2026-02-14")
      (accomplishments
        ("Created contractiles framework (must/trust/dust/lust/k9) customised for lcb-website"

@@ -6,8 +6,8 @@ Author URI: https://sinople.org
 Description: A modern, semantically-aware WordPress theme powered by ReScript, Deno, and WASM. Features RDF/OWL processing for character relationships and glosses, IndieWeb Level 4 compliance, and WCAG 2.3 AAA accessibility. Sinople (from the heraldic term for green) combines traditional WordPress theming with cutting-edge semantic web technologies.
 Version: 1.0.0
 Requires at least: 6.0
-Tested up to: 6.4
-Requires PHP: 7.4
+Tested up to: 6.9
+Requires PHP: 8.1
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: sinople
@@ -107,18 +107,11 @@ Tags: accessibility-ready, custom-background, custom-logo, custom-menu, editor-s
 }
 
 /**
- * Respect user preferences for color scheme
+ * Force light theme as the default presentation.
+ * This intentionally ignores automatic dark-mode preference.
  */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-text: #FFFFFF;
-    --color-bg: #000000;
-    --color-text-inverse: #000000;
-    --color-bg-inverse: #FFFFFF;
-    --color-link: #66FF66;
-    --color-link-visited: #CC99FF;
-    --color-border: #CCCCCC;
-  }
+:root {
+  color-scheme: light;
 }
 
 /**

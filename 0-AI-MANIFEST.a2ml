@@ -58,7 +58,7 @@ lcb-website/
 ├── TOPOLOGY.md                      # Architecture diagram + completion dashboard
 ├── Containerfile                    # Multi-stage Chainguard wolfi-base build
 ├── selur-compose.yml                # Stapeln orchestration (svalinn+vordr)
-├── docker-compose.yml               # Local dev stack (OLS+MariaDB+Varnish)
+├── docker-compose.yml               # Local dev stack (run via podman-compose)
 ├── robots.txt                       # AI bot blocks
 ├── infra/
 │   └── wordpress.ctp                # Cerro Torre manifest (Ed25519+Dilithium5)

@@ -1,0 +1,7 @@
+{
+  "workflow-checkout": "regex:actions/checkout@[0-9a-fA-F]{7,40}",
+  "workflow-action": "regex:(github|ossf|webfactory|trufflesecurity|editorconfig-checker|codeql-action)/[0-9A-Za-z._/-]+@[0-9a-fA-F]{7,40}",
+  "sha256-digest": "regex:sha256[:=]\\s*[0-9a-fA-F]{32,128}",
+  "sha512-digest": "regex:sha512[:=]\\s*[0-9a-fA-F]{64,128}",
+  "sha1-digest": "regex:sha1[:=]\\s*[0-9a-fA-F]{32,128}"
+}

@@ -46,7 +46,6 @@ CODE_OF_CONDUCT.md @hyperpolymath
 
 # Containerization and OCI standards
 Containerfile @hyperpolymath
-Dockerfile @hyperpolymath
 /k8s/ @hyperpolymath
 
 # Communication and community

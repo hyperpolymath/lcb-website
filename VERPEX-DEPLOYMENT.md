@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: PMPL-1.0-or-later
-# SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>
+# SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>
 #
 # Verpex Deployment Guide for nuj-lcb.org.uk
 
@@ -14,19 +14,37 @@ This guide deploys the NUJ LCB WordPress site to Verpex hosting with:
 ## Current Situation
 
 - **Primary domain:** metadatastician.art (already configured)
-- **New domain:** nuj-lcb.org.uk (needs to be added as addon domain)
+- **New domain:** nuj-lcb.org.uk (Cloudflare DNS cutover complete)
 - **Hosting:** Verpex with cPanel
-- **DNS:** Cloudflare
+- **DNS:** Cloudflare (`A @ -> 65.181.113.13`, proxied; `CNAME www -> nuj-lcb.org.uk`, proxied)
+- **Reachability:** `https://nuj-lcb.org.uk` serves live WordPress backend (`/wp-login.php` reachable)
+- **Cloudflare SSL mode:** `Full (strict)` active (validated 2026-02-17)
+- **WordPress state:** Core installed, db configured, installer completed, Sinople deployed (with activation compatibility patch)
+
+## Fast Path from Current State (2026-02-17)
+
+Use this if you are starting now from the existing Cloudflare cutover:
+
+1. In cPanel, confirm/add domain `nuj-lcb.org.uk` with the account docroot shown by DomainInfo.
+   On this account the active docroot is `/home/nujprcor/nuj-lcb.org.uk`.
+2. Create MySQL DB + user and grant all privileges.
+3. Upload site files and import database.
+4. Update `wp-config.php` with final DB credentials and rotate salts.
+5. Run `scripts/wp-deploy.sh` for plugins/pages/menu/forum baseline.
+6. Run AutoSSL in cPanel for both hostnames.
+7. Change Cloudflare SSL from temporary `Full` back to `Full (strict)`.
 
 ## Phase 1: Prepare Local Site for Export
 
 ### 1.1: Export Database
 
 ```bash
-cd ~/Documents/hyperpolymath-repos/nuj-lcb-production
+cd /var/mnt/eclipse/repos/lcb-website
 
 # Export database from running container
-docker exec nuj-lcb-mariadb mysqldump -u wordpress -p'3SK2u+kvr8XvytTBTBKIlnAFZEwGHNiHpZXkHmh70AM=' wordpress > nuj-lcb-backup.sql
+podman exec lcb-mariadb-dev \
+  mysqldump -u wordpress -p"${WORDPRESS_DB_PASSWORD:?set WORDPRESS_DB_PASSWORD}" wordpress \
+  > nuj-lcb-backup.sql
 
 # Compress for upload
 gzip nuj-lcb-backup.sql
@@ -36,8 +54,8 @@ gzip nuj-lcb-backup.sql
 
 ```bash
 # Copy WordPress files from container to local
-docker exec nuj-lcb-wordpress tar czf /tmp/wordpress-files.tar.gz -C /var/www/html .
-docker cp nuj-lcb-wordpress:/tmp/wordpress-files.tar.gz ./wordpress-files.tar.gz
+podman exec lcb-wordpress-ols-dev tar czf /tmp/wordpress-files.tar.gz -C /var/www/vhosts/localhost/html .
+podman cp lcb-wordpress-ols-dev:/tmp/wordpress-files.tar.gz ./wordpress-files.tar.gz
 
 echo "Files ready for upload:"
 ls -lh nuj-lcb-backup.sql.gz wordpress-files.tar.gz
@@ -60,7 +78,7 @@ ls -lh nuj-lcb-backup.sql.gz wordpress-files.tar.gz
 3. Fill in the form:
    - **New Domain Name:** `nuj-lcb.org.uk`
    - **Subdomain:** Leave blank (auto-fills)
-   - **Document Root:** `public_html/nuj-lcb.org.uk` (or just accept default)
+   - **Document Root:** Use cPanel default for this account. Current active path is `/home/nujprcor/nuj-lcb.org.uk`.
    - **Create an FTP account:** Optional (not needed)
 4. Click **"Add Domain"**
 
@@ -166,86 +184,75 @@ define( 'DB_COLLATE', '' );
 6. Replace the section with fresh keys from: https://api.wordpress.org/secret-key/1.1/salt/
 7. Click **"Save Changes"**
 
-### 5.2: Update Site URLs
+### 5.2: Update Site URLs (WP-CLI, no temporary PHP files)
 
-Since we're moving from localhost to production:
+From your Verpex shell (in WordPress document root), run:
 
-1. In cPanel File Manager, navigate to `public_html/nuj-lcb.org.uk/`
-2. Create a file called `fix-urls.php` with this content:
+```bash
+# 1) Dry run first
+wp search-replace 'http://localhost:8080' 'https://nuj-lcb.org.uk' \
+  --all-tables \
+  --precise \
+  --recurse-objects \
+  --skip-columns=guid \
+  --dry-run
 
-```php
-<?php
-// Temporary URL fixer - DELETE THIS FILE after running once!
-define( 'DB_NAME', 'metadat_nujlcb_wordpress' );
-define( 'DB_USER', 'metadat_nujlcb_wp' );
-define( 'DB_PASSWORD', 'YOUR_GENERATED_PASSWORD' );
-define( 'DB_HOST', 'localhost' );
-
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$old_url = 'http://localhost:8080';
-$new_url = 'https://nuj-lcb.org.uk';
-
-$tables = ['options', 'posts', 'postmeta'];
-foreach ($tables as $table) {
-    $sql = "UPDATE wp_${table} SET option_value = REPLACE(option_value, '$old_url', '$new_url') WHERE option_value LIKE '%$old_url%'";
-    if ($table == 'posts') {
-        $sql = "UPDATE wp_posts SET post_content = REPLACE(post_content, '$old_url', '$new_url'), guid = REPLACE(guid, '$old_url', '$new_url')";
-    }
-    if ($table == 'postmeta') {
-        $sql = "UPDATE wp_postmeta SET meta_value = REPLACE(meta_value, '$old_url', '$new_url')";
-    }
-    $conn->query($sql);
-}
-
-echo "URLs updated from $old_url to $new_url<br>";
-echo "<strong>DELETE THIS FILE NOW!</strong>";
-$conn->close();
-?>
+# 2) Apply for real once counts look right
+wp search-replace 'http://localhost:8080' 'https://nuj-lcb.org.uk' \
+  --all-tables \
+  --precise \
+  --recurse-objects \
+  --skip-columns=guid
 ```
 
-3. Visit: `https://nuj-lcb.org.uk/fix-urls.php` (or without https if SSL not ready yet)
-4. You should see "URLs updated"
-5. **IMMEDIATELY DELETE `fix-urls.php`** via File Manager (security risk if left)
+This preserves serialized data correctly and avoids exposing a one-off PHP script in public web root.
+
+### 5.3: Apply NUJ LCB WordPress baseline (scripted)
+
+Use the repository deployment helper to configure plugins, pages, menus, forums, and hardening defaults:
+
+```bash
+# Run from a checkout of this repository
+WP_PATH="$HOME/public_html/nuj-lcb.org.uk" \
+SITE_URL="https://nuj-lcb.org.uk" \
+SOURCE_URL="http://localhost:8080" \
+RUN_SEARCH_REPLACE=1 \
+bash scripts/wp-deploy.sh
+```
+
+Optional:
+- Set `UPDATE_EXISTING_CONTENT=1` if you want existing pages overwritten with repo content.
+- Set `WP_ALLOW_ROOT=1` only if WP-CLI must run as root.
 
 ## Phase 6: Configure Cloudflare DNS
 
 ### 6.1: Get Verpex Server IP
 
-1. In Verpex client area, find your server IP address
-2. OR: In cPanel, look for "Server Information" or contact Verpex support
-3. Write down the IP (e.g., `123.45.67.89`)
+This is already complete for the current deployment:
+
+- Verpex IP: `65.181.113.13`
+- Cloudflare apex A: `nuj-lcb.org.uk -> 65.181.113.13` (proxied)
+- Cloudflare www: `www.nuj-lcb.org.uk -> nuj-lcb.org.uk` (proxied CNAME)
 
 ### 6.2: Update Cloudflare DNS
 
-1. Log in to Cloudflare
+1. Log in to Cloudflare (only needed if you must correct records)
 2. Select `nuj-lcb.org.uk` domain
 3. Go to **DNS** section
 4. Add/Update these records:
 
-**A Record:**
+**A Record (apex):**
 - Type: `A`
-- Name: `@` (root domain)
-- IPv4 address: `YOUR_VERPEX_IP`
+- Name: `@`
+- IPv4 address: `65.181.113.13`
 - Proxy status: **Proxied** (orange cloud)
 - TTL: Auto
 
-**A Record (www):**
-- Type: `A`
-- Name: `www`
-- IPv4 address: `YOUR_VERPEX_IP`
-- Proxy status: **Proxied** (orange cloud)
-- TTL: Auto
-
-**CNAME Record (if you prefer for www):**
+**CNAME Record (www):**
 - Type: `CNAME`
 - Name: `www`
 - Target: `nuj-lcb.org.uk`
-- Proxy status: **Proxied**
+- Proxy status: **Proxied** (orange cloud)
 - TTL: Auto
 
 5. Click **"Save"**
@@ -303,8 +310,9 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 ## Phase 8: Configure Cloudflare SSL
 
-1. In Cloudflare, go to **SSL/TLS** section
-2. Set SSL/TLS encryption mode to: **"Full (strict)"**
+1. In Cloudflare, go to **SSL/TLS** section.
+2. During install/migration, keep SSL/TLS mode at temporary **"Full"** if you see error `526`.
+3. After AutoSSL is valid for both hostnames, set SSL/TLS mode to **"Full (strict)"**.
 3. Under **Edge Certificates**, enable:
    - ✅ Always Use HTTPS
    - ✅ Automatic HTTPS Rewrites
@@ -317,8 +325,8 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 1. Visit: `https://nuj-lcb.org.uk`
 2. Should redirect to HTTPS and load WordPress
 3. Login: `https://nuj-lcb.org.uk/wp-admin`
-   - Username: `admin`
-   - Password: `ChangeMeAfterSetup123!` (CHANGE THIS!)
+   - Username: use the administrator account created during installation
+   - Password: use a unique generated password (rotate immediately if temporary)
 
 ### 9.2: Change Admin Password
 
@@ -332,10 +340,10 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 ### 9.3: Test Theme
 
 1. Visit homepage: `https://nuj-lcb.org.uk`
-2. Should show Newspaperup theme
+2. Should show **Sinople** theme
 3. In admin: **Appearance** → **Customize**
-4. Set colors to match nuj-prc.org.uk:
-   - Primary color: `#461cfb` (purple)
+4. Confirm brand colors are set to NUJ LCB palette:
+   - Primary color: `#006747` (NUJ green)
 
 ### 9.4: Configure SMTP (for sending emails)
 
@@ -360,13 +368,13 @@ Since you're on shared hosting, you'll need to configure SMTP:
 - [ ] Site loads at https://nuj-lcb.org.uk
 - [ ] SSL certificate valid (green padlock)
 - [ ] WordPress admin accessible
-- [ ] Admin password changed from default
-- [ ] Newspaperup theme active
-- [ ] Colors configured (purple #461cfb)
+- [ ] Admin password rotated to a generated secret
+- [ ] Sinople theme active
+- [ ] Colors configured (`#006747` primary)
 - [ ] SMTP configured for emails
 - [ ] Test email sending works
-- [ ] Delete `fix-urls.php` file (security)
-- [ ] Remove local database credentials from this guide (security)
+- [ ] `wp search-replace` completed without errors
+- [ ] No plaintext credentials were stored in docs or scripts
 
 ## Troubleshooting
 
@@ -384,11 +392,17 @@ Since you're on shared hosting, you'll need to configure SMTP:
 - Wait longer for DNS propagation (up to 48 hours)
 - Check Cloudflare DNS records point to correct IP
 - Verify addon domain created in cPanel
+- If DNS resolves but site is `404`, WordPress files are missing from `public_html/nuj-lcb.org.uk/` or docroot is wrong
 
 ### "SSL Certificate Invalid"
 - Wait for AutoSSL to complete (can take 5-10 minutes)
 - Check domain is verified in cPanel SSL/TLS Status
 - Contact Verpex support if AutoSSL fails
+
+### Cloudflare `526 Invalid SSL Certificate`
+- This happens when Cloudflare cannot validate the origin cert in strict mode
+- Temporary mitigation: set Cloudflare SSL mode to `Full`
+- Permanent fix: reissue AutoSSL for `nuj-lcb.org.uk` and `www.nuj-lcb.org.uk`, then switch back to `Full (strict)`
 
 ## Security Recommendations
 
@@ -423,4 +437,4 @@ Since you're on shared hosting, you'll need to configure SMTP:
 ---
 
 **Deployment created:** 2026-01-28
-**Guide version:** 1.0
+**Guide version:** 1.2
