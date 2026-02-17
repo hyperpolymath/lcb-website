@@ -10,10 +10,10 @@ infrastructure (Vörðr, Cerro Torre, Svalinn) being dogfooded alongside it.
 
 ```bash
 cp .env.example .env  # Edit with real credentials
-docker compose up -d  # OpenLiteSpeed + MariaDB + Varnish
+podman-compose -f docker-compose.yml up -d  # OpenLiteSpeed + MariaDB + Varnish
 ```
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for local Docker setup,
+See [DEPLOYMENT.md](DEPLOYMENT.md) for local Podman setup,
 [VERPEX-DEPLOYMENT.md](VERPEX-DEPLOYMENT.md) for cPanel hosting, or
 [WORDPRESS-DEPLOYMENT-PLAN.md](WORDPRESS-DEPLOYMENT-PLAN.md) for full VPS deployment.
 
@@ -23,7 +23,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for local Docker setup,
 |------|--------|
 | **Production (now)** | Verpex cPanel + LiteSpeed Enterprise + PHP 8.4 + Cloudflare DNS |
 | **Container (future)** | `podman build -f Containerfile` → `cerro-torre sign` → `selur-compose up` |
-| **Dev (local)** | `docker compose up -d` (MariaDB + OpenLiteSpeed + Varnish) |
+| **Dev (local)** | `podman-compose -f docker-compose.yml up -d` (MariaDB + OpenLiteSpeed + Varnish) |
 
 **Key files:**
 - `Containerfile` — Multi-stage Chainguard wolfi-base build
@@ -39,6 +39,24 @@ All website pages live in `content/`:
 - `content/policies/` — AI Usage Policy, Imprint/Impressum
 - `content/mockups/` — HTML mockups (homepage, officers page)
 - `content/nuj-lcb-shareable-site.html` — Self-contained offline demo (1072 lines)
+
+## IPFS Automation
+
+Use `scripts/ipfs-publish.sh` (or `just ipfs-publish`) to publish
+`content/nuj-lcb-shareable-site.html` to Pinata and automatically update the
+Cloudflare DNSLink record for `ipfs.nuj-lcb.org.uk`.
+
+Set these in `.env.local`:
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ZONE_ID`
+- `PINATA_JWT` (or `PINATA_API_KEY` + `PINATA_API_SECRET`)
+- `IPFS_HOST` (optional, defaults to `ipfs.nuj-lcb.org.uk`)
+
+For unattended publishing, the repo includes `.github/workflows/ipfs-publish.yml`
+(daily at 05:15 UTC + manual trigger). Configure repository secrets:
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ZONE_ID`
+- `PINATA_JWT`
 
 ## Container Baseline
 

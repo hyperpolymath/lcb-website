@@ -99,11 +99,20 @@ vordr-start:
         echo "    This runtime is required for container execution"; \
     fi
 
-# Run development stack (requires Docker Compose or Svalinn Compose)
+# Run development stack (prefers Podman Compose; falls back to Docker Compose)
 dev:
     @echo "Starting development stack..."
     @if [ -f "docker-compose.yml" ]; then \
-        docker compose up -d; \
+        if command -v podman-compose >/dev/null 2>&1; then \
+            podman-compose -f docker-compose.yml up -d; \
+        elif command -v podman >/dev/null 2>&1; then \
+            podman compose -f docker-compose.yml up -d; \
+        elif command -v docker >/dev/null 2>&1; then \
+            docker compose up -d; \
+        else \
+            echo "⚠️  No Podman/Docker compose runtime found"; \
+            exit 1; \
+        fi; \
     elif [ -f "svalinn-compose.yml" ]; then \
         svalinn-compose up -d; \
     else \
@@ -114,7 +123,16 @@ dev:
 stop:
     @echo "Stopping development stack..."
     @if [ -f "docker-compose.yml" ]; then \
-        docker compose down; \
+        if command -v podman-compose >/dev/null 2>&1; then \
+            podman-compose -f docker-compose.yml down; \
+        elif command -v podman >/dev/null 2>&1; then \
+            podman compose -f docker-compose.yml down; \
+        elif command -v docker >/dev/null 2>&1; then \
+            docker compose down; \
+        else \
+            echo "⚠️  No Podman/Docker compose runtime found"; \
+            exit 1; \
+        fi; \
     elif [ -f "svalinn-compose.yml" ]; then \
         svalinn-compose down; \
     fi
@@ -124,7 +142,7 @@ security-check:
     @echo "Running security checks..."
     @echo "Checking for hardcoded secrets..."
     @if command -v trufflehog >/dev/null 2>&1; then \
-        trufflehog filesystem . --only-verified; \
+        scripts/run-trufflehog.sh; \
     else \
         echo "⚠️  trufflehog not installed"; \
     fi
@@ -137,6 +155,11 @@ validate-wellknown:
     @if command -v jq >/dev/null 2>&1; then \
         jq empty .well-known/aibdp.json && echo "✅ aibdp.json is valid JSON"; \
     fi
+
+# Publish static mirror to IPFS and update DNSLink
+ipfs-publish file='content/nuj-lcb-shareable-site.html':
+    @echo "Publishing {{file}} to IPFS and updating DNSLink..."
+    @bash scripts/ipfs-publish.sh {{file}}
 
 # Clean build artifacts
 clean:
@@ -165,7 +188,8 @@ status:
     @echo "Tools:"
     @echo -n "  ASDF:                  "; command -v asdf >/dev/null 2>&1 && echo "✅" || echo "❌ Missing"
     @echo -n "  Deno:                  "; command -v deno >/dev/null 2>&1 && echo "✅" || echo "❌ Missing"
-    @echo -n "  Docker:                "; command -v docker >/dev/null 2>&1 && echo "✅" || echo "❌ Missing"
+    @echo -n "  Podman:                "; command -v podman >/dev/null 2>&1 && echo "✅" || echo "❌ Missing"
+    @echo -n "  Podman Compose:        "; command -v podman-compose >/dev/null 2>&1 && echo "✅" || echo "❌ Missing"
 
 # Help
 help:

@@ -5,15 +5,14 @@
 
 ## Prerequisites
 
-- Docker and Docker Compose installed
+- Podman and Podman Compose installed
 - Domain name (nuj-lcb.org.uk) pointing to your server
 - SSL certificate (Let's Encrypt recommended)
 
 ## Step 1: Clone and Configure
 
 ```bash
-cd ~/Documents/hyperpolymath-repos
-cd nuj-lcb-production
+cd /var/mnt/eclipse/repos/lcb-website
 
 # Copy environment template
 cp .env.example .env
@@ -30,13 +29,13 @@ nano .env
 
 ```bash
 # Start WordPress and MariaDB
-docker-compose up -d
+podman-compose -f docker-compose.yml up -d
 
 # Check everything is running
-docker-compose ps
+podman-compose -f docker-compose.yml ps
 
 # View logs
-docker-compose logs -f
+podman-compose -f docker-compose.yml logs -f
 ```
 
 ## Step 3: Install WordPress
@@ -50,23 +49,19 @@ docker-compose logs -f
    - Email: your-email@nuj-lcb.org.uk
 4. Click "Install WordPress"
 
-## Step 4: Install Newspaperup Theme
-
-The same theme used on nuj-prc.org.uk.
+## Step 4: Install Sinople Theme
 
 ### Option A: Via WordPress Admin (Recommended)
 
 1. Login to WordPress admin
 2. Go to Appearance → Themes
-3. Click "Add New"
-4. Search for "Newspaperup"
-5. Click "Install" then "Activate"
+3. Confirm `Sinople` is present (mounted from `wp-content/themes/sinople/`)
+4. Click "Activate"
 
 ### Option B: Manual Upload
 
-1. Download from https://wordpress.org/themes/newspaperup/
-2. Go to Appearance → Themes → Add New → Upload Theme
-3. Upload the .zip file
+1. Go to Appearance → Themes → Add New → Upload Theme
+2. Upload `wp-content/themes/sinople` as a zip package if needed
 4. Activate
 
 ## Step 5: Configure Theme
@@ -75,7 +70,7 @@ Match nuj-prc.org.uk styling:
 
 1. **Colors:**
    - Go to Appearance → Customize → Colors
-   - Primary color: Purple/violet (#461cfb)
+   - Primary color: NUJ green (`#006747`)
 
 2. **Typography:**
    - Headings: Lexend Deca (weight 600)
@@ -99,7 +94,7 @@ sudo apt install nginx certbot python3-certbot-nginx
 # Get certificate
 sudo certbot --nginx -d nuj-lcb.org.uk -d www.nuj-lcb.org.uk
 
-# Configure nginx to proxy to Docker
+# Configure nginx to proxy to Podman
 sudo nano /etc/nginx/sites-available/nuj-lcb.org.uk
 ```
 
@@ -138,10 +133,10 @@ See Traefik documentation for automatic Let's Encrypt.
 
 ```bash
 # Backup database
-docker-compose exec db mysqldump -u wordpress -p wordpress > backup-$(date +%Y%m%d).sql
+podman-compose -f docker-compose.yml exec db mysqldump -u wordpress -p wordpress > backup-$(date +%Y%m%d).sql
 
 # Restore database
-docker-compose exec -T db mysql -u wordpress -p wordpress < backup-20260128.sql
+podman-compose -f docker-compose.yml exec -T db mysql -u wordpress -p wordpress < backup-20260128.sql
 ```
 
 ### Full Backup
@@ -154,7 +149,7 @@ tar -czf nuj-lcb-backup-$(date +%Y%m%d).tar.gz \
     wp-content/
 
 # Backup database separately
-docker-compose exec db mysqldump -u wordpress -p wordpress | gzip > db-backup-$(date +%Y%m%d).sql.gz
+podman-compose -f docker-compose.yml exec db mysqldump -u wordpress -p wordpress | gzip > db-backup-$(date +%Y%m%d).sql.gz
 ```
 
 ## Step 8: Updates
@@ -162,8 +157,8 @@ docker-compose exec db mysqldump -u wordpress -p wordpress | gzip > db-backup-$(
 ```bash
 # Update WordPress core (via admin dashboard)
 # OR pull new images:
-docker-compose pull
-docker-compose up -d
+podman-compose -f docker-compose.yml pull
+podman-compose -f docker-compose.yml up -d
 ```
 
 ## Troubleshooting
@@ -172,22 +167,22 @@ docker-compose up -d
 
 Check:
 ```bash
-docker-compose logs db
-docker-compose exec wordpress ping db
+podman-compose -f docker-compose.yml logs db
+podman-compose -f docker-compose.yml exec wordpress ping db
 ```
 
 ### Permission errors
 
 Fix wp-content permissions:
 ```bash
-docker-compose exec wordpress chown -R www-data:www-data /var/www/html/wp-content
+podman-compose -f docker-compose.yml exec wordpress chown -R www-data:www-data /var/www/html/wp-content
 ```
 
 ### Can't install themes/plugins
 
 Temporary fix:
 ```bash
-docker-compose exec wordpress chmod -R 777 /var/www/html/wp-content
+podman-compose -f docker-compose.yml exec wordpress chmod -R 777 /var/www/html/wp-content
 # (Fix permissions after installation)
 ```
 
@@ -214,7 +209,7 @@ After basic site is working:
 ## Support
 
 If stuck:
-1. Check Docker logs: `docker-compose logs`
+1. Check Podman logs: `podman-compose -f docker-compose.yml logs`
 2. Check WordPress debug: Enable WP_DEBUG in .env
 3. Search WordPress forums
 4. This is STANDARD WordPress - thousands of tutorials exist

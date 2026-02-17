@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+name: IPFS Publish
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 5 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Required Secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          PINATA_JWT: ${{ secrets.PINATA_JWT }}
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ZONE_ID"
+          test -n "$PINATA_JWT"
+
+      - name: Publish Static Snapshot To IPFS
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          PINATA_JWT: ${{ secrets.PINATA_JWT }}
+          IPFS_HOST: ${{ vars.IPFS_HOST }}
+          PINATA_GATEWAY_DOMAIN: ${{ vars.PINATA_GATEWAY_DOMAIN }}
+        run: |
+          bash scripts/ipfs-publish.sh

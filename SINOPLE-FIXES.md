@@ -2,16 +2,11 @@
 <!-- SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell (hyperpolymath) <jonathan.jewell@open.ac.uk> -->
 # Sinople Theme — Required Fixes Before Launch
 
-**Status:** BLOCKED — files owned by UID 52520, need `sudo chown -R hyper:hyper wp-content/themes/sinople/`
+**Status:** COMPLETE (2026-02-17) — required fixes have been applied in `wp-content/themes/sinople/`.
 
-Run this first:
-```bash
-sudo chown -R hyper:hyper /var/mnt/eclipse/repos/lcb-website/wp-content/themes/sinople/
-```
+Note: A read-only backup directory (`wp-content/themes_ro/`) may exist locally from recovery work. It is not part of the tracked theme path.
 
-Then apply the fixes below.
-
-## 1. style.css — Version Corrections
+## 1. style.css — Version Corrections (DONE)
 
 **File:** `wp-content/themes/sinople/style.css`
 
@@ -33,7 +28,7 @@ To:
 Tested up to: 6.9
 ```
 
-## 2. Missing: editor-style.css
+## 2. Missing: editor-style.css (DONE)
 
 **File:** `wp-content/themes/sinople/assets/css/editor-style.css`
 
@@ -101,7 +96,7 @@ li { margin-bottom: 0.5em; }
 .wp-block[data-align="full"] { max-width: none; }
 ```
 
-## 3. Missing: semantic_processor.js
+## 3. Missing: semantic_processor.js (DONE)
 
 **File:** `wp-content/themes/sinople/assets/wasm/semantic_processor.js`
 
@@ -152,7 +147,7 @@ mkdir -p wp-content/themes/sinople/assets/wasm/
 })();
 ```
 
-## 4. accessibility.php — Stub Needs Implementation
+## 4. accessibility.php — Stub Needs Implementation (DONE)
 
 **File:** `wp-content/themes/sinople/inc/accessibility.php`
 
@@ -165,11 +160,28 @@ Currently 18 lines with no real WCAG utilities. Before launch this needs:
 
 **Priority:** Medium — the CSS and theme structure provide baseline accessibility, but the PHP helpers would improve it significantly.
 
-## 5. composer.json — PHP Version Constraint
+## 5. composer.json — PHP Version Constraint (VERIFIED)
 
 **File:** `wp-content/themes/sinople/composer.json`
 
 Verify `"php": ">=8.1"` in require section. The theme uses php-aegis which requires 8.1+.
+
+## 6. Activation Fatal on Verpex — `delete_plugins()` Flow (DONE)
+
+**File:** `wp-content/themes/sinople/functions.php`
+
+Observed on Verpex during `after_switch_theme`:
+- Fatal: `Call to undefined function request_filesystem_credentials()`
+- Trigger path: `sinople_on_theme_activation()` -> `delete_plugins()` in non-admin/runtime context
+
+Applied fix:
+- Keep deactivation of default plugins
+- Remove plugin deletion during theme activation
+- Reason: shared hosting and non-admin contexts may not have filesystem credential helpers loaded
+
+Result:
+- Sinople activates without 500 on Verpex
+- Homepage and `wp-login.php` stay reachable under Cloudflare strict TLS
 
 ---
 

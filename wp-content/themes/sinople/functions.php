@@ -50,6 +50,7 @@ function sinople_theme_setup() {
     // Register navigation menus
     register_nav_menus( array(
         'primary' => esc_html__( 'Primary Menu', 'sinople' ),
+        'quick'   => esc_html__( 'Quick Links Menu', 'sinople' ),
         'footer'  => esc_html__( 'Footer Menu', 'sinople' ),
         'social'  => esc_html__( 'Social Links Menu', 'sinople' ),
     ) );
@@ -124,10 +125,11 @@ add_action( 'wp_head', 'sinople_add_favicons' );
  * Theme Activation: Initial Setup & Updates
  *
  * Runs once when theme is first activated to:
- * - Remove default plugins (Akismet, Hello Dolly) that come with WordPress
+ * - Deactivate default plugins (Akismet, Hello Dolly) if present
  * - Trigger immediate translation and core updates
  *
- * Note: Users can still install these plugins later if they choose
+ * Note: We avoid deleting plugins during activation because deletion can
+ * require filesystem credential flows that are unavailable in some hosts.
  */
 function sinople_on_theme_activation() {
     // Only run once per theme activation
@@ -146,8 +148,7 @@ function sinople_on_theme_activation() {
             // Deactivate first
             deactivate_plugins( $plugin, true );
 
-            // Delete the plugin
-            delete_plugins( array( $plugin ) );
+            // Do not delete on activation; cPanel/shared hosts can fatal here.
         }
     }
 
@@ -488,14 +489,168 @@ function sinople_body_classes( $classes ) {
         $classes[] = 'singular';
     }
 
-    // Add accessibility mode class if enabled
-    if ( get_theme_mod( 'sinople_high_contrast_mode', false ) ) {
-        $classes[] = 'high-contrast';
-    }
-
     return $classes;
 }
 add_filter( 'body_class', 'sinople_body_classes' );
+
+/**
+ * Determine whether to show the homepage quick links panel.
+ */
+function sinople_should_render_quick_links(): bool {
+    return is_front_page() || is_home();
+}
+
+/**
+ * Default service links for the quick-links side panel.
+ *
+ * @return array<int, array<string, string>>
+ */
+function sinople_get_quick_tool_links(): array {
+    return array(
+        array(
+            'label' => __( 'Office', 'sinople' ),
+            'url'   => 'https://office.nuj-lcb.org.uk/',
+        ),
+        array(
+            'label' => __( 'Members', 'sinople' ),
+            'url'   => 'https://members.nuj-lcb.org.uk/',
+        ),
+        array(
+            'label' => __( 'Conference (Jitsi)', 'sinople' ),
+            'url'   => 'https://conference.nuj-lcb.org.uk/',
+        ),
+        array(
+            'label' => __( 'Chat (Zulip)', 'sinople' ),
+            'url'   => 'https://chat.nuj-lcb.org.uk/',
+        ),
+        array(
+            'label' => __( 'Stream', 'sinople' ),
+            'url'   => 'https://stream.nuj-lcb.org.uk/',
+        ),
+        array(
+            'label' => __( 'IPFS Mirror', 'sinople' ),
+            'url'   => 'https://ipfs.nuj-lcb.org.uk/',
+        ),
+        array(
+            'label' => __( 'GraphQL API', 'sinople' ),
+            'url'   => 'https://graphql.nuj-lcb.org.uk/',
+        ),
+        array(
+            'label' => __( 'REST API', 'sinople' ),
+            'url'   => 'https://rest.nuj-lcb.org.uk/',
+        ),
+        array(
+            'label' => __( 'NUJ UK', 'sinople' ),
+            'url'   => 'https://www.nuj.org.uk/',
+        ),
+    );
+}
+
+/**
+ * Default RSS feed links for the quick-links side panel.
+ *
+ * @return array<int, array<string, string>>
+ */
+function sinople_get_quick_rss_links(): array {
+    return array(
+        array(
+            'label' => __( 'LCB News Feed', 'sinople' ),
+            'url'   => home_url( '/feed/' ),
+        ),
+        array(
+            'label' => __( 'LCB Comments Feed', 'sinople' ),
+            'url'   => home_url( '/comments/feed/' ),
+        ),
+        array(
+            'label' => __( 'LabourStart Feed', 'sinople' ),
+            'url'   => 'https://www.labourstart.org/rss/labourstart.xml',
+        ),
+    );
+}
+
+/**
+ * Render quick-links side panel.
+ */
+function sinople_render_quick_links(): void {
+    if ( ! sinople_should_render_quick_links() ) {
+        return;
+    }
+    ?>
+    <aside class="quick-links-panel" aria-label="<?php esc_attr_e( 'Useful links', 'sinople' ); ?>">
+        <h2 class="quick-links-title"><?php esc_html_e( 'Useful Links', 'sinople' ); ?></h2>
+
+        <?php if ( has_nav_menu( 'quick' ) ) : ?>
+            <?php
+            wp_nav_menu(
+                array(
+                    'theme_location' => 'quick',
+                    'container'      => false,
+                    'menu_class'     => 'quick-links-list',
+                    'fallback_cb'    => false,
+                )
+            );
+            ?>
+        <?php else : ?>
+            <ul class="quick-links-list">
+                <?php foreach ( sinople_get_quick_tool_links() as $link ) : ?>
+                    <li>
+                        <a href="<?php echo esc_url( $link['url'] ); ?>" target="_blank" rel="noopener noreferrer">
+                            <?php echo esc_html( $link['label'] ); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+
+        <h2 class="quick-links-title quick-links-title-rss"><?php esc_html_e( 'Useful RSS Feeds', 'sinople' ); ?></h2>
+        <ul class="quick-links-list quick-links-rss">
+            <?php foreach ( sinople_get_quick_rss_links() as $link ) : ?>
+                <li>
+                    <a href="<?php echo esc_url( $link['url'] ); ?>" target="_blank" rel="noopener noreferrer">
+                        <?php echo esc_html( $link['label'] ); ?>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </aside>
+    <?php
+}
+
+/**
+ * Footer policy links.
+ *
+ * @return array<int, array<string, string>>
+ */
+function sinople_get_policy_links(): array {
+    $links = array();
+
+    $privacy_policy_url = get_privacy_policy_url();
+    if ( ! empty( $privacy_policy_url ) ) {
+        $links[] = array(
+            'label' => __( 'Privacy Policy', 'sinople' ),
+            'url'   => $privacy_policy_url,
+        );
+    }
+
+    $links[] = array(
+        'label' => __( 'AI Usage Policy', 'sinople' ),
+        'url'   => home_url( '/ai-usage-policy/' ),
+    );
+    $links[] = array(
+        'label' => __( 'Imprint', 'sinople' ),
+        'url'   => home_url( '/imprint-impressum/' ),
+    );
+    $links[] = array(
+        'label' => __( 'Security.txt', 'sinople' ),
+        'url'   => home_url( '/.well-known/security.txt' ),
+    );
+    $links[] = array(
+        'label' => __( 'AI.txt', 'sinople' ),
+        'url'   => home_url( '/.well-known/ai.txt' ),
+    );
+
+    return $links;
+}
 
 /**
  * Add Dublin Core metadata to head
@@ -550,17 +705,6 @@ function sinople_excerpt_more( $more ) {
     return '&hellip; <a href="' . esc_url( get_permalink() ) . '" class="read-more">' . esc_html__( 'Continue reading', 'sinople' ) . '<span class="sr-only"> "' . esc_html( get_the_title() ) . '"</span></a>';
 }
 add_filter( 'excerpt_more', 'sinople_excerpt_more' );
-
-/**
- * Add skip links for accessibility
- */
-function sinople_skip_links() {
-    ?>
-    <a class="skip-link sr-only" href="#main"><?php esc_html_e( 'Skip to main content', 'sinople' ); ?></a>
-    <a class="skip-link sr-only" href="#nav"><?php esc_html_e( 'Skip to navigation', 'sinople' ); ?></a>
-    <?php
-}
-add_action( 'wp_body_open', 'sinople_skip_links' );
 
 /**
  * Improve archive titles

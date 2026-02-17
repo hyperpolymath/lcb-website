@@ -37,6 +37,10 @@
   flex: 1;
 }
 
+.site-content.front-layout.has-quick-links {
+  grid-template-columns: 1fr;
+}
+
 @media (min-width: 768px) {
   .has-sidebar .site-content {
     grid-template-columns: 2fr 1fr;
@@ -47,6 +51,23 @@
   }
 
   .widget-area {
+    grid-column: 2;
+  }
+}
+
+@media (min-width: 980px) {
+  .site-content.front-layout.has-quick-links {
+    grid-template-columns: 18rem minmax(0, 1fr);
+  }
+
+  .site-content.front-layout.has-quick-links .quick-links-panel {
+    grid-column: 1;
+    position: sticky;
+    top: var(--space-lg);
+    align-self: start;
+  }
+
+  .site-content.front-layout.has-quick-links .site-main {
     grid-column: 2;
   }
 }
