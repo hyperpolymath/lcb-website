@@ -2,7 +2,7 @@ Contact: mailto:security@hyperpolymath.org
 Expires: 2027-02-14T00:00:00.000Z
 Preferred-Languages: en
 Canonical: https://nuj-lcb.org.uk/.well-known/security.txt
-Policy: https://github.com/hyperpolymath/lcb-website/blob/main/docs/hardened-wordpress.adoc
+Policy: https://nuj-lcb.org.uk/policies/security-policy
 Hiring: https://github.com/hyperpolymath
 
 # Security Policy

@@ -1,0 +1,100 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "2b5232d6c7698430eef17d876a00a8ac",
+    "packages": [
+        {
+            "name": "hyperpolymath/php-aegis",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../../../../php-aegis",
+                "reference": "f3c3b465441b252926d2cbcd56063db4c524d4ba"
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "phpstan/phpstan": "^1.0",
+                "phpunit/phpunit": "^10.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpAegis\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "PhpAegis\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit"
+                ],
+                "analyze": [
+                    "phpstan analyse src"
+                ],
+                "lint": [
+                    "php-cs-fixer fix --dry-run --diff"
+                ],
+                "fmt": [
+                    "php-cs-fixer fix"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan D.A. Jewell",
+                    "homepage": "https://github.com/hyperpolymath"
+                }
+            ],
+            "description": "PHP security and hardening toolkit - input validation, sanitization, XSS prevention, WordPress integration, and IndieWeb protocol security",
+            "homepage": "https://github.com/hyperpolymath/php-aegis",
+            "keywords": [
+                "indieauth",
+                "indieweb",
+                "input-validation",
+                "micropub",
+                "php-security",
+                "rdf",
+                "sanitization",
+                "security",
+                "semantic-web",
+                "turtle",
+                "validation",
+                "webmention",
+                "wordpress",
+                "xss"
+            ],
+            "support": {
+                "issues": "https://github.com/hyperpolymath/php-aegis/issues",
+                "source": "https://github.com/hyperpolymath/php-aegis"
+            },
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "hyperpolymath/php-aegis": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=8.1"
+    },
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
+}

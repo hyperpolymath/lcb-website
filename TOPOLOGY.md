@@ -97,7 +97,7 @@
                 │               .well-known / CONSENT                         │
                 │                                                             │
                 │  /.well-known/aibdp.json    AIBDP consent policy            │
-                │  /.well-known/security.txt  Security contacts               │
+                │  /.well-known/security.txt  Security contacts and a pointer to https://nuj-lcb.org.uk/policies/security (which in turn references the `stfp` file service) │
                 │  /.well-known/ai.txt        AI/bot access rules             │
                 │  /robots.txt                AI bot blocks + sitemap          │
                 └─────────────────────────────────────────────────────────────┘
@@ -197,3 +197,31 @@ This file is maintained by both humans and AI agents. When updating:
 
 Progress bars use: `█` (filled) and `░` (empty), 10 characters wide.
 Percentages: 0%, 10%, 20%, ... 100% (in 10% increments).
+
+## Monitoring Fabric & Dashboards
+
+1. `scripts/collect-prometheus.sh` → Prometheus textfile exporter (`monitoring/prometheus/health.prom`) → node_exporter `textfile_collector`. Signal lines encode the curated schema so Grafana / Hypatia can reason about what each field means.
+2. `monitoring/prometheus/alerts.yml` defines five alert rules (Varnish hit ratio, TLS expiry, Cloudflare SSL, Redis evictions, PHP errors) and should be loaded into Prometheus/Alertmanager or any compatible cloud alerting tier.
+3. The exporter also writes snapshots to `monitoring/reports/health-*.json`; these snapshots can be fed into Hypatia during the workflow dispatch triggered by `monitoring/alert-trigger.sh`.
+
+### Dashboard Diagram
+
+[mermaid]
+----
+flowchart LR
+  Visitor --> CF[Cloudflare zone]
+  CF --> V[Varnish + OpenLiteSpeed]
+  V --> WP[WordPress (Sinople + php-aegis)]
+  V --> Redis[Redis object cache]
+  CF --> Conference[conference.nuj-lcb.org.uk (Jitsi)]
+  CF --> Chat[chat.nuj-lcb.org.uk (Zulip)]
+  CF --> Office[office.nuj-lcb.org.uk (OnlyOffice)]
+  CF --> API[api.nuj-lcb.org.uk (REST + GraphQL + gRPC)]
+  CF --> STFP[stfp.nuj-lcb.org.uk (file & policy service)]
+  CF --> IPFS[IPFS fallback (dnslink)]
+  Prometheus --> CF
+  Prometheus --> V
+  Prometheus --> WP
+  Prometheus --> Redis
+  Prometheus --> Alert[Alertmanager → Hypatia scan]
+----

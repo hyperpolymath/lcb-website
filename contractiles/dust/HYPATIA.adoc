@@ -1,0 +1,72 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= Hypatia Dustfile Adapter
+
+== Purpose
+The {{dust-hypatia.jl}} script transforms the human-readable {{contractiles/dust/Dustfile}} into a structured JSON payload that Hypatia, Prometheus alerts, or any downstream monitor can consume. The goal is to turn every recovery event into metadata that can be surfaced when the automation router or Hypatia trigger assesses site health and to emit incident-specific dust summaries whenever alerts fire.
+
+== Output
+[cols="1,1,1,1",options="header"]
+|===
+| Field | Description | Example | Notes
+
+| `version`
+| Schema version (currently `1`)
+| `1`
+| Increment when output structure changes.
+
+| `generated_at`
+| ISO 8601 timestamp (UTC) when the payload was produced.
+| `2026-02-17T18:40:23Z`
+| Derived from `Dates.format(now(UTC), ...)`.
+
+| `entries`
+| Array of recovery intents sorted by section/category/name.
+| `[{...}]`
+| Each entry includes `section`, `category`, `name`, `description`, `commands`, etc.
+
+| `counts.total_events`
+| Running total of parsed entries.
+| `10`
+| Helps Hypatia gauge coverage.
+|===
+
+== Running the adapter
+
+.Use the script directly in the repo root:
+
+[source,bash]
+----
+julia scripts/dust-hypatia.jl
+----
+
+The command regenerates `monitoring/reports/dust-hypatia.json` and clears any previous stale data. Pipe the result through `just lint` or `just validate-monitoring` if you add future automation checks.
+
+Hypatia-friendly automation (suggested):
+
+[source,bash]
+----
+just dust-hypatia
+----
+
+Add a `just` entry that reuses `scripts/dust-hypatia.jl` so the JSON stays in sync with the repo. When alerts trigger Hypatia, supply the `--incident-*` arguments so the script emits a corresponding incident dustfile:
+
+[source,bash]
+----
+julia scripts/dust-hypatia.jl --incident-name "openlitespeed-5xx" --incident-metric "openlitespeed.error_5xx" --incident-value "12" --incident-details "OpenLiteSpeed returning more than ten 5xx responses" --incident-tags "openlitespeed,error"
+----
+
+The additional metadata makes the script write `monitoring/reports/incidents/incident-<timestamp>.json` containing the incident context and the recommended recovery entries that an LLM or Hypatia can read as standalone guidance.
+
+== Integration with Hypatia and Monitoring
+
+- Point Hypatia’s next-phase alert workflow (e.g., `monitoring/alert-trigger.sh`) at the generated JSON so failing metrics can reference the precise rollback or handler.
+- For any Hypatia loop that auto-remediates (e.g., plugin deadlock), include `entries[*].commands` in the report comment to guide the next deployment step.
+- `monitoring/collect-prometheus.sh` already writes structured JSON snapshots. Extend it to include digesting `monitoring/reports/dust-hypatia.json` when available; the enrichment can populate Grafana panels with recovery readiness data.
+- When Hypatia runs, stash one copy of `dust-hypatia.json` in `monitoring/reports/archives/<YYYYMMDD>_dust.json` for auditability.
+- Keep the per-incident dustfiles under `monitoring/reports/incidents/` attached to Hypatia comments so LLMs can read the narrative plus the recommended handlers that matched the open alert.
+
+== Notes
+
+- The adapter ignores comment blocks and only captures the core recovery instructions.
+- Keep `Dustfile` sorted and annotated — the adapter relies on section/category/name to determine display order.
+- If you add new events, rerun the script and commit the updated JSON so downstream automation always sees the latest coverage.

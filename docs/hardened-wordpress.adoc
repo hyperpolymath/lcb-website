@@ -44,6 +44,11 @@ Document each `sanctify`/php-aegis step directly in the manifest so CT can trace
 == Observability & policy continuum
 The asset stack also captures: (1) the DHI SBOM/VEX artifacts alongside the `.ctp` bundle so future audits can prove the Debian/PHP 8.5 lineage, (2) the php-aegis header and sanitizer configuration so runtime behavior matches the static analysis, and (3) the Sanctify reports (HTML/SARIF/JSON) so defenders know what was fixed automatically versus what needs reviewer attention.
 
+== Local / dogfood workflow
+- `composer.json` in `wp-content/themes/sinople` now points at the nearby `../../../../php-aegis` checkout so you can tweak php-aegis helpers and re-run `composer install --no-dev --optimize-autoloader` to refresh the theme vendor tree without hitting GitHub or Packagist.
+- The `sanctify-php` repo lives at the same sibling level (`../sanctify-php`). Build it via `cabal build` or just call `just sanctify-analyze`, which runs `scripts/run-sanctify.sh` and drops `monitoring/reports/sanctify-theme.json` plus `sanctify-theme-summary.txt` after each pass.
+- Drop those outputs into your Cerro Torre manifest (`infra/wordpress.ctp`) metadata (e.g., `sanctify-report` and `sanctify-summary` labels) so Hypatia/Hardened-WordPress gating knows which analysis produced the overlay.
+
 == Next steps
 * Drop the DHI WordPress manifest(s) into `infra/` or `services/` and call them from `Containerfile` so the plan is executable.  
 * Keep `ASDF.md` in sync when we add other runtimes (varnish, OpenLiteSpeed) that support the hardened WordPress flows.  
