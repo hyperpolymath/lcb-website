@@ -1,0 +1,15 @@
+{
+  "type": "presentation",
+  "id": "nuj-lcb-topology",
+  "title": "LCB Topology",
+  "sections": [
+    {"id": "cloudflare", "label": "Cloudflare zone", "details": "DNS, SSL, WAF, CDN"},
+    {"id": "core", "label": "Core stack", "details": "Varnish → OpenLiteSpeed → WordPress (Sinople + php-aegis)"},
+    {"id": "caching", "label": "Caching", "details": "Redis object cache, ipfs fallback, Prometheus exporter"},
+    {"id": "subdomains", "label": "Subdomains", "details": "conference (Jitsi), chat (Zulip), office (OnlyOffice), api (GraphQL/REST/gRPC)"},
+    {"id": "monitoring", "label": "Monitoring", "details": "Prometheus metrics & alerts, Hypatia scan trigger"}
+  ],
+  "media": {
+    "diagram": "https://example.com/diagrams/nuj-lcb-topology.svg"
+  }
+}

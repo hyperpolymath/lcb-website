@@ -1,0 +1,39 @@
+= LCB Public Relations Architecture Brief
+:icons: font
+
+== Purpose
+This brief distills the live NUJ LCB infrastructure into a story that can be shared with stakeholders. It mirrors the multi-tab site structure, the Cloudflare/Prometheus monitoring fabric, and the supplementary IPFS fallback.
+
+== Highlights
+* All public traffic hits `https://nuj-lcb.org.uk`, which Cloudflare fronts with Full (Strict) TLS, WAF policies, and caching rules.
+* Traffic hits Varnish + OpenLiteSpeed on Verpex for the production path, with Redis as the object cache and WordPress (Sinople theme + php-aegis) delivering the site.
+* Subdomains (`conference.`, `chat.`, `office.`, `api.`) live alongside the main site: Zulip/Jitsi/members endpoints are proxied through the same Cloudflare zone and logged via the Prometheus exporter.
+* An IPFS fallback is published via `scripts/ipfs-publish.sh` for the static shareable preview, exposing `dnslink` TXT records for resilience.
+* Monitoring uses `scripts/collect-prometheus.sh` + `monitoring/prometheus/health.prom`; Grafana dashboards (see `monitoring/prometheus/grafana-dashboard.json`) show the five “courses” of cache, delivery, Cloudflare, WordPress, and security.
+
+[mermaid]
+----
+flowchart TB
+  subgraph Cloudflare zone
+    CF["Cloudflare
+A/AAAA, SSL, WAF" ]
+  end
+  CF --> V[Varnish + OLS]
+  V --> WP["WordPress (Sinople + php-aegis)"]
+  V --> Redis["Redis object cache"]
+  CF --> IPFS["IPFS gateway (dnslink)"]
+  CF --> Conference["conference.nuj-lcb.org.uk (Jitsi)"]
+  CF --> Chat["chat.nuj-lcb.org.uk (Zulip)"]
+  CF --> Office["office.nuj-lcb.org.uk (OnlyOffice)"]
+  CF --> API["api.nuj-lcb.org.uk (REST/GraphQL/gRPC)"]
+  WP --> DB["MariaDB (Verpex cPanel)"]
+  VP["Prometheus + Grafana"] --> CF
+  VP --> V
+  VP --> WP
+  VP --> Redis
+  VP --> Monitoring["Scripts/report"]; Monitoring --> Alert["Alertmanager → Hypatia"]
+----
+
+== Presentation formats
+* `business/public_relations/presentations/topology.adoc` (this document) is for humans and can be published as a PDF.
+* `business/public_relations/presentations/topology.a2ml` holds the same semantics for automated systems (e.g., downstream Hypatia ingestion).

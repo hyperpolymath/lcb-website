@@ -147,6 +147,14 @@ security-check:
         echo "⚠️  trufflehog not installed"; \
     fi
 
+dust-hypatia:
+    @echo "Extracting recovery events for Hypatia..."
+    @julia scripts/dust-hypatia.jl
+
+sanctify-analyze:
+    @echo "Running sanctify-php against the Sinople theme..."
+    @bash scripts/run-sanctify.sh
+
 # Validate .well-known files
 validate-wellknown:
     @echo "Validating .well-known files..."

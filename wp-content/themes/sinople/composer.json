@@ -13,14 +13,16 @@
         "php": ">=8.1",
         "hyperpolymath/php-aegis": "dev-main"
     },
-    "require-dev": {
-        "phpstan/phpstan": "^1.0",
-        "friendsofphp/php-cs-fixer": "^3.0"
-    },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/hyperpolymath/php-aegis"
+            "packagist": false
+        },
+        {
+            "type": "path",
+            "url": "../../../../php-aegis",
+            "options": {
+                "symlink": true
+            }
         }
     ],
     "autoload": {

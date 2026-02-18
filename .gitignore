@@ -5,6 +5,9 @@
 .env.local
 .env.*.local
 
+# Cabal cache
+/.cabal
+
 # Build artifacts
 build/
 dist/

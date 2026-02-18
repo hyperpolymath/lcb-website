@@ -1,0 +1,14 @@
+{
+  "presentation_id": "nuj-lcb-topology",
+  "source": "business/public_relations/presentations/topology.adoc",
+  "formats": [
+    "adoc",
+    "a2ml"
+  ],
+  "tags": [
+    "topology",
+    "architecture",
+    "monitoring",
+    "public_relations"
+  ]
+}
