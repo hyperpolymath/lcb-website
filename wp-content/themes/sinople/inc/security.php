@@ -305,32 +305,12 @@ class Sinople_Security {
     /**
      * Add security headers
      *
-     * Should be called early in the request lifecycle.
+     * Deprecated: Security headers are now managed by PhpAegis in functions.php.
+     * This method is retained for backward compatibility but is a no-op.
+     * The authoritative CSP and header configuration lives in sinople_security_headers().
      */
     public function add_security_headers(): void {
-        if ( headers_sent() ) {
-            return;
-        }
-
-        // Content Security Policy (relaxed for WordPress admin compatibility)
-        if ( ! is_admin() ) {
-            header( "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; frame-ancestors 'self'" );
-        }
-
-        // Prevent MIME type sniffing
-        header( 'X-Content-Type-Options: nosniff' );
-
-        // Enable XSS filter
-        header( 'X-XSS-Protection: 1; mode=block' );
-
-        // Prevent clickjacking
-        header( 'X-Frame-Options: SAMEORIGIN' );
-
-        // Referrer policy
-        header( 'Referrer-Policy: strict-origin-when-cross-origin' );
-
-        // Permissions policy
-        header( "Permissions-Policy: geolocation=(), microphone=(), camera=()" );
+        // No-op: headers managed by PhpAegis in functions.php to avoid duplicates.
     }
 }
 
