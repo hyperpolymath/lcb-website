@@ -56,6 +56,7 @@ Control what other members can see:
 
 ### 2026 Meetings
 
+- [Branch Meeting - February 2026](#) (PDF, 94KB)
 - [Annual General Meeting - January 2026](#) (PDF, 156KB)
 - [Branch Meeting - January 2026](#) (PDF, 89KB)
 
@@ -126,15 +127,15 @@ Control what other members can see:
 #### Available Courses
 
 **Next AI in Journalism Workshop**
-- Date: Saturday, 1 February 2026
+- Date: Saturday, 7 March 2026
 - Time: 10:00-16:00
 - Location: Conway Hall + Online
 - [Register Now](#)
 
 **Upcoming Training**
-- Data Journalism Basics - 15 February
-- Investigative Techniques - 1 March
-- Multimedia Storytelling - 15 March
+- Data Journalism Basics - 14 March
+- Investigative Techniques - 28 March
+- Multimedia Storytelling - 11 April
 - [View All Training →](#)
 
 #### Self-Study Resources
@@ -205,13 +206,13 @@ Members can access:
 ### Upcoming Meetings
 
 **Branch General Meeting**
-- Date: Thursday, 6 February 2026
+- Date: Thursday, 5 March 2026
 - Time: 18:30-20:30
-- Room: `monthly-meeting-feb2026`
+- Room: `monthly-meeting-mar2026`
 - Password: (sent via email)
 
 **Freelancer Drop-In**
-- Date: Monday, 10 February 2026
+- Date: Monday, 9 March 2026
 - Time: 12:00-13:00
 - Room: `freelance-dropin`
 - No password needed
@@ -232,7 +233,7 @@ Members can access:
 
 **Fair Pay at [Publisher Name]**
 - Status: Negotiating
-- Next action: Rally, 15 February
+- Next action: Rally, 8 March
 - [Get Involved →](#)
 
 **Stop AI Training on Our Work**
