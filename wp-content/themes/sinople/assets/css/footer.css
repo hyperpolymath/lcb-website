@@ -70,6 +70,33 @@
   color: var(--color-text-muted);
 }
 
+/* Footer Navigation Menu */
+.footer-nav {
+  flex-shrink: 0;
+}
+
+.footer-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.footer-menu a {
+  font-size: var(--font-sm);
+  color: var(--color-heading);
+  text-decoration: none;
+  font-weight: var(--weight-medium);
+  transition: color var(--transition-fast);
+}
+
+.footer-menu a:hover,
+.footer-menu a:focus-visible {
+  color: var(--color-primary);
+}
+
 .footer-policy-nav {
   flex-shrink: 0;
 }

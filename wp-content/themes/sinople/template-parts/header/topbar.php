@@ -18,6 +18,21 @@ $social_links = sinople_get_social_links();
             <?php echo esc_html( date_i18n( get_option( 'date_format' ) ) ); ?>
         </span>
 
+        <?php if ( has_nav_menu( 'topbar' ) ) : ?>
+            <nav class="topbar-nav" aria-label="<?php esc_attr_e( 'Top bar navigation', 'sinople' ); ?>">
+                <?php
+                wp_nav_menu( array(
+                    'theme_location' => 'topbar',
+                    'container'      => false,
+                    'menu_class'     => 'topbar-menu',
+                    'fallback_cb'    => false,
+                    'depth'          => 1,
+                    'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>',
+                ) );
+                ?>
+            </nav>
+        <?php endif; ?>
+
         <?php if ( $show_ticker ) : ?>
             <div class="topbar-ticker" aria-label="<?php esc_attr_e( 'Latest news', 'sinople' ); ?>">
                 <span class="topbar-ticker-label">

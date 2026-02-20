@@ -403,8 +403,18 @@ function sinople_get_policy_links(): array {
         );
     }
 
-    $links[] = array( 'label' => __( 'AI Usage Policy', 'sinople' ), 'url' => home_url( '/ai-usage-policy/' ) );
-    $links[] = array( 'label' => __( 'Imprint', 'sinople' ), 'url' => home_url( '/imprint-impressum/' ) );
+    // Only show page links if the page actually exists
+    $optional_pages = array(
+        'ai-usage-policy'    => __( 'AI Usage Policy', 'sinople' ),
+        'imprint-impressum'  => __( 'Imprint', 'sinople' ),
+    );
+    foreach ( $optional_pages as $slug => $label ) {
+        if ( get_page_by_path( $slug ) ) {
+            $links[] = array( 'label' => $label, 'url' => home_url( '/' . $slug . '/' ) );
+        }
+    }
+
+    // .well-known files are always available
     $links[] = array( 'label' => __( 'Security.txt', 'sinople' ), 'url' => home_url( '/.well-known/security.txt' ) );
     $links[] = array( 'label' => __( 'AI.txt', 'sinople' ), 'url' => home_url( '/.well-known/ai.txt' ) );
 
