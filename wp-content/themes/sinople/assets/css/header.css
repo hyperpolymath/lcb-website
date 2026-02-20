@@ -25,6 +25,46 @@
   font-weight: var(--weight-medium);
 }
 
+/* Top Bar Navigation (utility links) */
+.topbar-nav {
+  flex-shrink: 0;
+}
+
+.topbar-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.topbar-menu li {
+  display: inline;
+}
+
+.topbar-menu a {
+  color: var(--color-text-inverse);
+  text-decoration: none;
+  opacity: 0.85;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-xs);
+  transition: opacity var(--transition-fast);
+  white-space: nowrap;
+}
+
+.topbar-menu a:hover,
+.topbar-menu a:focus-visible {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+@media (max-width: 991px) {
+  .topbar-nav {
+    display: none;
+  }
+}
+
 .topbar-ticker {
   flex: 1;
   overflow: hidden;

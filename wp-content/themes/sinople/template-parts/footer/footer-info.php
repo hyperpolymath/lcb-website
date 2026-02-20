@@ -18,6 +18,21 @@ $social_links = sinople_get_social_links();
         <?php esc_html_e( 'All rights reserved.', 'sinople' ); ?>
     </div>
 
+    <?php if ( has_nav_menu( 'footer' ) ) : ?>
+        <nav class="footer-nav" aria-label="<?php esc_attr_e( 'Footer navigation', 'sinople' ); ?>">
+            <?php
+            wp_nav_menu( array(
+                'theme_location' => 'footer',
+                'container'      => false,
+                'menu_class'     => 'footer-menu',
+                'fallback_cb'    => false,
+                'depth'          => 1,
+                'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>',
+            ) );
+            ?>
+        </nav>
+    <?php endif; ?>
+
     <?php if ( ! empty( $policy_links ) ) : ?>
         <nav class="footer-policy-nav" aria-label="<?php esc_attr_e( 'Policy links', 'sinople' ); ?>">
             <ul class="footer-policy-links">
