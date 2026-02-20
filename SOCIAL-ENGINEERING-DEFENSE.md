@@ -197,7 +197,7 @@ DON'T:
   ❌ Use venue with eavesdropping risk
 
 DO:
-  ✅ Password-protect Jitsi rooms
+  ✅ Password-protect BigBlueButton rooms
   ✅ Verbal-only for most sensitive items
   ✅ "No recordings" rule enforced
   ✅ Meeting notes: "Chatham House Rule"

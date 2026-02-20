@@ -112,7 +112,7 @@ Officers are elected annually at the AGM. Consider standing if you want to:
 
 We meet regularly at venues across central London. Check our [Events page](/events) for upcoming meetings and their locations.
 
-Virtual attendance is always available via our Jitsi platform - no account needed, just click the link.
+Virtual attendance is always available via our BigBlueButton platform - no account needed, just click the link.
 
 ---
 

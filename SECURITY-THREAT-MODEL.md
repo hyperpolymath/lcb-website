@@ -49,7 +49,7 @@ CRITICAL - Implement Immediately:
   - ✅ Database encryption at rest (LUKS/dm-crypt on VPS)
   - ✅ Strong database passwords (32+ chars, random)
   - ✅ Database firewall (no external access)
-  - ✅ Separate database user per service (WordPress, Zulip, Jitsi)
+  - ✅ Separate database user per service (WordPress, Zulip, BigBlueButton)
   - ✅ Regular encrypted backups (off-site, different provider)
   - ✅ Database audit logging
 ```
@@ -369,7 +369,7 @@ For sensitive union business:
 ✅ Encrypted email (ProtonMail or Tutanota)
 ✅ Signal (for real-time chat)
 ✅ Zulip (self-hosted, encrypted at rest)
-✅ Jitsi (self-hosted, E2EE)
+✅ BigBlueButton (self-hosted, E2EE)
 
 ❌ NEVER use:
   ❌ Unencrypted email for member lists

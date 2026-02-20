@@ -17,7 +17,7 @@ flowchart TB
   Hypatia -->|enrich| Alerting["Grafana / Alertmanager / Hypatia comments"]
 
   subgraph Subdomains
-    Conference[conference.nuj-lcb.org.uk\nJitsi Meet]
+    Conference[conference.nuj-lcb.org.uk\nBigBlueButton]
     Chat[chat.nuj-lcb.org.uk\nZulip]
     API[api.nuj-lcb.org.uk\nGraphQL / REST / gRPC]
     STFP[stfp.nuj-lcb.org.uk\nSecure file service]

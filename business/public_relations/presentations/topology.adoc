@@ -7,7 +7,7 @@ This brief distills the live NUJ LCB infrastructure into a story that can be sha
 == Highlights
 * All public traffic hits `https://nuj-lcb.org.uk`, which Cloudflare fronts with Full (Strict) TLS, WAF policies, and caching rules.
 * Traffic hits Varnish + OpenLiteSpeed on Verpex for the production path, with Redis as the object cache and WordPress (Sinople theme + php-aegis) delivering the site.
-* Subdomains (`conference.`, `chat.`, `office.`, `api.`) live alongside the main site: Zulip/Jitsi/members endpoints are proxied through the same Cloudflare zone and logged via the Prometheus exporter.
+* Subdomains (`conference.`, `chat.`, `office.`, `api.`) live alongside the main site: Zulip/BigBlueButton/members endpoints are proxied through the same Cloudflare zone and logged via the Prometheus exporter.
 * An IPFS fallback is published via `scripts/ipfs-publish.sh` for the static shareable preview, exposing `dnslink` TXT records for resilience.
 * Monitoring uses `scripts/collect-prometheus.sh` + `monitoring/prometheus/health.prom`; Grafana dashboards (see `monitoring/prometheus/grafana-dashboard.json`) show the five “courses” of cache, delivery, Cloudflare, WordPress, and security.
 
@@ -22,7 +22,7 @@ A/AAAA, SSL, WAF" ]
   V --> WP["WordPress (Sinople + php-aegis)"]
   V --> Redis["Redis object cache"]
   CF --> IPFS["IPFS gateway (dnslink)"]
-  CF --> Conference["conference.nuj-lcb.org.uk (Jitsi)"]
+  CF --> Conference["conference.nuj-lcb.org.uk (BigBlueButton)"]
   CF --> Chat["chat.nuj-lcb.org.uk (Zulip)"]
   CF --> Office["office.nuj-lcb.org.uk (OnlyOffice)"]
   CF --> API["api.nuj-lcb.org.uk (REST/GraphQL/gRPC)"]

@@ -331,7 +331,7 @@ In post editor sidebar:
 - Members → Content Permissions
 - Select: "NUJ Member" only
 
-### Step 10: Integration with Forum/Jitsi
+### Step 10: Integration with Forum/BigBlueButton
 
 **External Links in Members Area:**
 
@@ -349,7 +349,7 @@ In post editor sidebar:
 
   <div class="platform-card">
     <h3>📹 Video Meetings</h3>
-    <p>Join branch meetings via our Jitsi platform.</p>
+    <p>Join branch meetings via our BigBlueButton platform.</p>
     <a href="https://convene.nuj-lcb.org.uk" class="button" target="_blank">
       Join Meeting →
     </a>
@@ -431,7 +431,7 @@ wp plugin install wp-security-audit-log --activate
 - [ ] Verify admin approval process
 - [ ] Test password reset
 - [ ] Check mobile responsiveness
-- [ ] Test forum/Jitsi links
+- [ ] Test forum/BigBlueButton links
 - [ ] Verify GDPR compliance
 - [ ] Test activity logging
 
