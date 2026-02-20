@@ -1,0 +1,28 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/**
+ * Self-hosted fonts for Sinople Theme
+ *
+ * Lexend Deca (headings) — SIL Open Font License 1.1
+ * Outfit (body) — SIL Open Font License 1.1
+ *
+ * Fonts served as WOFF2 from assets/fonts/ for privacy and CSP compliance.
+ * No CDN dependencies.
+ */
+
+/* Lexend Deca — Variable weight 100-900 */
+@font-face {
+  font-family: "Lexend Deca";
+  src: url("../fonts/LexendDeca-VariableFont_wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Outfit — Variable weight 100-900 */
+@font-face {
+  font-family: "Outfit";
+  src: url("../fonts/Outfit-VariableFont_wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}

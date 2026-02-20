@@ -1,7 +1,9 @@
 <?php
 /**
- * Template part for displaying posts
+ * Template part for displaying posts (list/single view)
+ *
  * @package Sinople
+ * @since 2.0.0
  */
 ?>
 
@@ -16,17 +18,8 @@
         ?>
 
         <div class="entry-meta">
-            <time class="dt-published" datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>">
-                <?php echo esc_html( get_the_date() ); ?>
-            </time>
-            <span class="byline">
-                <?php esc_html_e( 'by', 'sinople' ); ?>
-                <span class="p-author h-card">
-                    <a href="<?php echo esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>" class="u-url">
-                        <span class="p-name"><?php echo esc_html( get_the_author() ); ?></span>
-                    </a>
-                </span>
-            </span>
+            <?php sinople_posted_on(); ?>
+            <?php sinople_posted_by(); ?>
         </div>
     </header>
 
@@ -41,17 +34,7 @@
     </div>
 
     <footer class="entry-footer">
-        <?php
-        $categories = get_the_category_list( ', ' );
-        $tags = get_the_tag_list( '', ', ' );
-
-        if ( $categories ) :
-            echo '<span class="cat-links">' . $categories . '</span>';
-        endif;
-
-        if ( $tags ) :
-            echo '<span class="tags-links">' . $tags . '</span>';
-        endif;
-        ?>
+        <?php sinople_entry_categories(); ?>
+        <?php sinople_entry_tags(); ?>
     </footer>
 </article>

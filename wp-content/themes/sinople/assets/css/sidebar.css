@@ -1,0 +1,128 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/**
+ * Sidebar & Widget Styles for Sinople Theme
+ */
+
+.widget-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* Widget base */
+.widget {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+}
+
+.widget-title {
+  font-size: var(--font-lg);
+  font-weight: var(--weight-bold);
+  margin: 0 0 var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 2px solid var(--color-primary);
+  color: var(--color-heading);
+}
+
+/* Widget lists */
+.widget ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.widget li {
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.widget li:last-child {
+  border-bottom: none;
+}
+
+.widget a {
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.widget a:hover,
+.widget a:focus-visible {
+  color: var(--color-primary);
+}
+
+/* Search widget */
+.widget_search .search-form {
+  display: flex;
+  gap: 0;
+}
+
+.widget_search .search-field {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-right: none;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  font-size: var(--font-sm);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.widget_search .search-submit {
+  padding: var(--space-2) var(--space-3);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: var(--font-sm);
+}
+
+/* Recent posts widget */
+.widget_recent_entries li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.widget_recent_entries .post-date {
+  font-size: var(--font-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* Categories widget */
+.widget_categories .cat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.widget_categories .count {
+  font-size: var(--font-xs);
+  color: var(--color-text-muted);
+  background: var(--color-bg-alt);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+}
+
+/* Tag cloud */
+.widget_tag_cloud .tagcloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.widget_tag_cloud .tagcloud a {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs) !important; /* Override WP inline styles */
+  transition: all var(--transition-fast);
+}
+
+.widget_tag_cloud .tagcloud a:hover,
+.widget_tag_cloud .tagcloud a:focus-visible {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
