@@ -1,0 +1,88 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# onlyoffice-compose.yml — Office document collaboration for office.nuj-lcb.org.uk
+#
+# Runtime: Podman (never Docker)
+# Deploy: podman-compose -f services/onlyoffice/onlyoffice-compose.yml up -d
+#
+# Prerequisites:
+#   - Set ONLYOFFICE_JWT_SECRET in .env or environment
+#   - DNS: office.nuj-lcb.org.uk -> container host IP
+#   - TLS: Cloudflare proxied or Caddy auto-TLS (see caddy/Caddyfile)
+#
+# Architecture:
+#   Internet -> Cloudflare -> Caddy (TLS) -> Office DS (:8080)
+#   WordPress at nuj-lcb.org.uk connects via ONLYOFFICE plugin using JWT
+
+version: '3.8'
+
+services:
+  onlyoffice-ds:
+    image: docker.io/onlyoffice/documentserver:8.2
+    container_name: lcb-onlyoffice-ds
+    restart: unless-stopped
+    environment:
+      - JWT_ENABLED=true
+      - JWT_SECRET=${ONLYOFFICE_JWT_SECRET:?Set ONLYOFFICE_JWT_SECRET}
+      - JWT_HEADER=Authorization
+      - JWT_IN_BODY=true
+      # Restrict to our WordPress instance
+      - WOPI_ENABLED=false
+      - ALLOW_META_IP_ADDRESS=false
+      - ALLOW_PRIVATE_IP_ADDRESS=false
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - onlyoffice-data:/var/www/onlyoffice/Data
+      - onlyoffice-logs:/var/log/onlyoffice
+      - onlyoffice-lib:/var/lib/onlyoffice
+      - onlyoffice-db:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    # Security hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+      - FOWNER
+      - SYS_CHROOT
+    tmpfs:
+      - /tmp:noexec,nosuid,size=256m
+
+  caddy:
+    image: docker.io/library/caddy:2-alpine
+    container_name: lcb-onlyoffice-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      onlyoffice-ds:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+
+volumes:
+  onlyoffice-data:
+  onlyoffice-logs:
+  onlyoffice-lib:
+  onlyoffice-db:
+  caddy-data:
+  caddy-config:

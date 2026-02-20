@@ -91,6 +91,13 @@ function sinople_dark_mode_inline_script(): void {
           d.setAttribute('data-theme', 'dark');
         }
       }
+      /* Restore high contrast + font scale before paint */
+      try {
+        var c = localStorage.getItem('sinople_contrast');
+        if (c === 'high') d.setAttribute('data-contrast', 'high');
+        var f = localStorage.getItem('sinople_fontscale');
+        if (f && ['small','normal','large','x-large'].indexOf(f) !== -1) d.setAttribute('data-fontscale', f);
+      } catch(e2) {}
     })();
     </script>
     <?php

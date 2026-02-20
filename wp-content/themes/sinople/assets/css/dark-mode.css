@@ -109,10 +109,5 @@ html[data-theme="dark"] .offcanvas-drawer {
 html[data-theme="dark"] .dark-mode-toggle .fa-moon { display: none; }
 html[data-theme="dark"] .dark-mode-toggle .fa-sun { display: inline-block; }
 
-/* High contrast mode adjustments for dark theme */
-html[data-theme="dark"] .high-contrast {
-  --color-text: #ffffff;
-  --color-bg: #000000;
-  --color-primary: #00ff99;
-  --color-border: #ffffff;
-}
+/* High contrast + dark mode combo is handled in a11y-toolbar.css
+   via html[data-theme="dark"][data-contrast="high"] selector */

@@ -1,0 +1,314 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/**
+ * Accessibility Toolbar — Floating panel with display mode controls
+ *
+ * @package Sinople
+ * @since 2.1.0
+ */
+
+/* ------------------------------------------------------------------ */
+/*  Floating Action Button (FAB)                                      */
+/* ------------------------------------------------------------------ */
+.a11y-fab {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  z-index: var(--z-fixed);
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  transition: background var(--transition-base), transform var(--transition-base);
+}
+
+.a11y-fab:hover {
+  background: var(--color-primary-hover);
+  transform: scale(1.05);
+}
+
+.a11y-fab:focus-visible {
+  outline: var(--focus-width) var(--focus-style) var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+
+.a11y-fab[aria-expanded="true"] .a11y-fab-icon-open {
+  display: none;
+}
+
+.a11y-fab[aria-expanded="false"] .a11y-fab-icon-close,
+.a11y-fab:not([aria-expanded="true"]) .a11y-fab-icon-close {
+  display: none;
+}
+
+.a11y-fab[aria-expanded="true"] .a11y-fab-icon-close {
+  display: inline;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Toolbar Panel                                                     */
+/* ------------------------------------------------------------------ */
+.a11y-toolbar {
+  position: fixed;
+  bottom: calc(var(--space-6) + 70px);
+  right: var(--space-6);
+  z-index: var(--z-fixed);
+  width: 280px;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+  background: var(--color-surface, var(--color-bg));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-4);
+  display: none;
+}
+
+.a11y-toolbar[aria-hidden="false"] {
+  display: block;
+}
+
+.a11y-toolbar-title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+  margin: 0 0 var(--space-3) 0;
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Toolbar Sections                                                  */
+/* ------------------------------------------------------------------ */
+.a11y-section {
+  margin-bottom: var(--space-4);
+}
+
+.a11y-section:last-child {
+  margin-bottom: 0;
+}
+
+.a11y-section-label {
+  display: block;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-2);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Mode Buttons (Light / Dark / High Contrast)                       */
+/* ------------------------------------------------------------------ */
+.a11y-mode-group {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.a11y-mode-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-1);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: var(--font-sm);
+  font-family: var(--font-family-base);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.a11y-mode-btn:hover {
+  border-color: var(--color-primary);
+}
+
+.a11y-mode-btn:focus-visible {
+  outline: var(--focus-width) var(--focus-style) var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+
+.a11y-mode-btn[aria-pressed="true"] {
+  border-color: var(--color-primary);
+  background: var(--color-primary-pale);
+  font-weight: var(--weight-semibold);
+}
+
+.a11y-mode-btn i {
+  font-size: var(--font-xl);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Font Size Controls                                                */
+/* ------------------------------------------------------------------ */
+.a11y-fontsize-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.a11y-fontsize-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-lg);
+  font-family: var(--font-family-base);
+  font-weight: var(--weight-bold);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.a11y-fontsize-btn:hover {
+  border-color: var(--color-primary);
+}
+
+.a11y-fontsize-btn:focus-visible {
+  outline: var(--focus-width) var(--focus-style) var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+
+.a11y-fontsize-label {
+  flex: 1;
+  text-align: center;
+  font-size: var(--font-sm);
+  color: var(--color-text);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Reset Button                                                      */
+/* ------------------------------------------------------------------ */
+.a11y-reset {
+  display: block;
+  width: 100%;
+  padding: var(--space-2);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: var(--font-sm);
+  font-family: var(--font-family-base);
+  text-align: center;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.a11y-reset:hover {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.a11y-reset:focus-visible {
+  outline: var(--focus-width) var(--focus-style) var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+
+/* ------------------------------------------------------------------ */
+/*  High Contrast Mode (full overrides)                               */
+/* ------------------------------------------------------------------ */
+html[data-contrast="high"] {
+  --color-text: #000000;
+  --color-heading: #000000;
+  --color-bg: #ffffff;
+  --color-bg-alt: #f0f0f0;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-primary: #003d2b;
+  --color-primary-hover: #002a1d;
+  --color-primary-pale: #d4ede4;
+  --color-link: #003d2b;
+  --color-link-hover: #001a10;
+  --color-border: #000000;
+  --color-border-strong: #000000;
+  --color-focus: #ff6600;
+  --color-focus-outline: #000000;
+}
+
+html[data-contrast="high"] a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+html[data-contrast="high"] button,
+html[data-contrast="high"] .button,
+html[data-contrast="high"] input[type="submit"] {
+  border-width: 3px;
+}
+
+html[data-contrast="high"] img {
+  outline: 1px solid var(--color-border);
+}
+
+/* High contrast + dark mode combo */
+html[data-theme="dark"][data-contrast="high"] {
+  --color-text: #ffffff;
+  --color-heading: #ffffff;
+  --color-bg: #000000;
+  --color-bg-alt: #111111;
+  --color-surface: #0a0a0a;
+  --color-surface-raised: #1a1a1a;
+  --color-primary: #00ff99;
+  --color-primary-hover: #33ffb3;
+  --color-primary-pale: #002211;
+  --color-link: #00ff99;
+  --color-link-hover: #66ffcc;
+  --color-border: #ffffff;
+  --color-border-strong: #ffffff;
+  --color-focus: #ff6600;
+  --color-focus-outline: #ffffff;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Font Size Scaling                                                 */
+/* ------------------------------------------------------------------ */
+html[data-fontscale="small"] { font-size: 14px; }
+html[data-fontscale="normal"] { font-size: 16px; }
+html[data-fontscale="large"] { font-size: 18px; }
+html[data-fontscale="x-large"] { font-size: 20px; }
+
+/* ------------------------------------------------------------------ */
+/*  Responsive: smaller FAB + panel on mobile                         */
+/* ------------------------------------------------------------------ */
+@media (max-width: 575.98px) {
+  .a11y-fab {
+    width: 48px;
+    height: 48px;
+    bottom: var(--space-4);
+    right: var(--space-4);
+    font-size: 1.25rem;
+  }
+
+  .a11y-toolbar {
+    bottom: calc(var(--space-4) + 60px);
+    right: var(--space-4);
+    left: var(--space-4);
+    width: auto;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Print: hide toolbar                                               */
+/* ------------------------------------------------------------------ */
+@media print {
+  .a11y-fab,
+  .a11y-toolbar {
+    display: none !important;
+  }
+}

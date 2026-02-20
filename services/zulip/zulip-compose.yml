@@ -1,0 +1,156 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# zulip-compose.yml — Zulip team chat for chat.nuj-lcb.org.uk
+#
+# Runtime: Podman (never Docker)
+# Deploy: podman-compose -f services/zulip/zulip-compose.yml up -d
+#
+# Prerequisites:
+#   - Set environment variables in .env
+#   - DNS: chat.nuj-lcb.org.uk -> container host IP
+#   - Minimum 2 CPU cores, 4GB RAM recommended
+#
+# Architecture:
+#   Internet -> Cloudflare -> Caddy (TLS) -> Zulip (:8003)
+#                                         -> PostgreSQL (:5432)
+#                                         -> Redis (:6379)
+#                                         -> Memcached (:11211)
+#                                         -> RabbitMQ (:5672)
+
+version: '3.8'
+
+services:
+  zulip-db:
+    image: docker.io/zulip/zulip-postgresql:14
+    container_name: lcb-zulip-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${ZULIP_DB_NAME:-zulip}
+      POSTGRES_USER: ${ZULIP_DB_USER:-zulip}
+      POSTGRES_PASSWORD: ${ZULIP_DB_PASSWORD:?Set ZULIP_DB_PASSWORD}
+    volumes:
+      - zulip-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${ZULIP_DB_USER:-zulip}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+
+  zulip-redis:
+    image: docker.io/library/redis:7-alpine
+    container_name: lcb-zulip-redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 128mb --maxmemory-policy allkeys-lru
+    volumes:
+      - zulip-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+
+  zulip-memcached:
+    image: docker.io/library/memcached:1-alpine
+    container_name: lcb-zulip-memcached
+    restart: unless-stopped
+    command: memcached -m 128
+    healthcheck:
+      test: ["CMD-SHELL", "echo stats | nc localhost 11211 | grep -q pid"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+
+  zulip-rabbitmq:
+    image: docker.io/library/rabbitmq:3-alpine
+    container_name: lcb-zulip-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${ZULIP_RABBITMQ_USER:-zulip}
+      RABBITMQ_DEFAULT_PASS: ${ZULIP_RABBITMQ_PASSWORD:?Set ZULIP_RABBITMQ_PASSWORD}
+    volumes:
+      - zulip-rabbitmq:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    security_opt:
+      - no-new-privileges:true
+
+  zulip-app:
+    image: docker.io/zulip/docker-zulip:9.3-0
+    container_name: lcb-zulip-app
+    restart: unless-stopped
+    environment:
+      - DB_HOST=zulip-db
+      - DB_HOST_PORT=5432
+      - DB_USER=${ZULIP_DB_USER:-zulip}
+      - DISABLE_HTTPS=true
+      - SETTING_MEMCACHED_LOCATION=zulip-memcached:11211
+      - SETTING_RABBITMQ_HOST=zulip-rabbitmq
+      - SETTING_REDIS_HOST=zulip-redis
+      - SECRETS_email_password=${ZULIP_EMAIL_PASSWORD:-}
+      - SECRETS_rabbitmq_password=${ZULIP_RABBITMQ_PASSWORD}
+      - SECRETS_postgres_password=${ZULIP_DB_PASSWORD}
+      - SECRETS_secret_key=${ZULIP_SECRET_KEY:?Set ZULIP_SECRET_KEY}
+      - SETTING_EXTERNAL_HOST=chat.nuj-lcb.org.uk
+      - SETTING_ZULIP_ADMINISTRATOR=contact@nuj-lcb.org.uk
+      - SETTING_EMAIL_GATEWAY_PATTERN=
+      - SETTING_DEFAULT_FROM_EMAIL=noreply@nuj-lcb.org.uk
+      - SETTING_NOREPLY_EMAIL_ADDRESS=noreply@nuj-lcb.org.uk
+      - SETTING_ADD_TOKENS_TO_NOREPLY_ADDRESS=true
+      - SETTING_AUTHENTICATION_BACKENDS=EmailAuthBackend
+      - SETTING_TIME_ZONE=Europe/London
+      - SETTING_DEFAULT_LANGUAGE=en
+      - SSL_CERTIFICATE_GENERATION=self-signed
+    ports:
+      - "127.0.0.1:8003:80"
+    volumes:
+      - zulip-data:/data
+    depends_on:
+      zulip-db:
+        condition: service_healthy
+      zulip-redis:
+        condition: service_healthy
+      zulip-memcached:
+        condition: service_healthy
+      zulip-rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    security_opt:
+      - no-new-privileges:true
+
+  caddy:
+    image: docker.io/library/caddy:2-alpine
+    container_name: lcb-zulip-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      zulip-app:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  zulip-pgdata:
+  zulip-redis:
+  zulip-rabbitmq:
+  zulip-data:
+  caddy-data:
+  caddy-config:

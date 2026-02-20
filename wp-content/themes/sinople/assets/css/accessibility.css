@@ -4,12 +4,13 @@
  * WCAG AAA specific styles
  */
 
-/* High Contrast Mode */
+/* High Contrast Mode (legacy body class for backward compat) */
+/* Primary high-contrast styles are now in a11y-toolbar.css via data-contrast="high" */
 .high-contrast {
   --color-text: #000000;
   --color-bg: #FFFFFF;
-  --color-primary: #000000;
-  --color-link: #000000;
+  --color-primary: #003d2b;
+  --color-link: #003d2b;
   --color-border: #000000;
 }
 
