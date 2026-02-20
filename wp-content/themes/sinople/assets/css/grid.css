@@ -93,6 +93,17 @@
   }
 }
 
+@media (max-width: 767px) {
+  .featured-grid .featured-sidebar-left,
+  .featured-grid .featured-sidebar-right {
+    display: none;
+  }
+
+  .featured-grid .featured-carousel {
+    order: -1;
+  }
+}
+
 /* Missed posts: 4 columns */
 .missed-grid {
   display: grid;
