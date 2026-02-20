@@ -165,6 +165,8 @@ PLUGINS=(
     "download-monitor"
     "redirection"
     "wordpress-seo"
+    "onlyoffice"
+    "wp-accessibility"
 )
 
 for plugin in "${PLUGINS[@]}"; do

@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Caddyfile — Reverse proxy for Zulip team chat
+
+chat.nuj-lcb.org.uk {
+    reverse_proxy zulip-app:80 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+
+        # WebSocket + long-polling for real-time messages
+        transport http {
+            read_timeout 300s
+            write_timeout 300s
+        }
+    }
+
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        Permissions-Policy "geolocation=(), microphone=(), camera=()"
+        -Server
+    }
+
+    log {
+        output file /data/access.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}

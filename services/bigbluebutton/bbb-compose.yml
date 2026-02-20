@@ -1,0 +1,112 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# bbb-compose.yml — BigBlueButton for conference.nuj-lcb.org.uk
+#
+# Runtime: Podman (never Docker)
+# Deploy: podman-compose -f services/bigbluebutton/bbb-compose.yml up -d
+#
+# Note: BigBlueButton is complex and officially recommends a dedicated server
+# with their install script. This compose file uses the community container
+# image for lighter deployments. For production with >50 concurrent users,
+# consider a dedicated BBB server with `bbb-install.sh`.
+#
+# Prerequisites:
+#   - Set environment variables in .env
+#   - DNS: conference.nuj-lcb.org.uk -> container host IP
+#   - Minimum 4 CPU cores, 8GB RAM recommended
+#   - Ports 80, 443, 16384-32768/UDP (FreeSWITCH media)
+#
+# Architecture:
+#   Internet -> Cloudflare (DNS only, NOT proxied for WebRTC)
+#            -> Caddy (TLS) -> BBB (Greenlight + core)
+
+version: '3.8'
+
+services:
+  bbb-db:
+    image: docker.io/library/postgres:16-alpine
+    container_name: lcb-bbb-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${BBB_DB_NAME:-greenlight}
+      POSTGRES_USER: ${BBB_DB_USER:-greenlight}
+      POSTGRES_PASSWORD: ${BBB_DB_PASSWORD:?Set BBB_DB_PASSWORD}
+    volumes:
+      - bbb-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${BBB_DB_USER:-greenlight}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+
+  bbb-redis:
+    image: docker.io/library/redis:7-alpine
+    container_name: lcb-bbb-redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - bbb-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+
+  # Greenlight — BBB front-end for room management
+  greenlight:
+    image: docker.io/bigbluebutton/greenlight:v3
+    container_name: lcb-bbb-greenlight
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgres://${BBB_DB_USER:-greenlight}:${BBB_DB_PASSWORD}@bbb-db:5432/${BBB_DB_NAME:-greenlight}
+      - REDIS_URL=redis://bbb-redis:6379/0
+      - SECRET_KEY_BASE=${BBB_SECRET_KEY:?Set BBB_SECRET_KEY}
+      - BIGBLUEBUTTON_ENDPOINT=${BBB_API_URL:?Set BBB_API_URL}
+      - BIGBLUEBUTTON_SECRET=${BBB_API_SECRET:?Set BBB_API_SECRET}
+      - RELATIVE_URL_ROOT=/
+      - RAILS_ENV=production
+      - DEFAULT_LOCALE=en
+      - ALLOW_GREENLIGHT_ACCOUNTS=true
+      - ROOM_FEATURES=mute-on-join,require-moderator-approval
+      - SAFE_HOSTS=conference.nuj-lcb.org.uk
+    ports:
+      - "127.0.0.1:8002:3000"
+    depends_on:
+      bbb-db:
+        condition: service_healthy
+      bbb-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    security_opt:
+      - no-new-privileges:true
+
+  caddy:
+    image: docker.io/library/caddy:2-alpine
+    container_name: lcb-bbb-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      greenlight:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  bbb-pgdata:
+  bbb-redis:
+  caddy-data:
+  caddy-config:

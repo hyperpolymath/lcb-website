@@ -1,0 +1,112 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# tendenci-compose.yml — Tendenci membership management for members.nuj-lcb.org.uk
+#
+# Runtime: Podman (never Docker)
+# Deploy: podman-compose -f services/tendenci/tendenci-compose.yml up -d
+#
+# Prerequisites:
+#   - Set environment variables in .env (see below)
+#   - DNS: members.nuj-lcb.org.uk -> container host IP
+#
+# Architecture:
+#   Internet -> Cloudflare -> Caddy (TLS) -> Tendenci (:8000)
+#                                         -> PostgreSQL (:5432)
+#                                         -> Redis (:6379)
+
+version: '3.8'
+
+services:
+  tendenci-db:
+    image: docker.io/library/postgres:16-alpine
+    container_name: lcb-tendenci-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${TENDENCI_DB_NAME:-tendenci}
+      POSTGRES_USER: ${TENDENCI_DB_USER:-tendenci}
+      POSTGRES_PASSWORD: ${TENDENCI_DB_PASSWORD:?Set TENDENCI_DB_PASSWORD}
+    volumes:
+      - tendenci-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TENDENCI_DB_USER:-tendenci}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+
+  tendenci-redis:
+    image: docker.io/library/redis:7-alpine
+    container_name: lcb-tendenci-redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 128mb --maxmemory-policy allkeys-lru
+    volumes:
+      - tendenci-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+
+  tendenci-app:
+    image: docker.io/tendenci/tendenci:latest
+    container_name: lcb-tendenci-app
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgres://${TENDENCI_DB_USER:-tendenci}:${TENDENCI_DB_PASSWORD}@tendenci-db:5432/${TENDENCI_DB_NAME:-tendenci}
+      - REDIS_URL=redis://tendenci-redis:6379/0
+      - SECRET_KEY=${TENDENCI_SECRET_KEY:?Set TENDENCI_SECRET_KEY}
+      - SITE_SETTINGS_KEY=${TENDENCI_SITE_KEY:?Set TENDENCI_SITE_KEY}
+      - ALLOWED_HOSTS=members.nuj-lcb.org.uk,localhost
+      - SITE_URL=https://members.nuj-lcb.org.uk
+      - TIME_ZONE=Europe/London
+      - LANGUAGE_CODE=en-gb
+      - DEBUG=false
+    ports:
+      - "127.0.0.1:8001:8000"
+    volumes:
+      - tendenci-media:/var/www/tendenci/media
+      - tendenci-static:/var/www/tendenci/static
+      - tendenci-themes:/var/www/tendenci/themes
+    depends_on:
+      tendenci-db:
+        condition: service_healthy
+      tendenci-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+    security_opt:
+      - no-new-privileges:true
+
+  caddy:
+    image: docker.io/library/caddy:2-alpine
+    container_name: lcb-tendenci-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+      - tendenci-media:/srv/media:ro
+      - tendenci-static:/srv/static:ro
+    depends_on:
+      tendenci-app:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  tendenci-pgdata:
+  tendenci-redis:
+  tendenci-media:
+  tendenci-static:
+  tendenci-themes:
+  caddy-data:
+  caddy-config:

@@ -305,6 +305,7 @@ function sinople_enqueue_assets() {
         wp_enqueue_style( 'sinople-dark-mode', SINOPLE_URL . '/assets/css/dark-mode.css', array( 'sinople-variables' ), SINOPLE_VERSION );
         wp_enqueue_style( 'sinople-search-modal', SINOPLE_URL . '/assets/css/search-modal.css', array( 'sinople-style' ), SINOPLE_VERSION );
         wp_enqueue_style( 'sinople-accessibility', SINOPLE_URL . '/assets/css/accessibility.css', array( 'sinople-style' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-a11y-toolbar', SINOPLE_URL . '/assets/css/a11y-toolbar.css', array( 'sinople-variables' ), SINOPLE_VERSION );
 
         // Featured section CSS (front page only, already in bundle for production)
         if ( is_front_page() ) {
@@ -331,6 +332,7 @@ function sinople_enqueue_assets() {
         wp_enqueue_script( 'sinople-offcanvas', SINOPLE_URL . '/assets/js/offcanvas.js', array(), SINOPLE_VERSION, true );
         wp_enqueue_script( 'sinople-search-modal', SINOPLE_URL . '/assets/js/search-modal.js', array(), SINOPLE_VERSION, true );
         wp_enqueue_script( 'sinople-navigation', SINOPLE_URL . '/assets/js/navigation.js', array(), SINOPLE_VERSION, true );
+        wp_enqueue_script( 'sinople-a11y-toolbar', SINOPLE_URL . '/assets/js/a11y-toolbar.js', array(), SINOPLE_VERSION, true );
     }
 
     // Swiper (front page only, always separate — vendor dependency)

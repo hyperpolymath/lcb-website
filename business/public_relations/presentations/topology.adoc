@@ -24,7 +24,7 @@ A/AAAA, SSL, WAF" ]
   CF --> IPFS["IPFS gateway (dnslink)"]
   CF --> Conference["conference.nuj-lcb.org.uk (BigBlueButton)"]
   CF --> Chat["chat.nuj-lcb.org.uk (Zulip)"]
-  CF --> Office["office.nuj-lcb.org.uk (OnlyOffice)"]
+  CF --> Office["office.nuj-lcb.org.uk (Office)"]
   CF --> API["api.nuj-lcb.org.uk (REST/GraphQL/gRPC)"]
   WP --> DB["MariaDB (Verpex cPanel)"]
   VP["Prometheus + Grafana"] --> CF

@@ -8,8 +8,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NUJ London Central Branch - Website Preview</title>
   <style>
-    /* NUJ Brand Colors */
-    :root {
+    /* NUJ Brand Colors — Light mode (default) */
+    :root,
+    html[data-theme="light"] {
       --nuj-green-dark: #006747;
       --nuj-green: #008559;
       --nuj-green-light: #00a572;
@@ -20,6 +21,29 @@
       --nuj-grey-light: #a0a0a0;
       --nuj-grey-pale: #f5f5f5;
       --nuj-white: #ffffff;
+      --nuj-card-bg: #ffffff;
+      --nuj-card-border: #0077b5;
+      --nuj-card-text: #333333;
+      --nuj-card-meta: #666666;
+      color-scheme: light dark;
+    }
+
+    /* Dark mode */
+    html[data-theme="dark"] {
+      --nuj-green-dark: #00c88a;
+      --nuj-green: #00e6a0;
+      --nuj-green-light: #33d4a4;
+      --nuj-green-pale: #1a3d32;
+      --nuj-grey-dark: #f0f0f0;
+      --nuj-grey: #e0e0e0;
+      --nuj-grey-medium: #b0b0b0;
+      --nuj-grey-light: #555555;
+      --nuj-grey-pale: #1a1a1a;
+      --nuj-white: #242424;
+      --nuj-card-bg: #2b2b2b;
+      --nuj-card-border: #4da8da;
+      --nuj-card-text: #e0e0e0;
+      --nuj-card-meta: #a0a0a0;
     }
 
     * {
@@ -287,6 +311,113 @@
       display: block;
     }
 
+    /* Dark mode toggle button */
+    .theme-toggle {
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      color: var(--nuj-white);
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--nuj-green-light);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .theme-toggle:focus {
+      outline: 3px solid #FFD700;
+      outline-offset: 2px;
+    }
+
+    html[data-theme="dark"] .theme-toggle {
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #f0f0f0;
+    }
+
+    .theme-toggle .icon-sun { display: none; }
+    .theme-toggle .icon-moon { display: inline; }
+    html[data-theme="dark"] .theme-toggle .icon-sun { display: inline; }
+    html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+    /* Dark mode overrides for header */
+    html[data-theme="dark"] .site-header {
+      background: #004d35;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    html[data-theme="dark"] .logo-circle {
+      background: #f0f0f0;
+      color: #004d35;
+    }
+
+    /* Dark mode overrides for forms */
+    html[data-theme="dark"] .form-group input,
+    html[data-theme="dark"] .form-group textarea {
+      background: var(--nuj-white);
+      border-color: var(--nuj-grey-light);
+      color: var(--nuj-grey);
+    }
+
+    html[data-theme="dark"] .form-group input:focus,
+    html[data-theme="dark"] .form-group textarea:focus {
+      border-color: var(--nuj-green-dark);
+      box-shadow: 0 0 0 3px rgba(0, 200, 138, 0.3);
+    }
+
+    /* Dark mode overrides for alerts */
+    html[data-theme="dark"] .alert-info {
+      background: #0d2137;
+      border-color: #29b6f6;
+      color: #90caf9;
+    }
+
+    html[data-theme="dark"] .alert-success {
+      background: var(--nuj-green-pale);
+      border-color: var(--nuj-green-dark);
+      color: var(--nuj-green-dark);
+    }
+
+    /* Dark mode overrides for LinkedIn cards (inline styles need overrides) */
+    html[data-theme="dark"] .linkedin-card {
+      background: var(--nuj-card-bg) !important;
+      border-color: var(--nuj-card-border) !important;
+    }
+
+    html[data-theme="dark"] .linkedin-card p {
+      color: var(--nuj-card-text) !important;
+    }
+
+    /* Dark mode footer */
+    html[data-theme="dark"] .site-footer {
+      background: #111111;
+    }
+
+    /* Dark mode policy detail */
+    html[data-theme="dark"] #policy-detail {
+      background: var(--nuj-white) !important;
+    }
+
+    /* Dark mode CTA banners */
+    html[data-theme="dark"] .cta-banner {
+      background: #004d35 !important;
+    }
+
+    /* Dark mode tables */
+    html[data-theme="dark"] .page-content th {
+      background: var(--nuj-green-pale);
+    }
+
+    html[data-theme="dark"] .page-content th,
+    html[data-theme="dark"] .page-content td {
+      border-color: var(--nuj-grey-light);
+    }
+
     @media (max-width: 768px) {
       .header-container {
         flex-direction: column;
@@ -305,6 +436,19 @@
       }
     }
   </style>
+  <script>
+    /* Resolve theme before paint to prevent FOUC */
+    (function(){
+      var d = document.documentElement;
+      var stored = null;
+      try { stored = localStorage.getItem('nujlcb_theme'); } catch(e) {}
+      if (stored === 'dark' || stored === 'light') {
+        d.setAttribute('data-theme', stored);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        d.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
 </head>
 <body>
   <!-- Header -->
@@ -328,6 +472,10 @@
           <li><a onclick="showPage('policies')" data-page="policies">Policies</a></li>
         </ul>
       </nav>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode">
+        <span class="icon-moon" aria-hidden="true">&#9790;</span>
+        <span class="icon-sun" aria-hidden="true">&#9788;</span>
+      </button>
     </div>
   </header>
 
@@ -1034,6 +1182,22 @@
       document.getElementById('policy-detail').style.display = 'block';
       document.getElementById('policy-detail').scrollIntoView({ behavior: 'smooth' });
     }
+
+    // Dark mode toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      var toggle = document.getElementById('theme-toggle');
+      if (toggle) {
+        toggle.addEventListener('click', function() {
+          var html = document.documentElement;
+          var current = html.getAttribute('data-theme') || 'light';
+          var next = current === 'dark' ? 'light' : 'dark';
+          html.setAttribute('data-theme', next);
+          toggle.setAttribute('aria-label',
+            next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+          try { localStorage.setItem('nujlcb_theme', next); } catch(e) {}
+        });
+      }
+    });
 
     // Comment form handling
     document.addEventListener('DOMContentLoaded', function() {

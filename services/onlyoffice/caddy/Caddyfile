@@ -1,0 +1,57 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Caddyfile — Reverse proxy for Office document collaboration
+#
+# Caddy handles TLS termination (auto Let's Encrypt or Cloudflare origin cert)
+# and proxies to the OnlyOffice container on port 8080.
+
+office.nuj-lcb.org.uk {
+    # Reverse proxy to Office document server
+    reverse_proxy onlyoffice-ds:80 {
+        # WebSocket support (required for collaborative editing)
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+
+        # Increase timeouts for large document operations
+        transport http {
+            read_timeout 120s
+            write_timeout 120s
+        }
+    }
+
+    # Security headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options SAMEORIGIN
+        Referrer-Policy strict-origin-when-cross-origin
+        Permissions-Policy "geolocation=(), microphone=(), camera=()"
+        # Allow embedding from the main WordPress site
+        Content-Security-Policy "frame-ancestors 'self' https://nuj-lcb.org.uk"
+        -Server
+    }
+
+    # CORS: allow WordPress to connect
+    @cors {
+        header Origin https://nuj-lcb.org.uk
+    }
+    header @cors {
+        Access-Control-Allow-Origin https://nuj-lcb.org.uk
+        Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Access-Control-Allow-Headers "Authorization, Content-Type, X-Requested-With"
+        Access-Control-Allow-Credentials true
+    }
+
+    # Health check endpoint (no auth required)
+    handle /healthcheck {
+        reverse_proxy onlyoffice-ds:80
+    }
+
+    # Logging
+    log {
+        output file /data/access.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
