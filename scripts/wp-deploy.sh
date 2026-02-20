@@ -448,6 +448,7 @@ create_post() {
     local slug="$2"
     local content_file="$3"
     local category="$4"
+    local image_file="${5:-}"
     local post_id=""
     local content="<p>Content coming soon.</p>"
 
@@ -459,13 +460,32 @@ create_post() {
     if [ -n "${post_id}" ]; then
         echo "  Post exists: ${title}"
     else
-        wpcli post create --post_type=post \
+        post_id="$(wpcli post create --post_type=post \
             --post_title="${title}" \
             --post_name="${slug}" \
             --post_status="publish" \
             --post_content="${content}" \
-            --post_category="${category}" >/dev/null 2>&1 || true
+            --post_category="${category}" \
+            --porcelain 2>/dev/null)" || true
         echo "  Created post: ${title}"
+    fi
+
+    # Attach featured image if provided and post exists
+    if [ -n "${post_id}" ] && [ -n "${image_file}" ] && [ -f "${image_file}" ]; then
+        local existing_thumb
+        existing_thumb="$(wpcli post meta get "${post_id}" _thumbnail_id 2>/dev/null || true)"
+        if [ -z "${existing_thumb}" ]; then
+            local attach_id
+            attach_id="$(wpcli media import "${image_file}" \
+                --post_id="${post_id}" \
+                --title="${title}" \
+                --alt="${title}" \
+                --featured_image \
+                --porcelain 2>/dev/null)" || true
+            if [ -n "${attach_id}" ]; then
+                echo "    Featured image set for: ${title}"
+            fi
+        fi
     fi
 }
 
@@ -483,7 +503,9 @@ if [ -d "${CONTENT_DIR}/posts" ]; then
         [ -f "${post_file}" ] || continue
         BASENAME="$(basename "${post_file}" .html)"
         TITLE="$(echo "${BASENAME}" | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')"
-        create_post "${TITLE}" "${BASENAME}" "${post_file}" "1"
+        IMAGE_FILE="${CONTENT_DIR}/images/${BASENAME}.jpg"
+        [ -f "${IMAGE_FILE}" ] || IMAGE_FILE=""
+        create_post "${TITLE}" "${BASENAME}" "${post_file}" "1" "${IMAGE_FILE}"
     done
 fi
 
