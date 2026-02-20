@@ -20,7 +20,7 @@ Join our Zulip forum for:
 
 ### Video Meetings
 
-**Jitsi**: [convene.nuj-lcb.org.uk](https://convene.nuj-lcb.org.uk)
+**BigBlueButton**: [convene.nuj-lcb.org.uk](https://convene.nuj-lcb.org.uk)
 
 Join our video calls for:
 - Branch meetings
@@ -77,7 +77,7 @@ London WC1R 4RL
 ### Virtual Meetings
 
 All meetings offer remote attendance via:
-- **Jitsi**: [convene.nuj-lcb.org.uk](https://convene.nuj-lcb.org.uk)
+- **BigBlueButton**: [convene.nuj-lcb.org.uk](https://convene.nuj-lcb.org.uk)
 - **Forum**: Live discussion at [forum.nuj-lcb.org.uk](https://forum.nuj-lcb.org.uk)
 
 No special software needed - works in any modern browser.

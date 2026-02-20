@@ -3,7 +3,7 @@
 Complete step-by-step plan for deploying the NUJ LCB website to VPS-D8 with three services:
 - Main site: nuj-lcb.org.uk (WordPress)
 - Forum: forum.nuj-lcb.org.uk (Zulip)
-- Video: convene.nuj-lcb.org.uk (Jitsi Meet)
+- Video: convene.nuj-lcb.org.uk (BigBlueButton Meet)
 
 ## Prerequisites
 
@@ -76,7 +76,7 @@ systemctl start fail2ban
 # As nujdeploy user
 su - nujdeploy
 
-mkdir -p ~/nuj-lcb/{wordpress,zulip,jitsi,caddy,backups}
+mkdir -p ~/nuj-lcb/{wordpress,zulip,bbb,caddy,backups}
 mkdir -p ~/nuj-lcb/wordpress/{html,db}
 mkdir -p ~/nuj-lcb/caddy/{config,data}
 ```
@@ -259,9 +259,9 @@ forum.nuj-lcb.org.uk {
 	respond "Forum coming soon" 503
 }
 
-# Video subdomain (Jitsi - will add in Phase 5)
+# Video subdomain (BigBlueButton - will add in Phase 6)
 convene.nuj-lcb.org.uk {
-	# Placeholder - Jitsi setup later
+	# Placeholder - BigBlueButton setup later
 	respond "Video conferencing coming soon" 503
 }
 ```
@@ -531,87 +531,20 @@ docker exec -it nujlcb-zulip /home/zulip/deployments/current/manage.py createsup
 
 ---
 
-## Phase 6: Deploy Jitsi Meet (Day 6)
+## Phase 6: Deploy BigBlueButton Meet (Day 6)
 
-### 6.1 Add Jitsi to docker-compose.yml
+### 6.1 BigBlueButton Infrastructure
+- Video: convene.nuj-lcb.org.uk (BigBlueButton)
 
-Add to `docker-compose.yml`:
+Note: BigBlueButton installation is significantly more complex than BigBlueButton and typically requires a dedicated server or a very specific container setup. We recommend using the official `bbb-install.sh` script or a verified Docker-based orchestration for BigBlueButton.
 
-```yaml
-  # Jitsi Meet video conferencing
-  jitsi-web:
-    image: jitsi/web:stable
-    container_name: nujlcb-jitsi-web
-    restart: unless-stopped
-    environment:
-      - ENABLE_HSTS=1
-      - ENABLE_HTTP_REDIRECT=1
-      - DISABLE_HTTPS=1  # Caddy handles HTTPS
-      - PUBLIC_URL=https://convene.nuj-lcb.org.uk
-      - XMPP_SERVER=jitsi-prosody
-      - JICOFO_COMPONENT_SECRET=${JICOFO_SECRET}
-      - JVB_TCP_HARVESTER_DISABLED=true
-    volumes:
-      - ./jitsi/web:/config
-      - ./jitsi/web/crontabs:/var/spool/cron/crontabs
-      - ./jitsi/transcripts:/usr/share/jitsi-meet/transcripts
-    networks:
-      - nujlcb
-    ports:
-      - "8000:80"  # Internal only
+### 6.2 Update Caddyfile for BigBlueButton
 
-  jitsi-prosody:
-    image: jitsi/prosody:stable
-    container_name: nujlcb-jitsi-prosody
-    restart: unless-stopped
-    environment:
-      - XMPP_DOMAIN=convene.nuj-lcb.org.uk
-      - JICOFO_COMPONENT_SECRET=${JICOFO_SECRET}
-      - JVB_AUTH_PASSWORD=${JVB_PASSWORD}
-      - JICOFO_AUTH_PASSWORD=${JICOFO_PASSWORD}
-      - PUBLIC_URL=https://convene.nuj-lcb.org.uk
-    volumes:
-      - ./jitsi/prosody:/config
-    networks:
-      - nujlcb
-
-  jitsi-jicofo:
-    image: jitsi/jicofo:stable
-    container_name: nujlcb-jitsi-jicofo
-    restart: unless-stopped
-    environment:
-      - XMPP_SERVER=jitsi-prosody
-      - JICOFO_COMPONENT_SECRET=${JICOFO_SECRET}
-      - JICOFO_AUTH_PASSWORD=${JICOFO_PASSWORD}
-    networks:
-      - nujlcb
-    depends_on:
-      - jitsi-prosody
-
-  jitsi-jvb:
-    image: jitsi/jvb:stable
-    container_name: nujlcb-jitsi-jvb
-    restart: unless-stopped
-    environment:
-      - XMPP_SERVER=jitsi-prosody
-      - JVB_AUTH_PASSWORD=${JVB_PASSWORD}
-      - JVB_STUN_SERVERS=stun.l.google.com:19302
-      - JVB_TCP_HARVESTER_DISABLED=true
-    ports:
-      - "10000:10000/udp"  # Video RTP
-    networks:
-      - nujlcb
-    depends_on:
-      - jitsi-prosody
-```
-
-### 6.2 Update Caddyfile for Jitsi
-
-Replace Jitsi placeholder:
+Replace BigBlueButton placeholder:
 
 ```caddyfile
 convene.nuj-lcb.org.uk {
-	reverse_proxy jitsi-web:80
+	reverse_proxy bbb-server:80
 
 	header {
 		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -619,13 +552,13 @@ convene.nuj-lcb.org.uk {
 	}
 
 	log {
-		output file /data/jitsi-access.log
+		output file /data/bbb-access.log
 		format json
 	}
 }
 ```
 
-### 6.3 Deploy Jitsi
+### 6.3 Deploy BigBlueButton
 
 ```bash
 # Generate secrets
@@ -636,8 +569,8 @@ echo "JICOFO_PASSWORD=$(openssl rand -base64 24)" >> .env
 # Open UDP port for video
 ufw allow 10000/udp
 
-# Start Jitsi
-docker compose up -d jitsi-web jitsi-prosody jitsi-jicofo jitsi-jvb
+# Start BigBlueButton
+docker compose up -d bbb-web bbb-prosody bbb-jicofo bbb-jvb
 
 # Wait for startup
 sleep 60
@@ -646,9 +579,9 @@ sleep 60
 curl -I https://convene.nuj-lcb.org.uk
 ```
 
-### 6.4 Configure Jitsi
+### 6.4 Configure BigBlueButton
 
-**Create config file `jitsi/web/interface_config.js`:**
+**Create config file `bbb/web/interface_config.js`:**
 
 ```javascript
 var interfaceConfig = {
@@ -697,9 +630,9 @@ docker exec nujlcb-db mysqldump -u root -p"$DB_ROOT_PASSWORD" --all-databases | 
 cd ~/nuj-lcb/zulip/data
 tar czf - . | age -r "$AGE_KEY" > "$BACKUP_DIR/zulip-$DATE.tar.gz.age"
 
-# Backup Jitsi config
-cd ~/nuj-lcb/jitsi
-tar czf - . | age -r "$AGE_KEY" > "$BACKUP_DIR/jitsi-$DATE.tar.gz.age"
+# Backup BigBlueButton config
+cd ~/nuj-lcb/bbb
+tar czf - . | age -r "$AGE_KEY" > "$BACKUP_DIR/bbb-$DATE.tar.gz.age"
 
 # Delete backups older than 30 days
 find "$BACKUP_DIR" -name "*.age" -mtime +30 -delete
@@ -743,7 +676,7 @@ df -h | awk '$5+0 > 80 {print "⚠️  Disk usage: " $5 " on " $6}' | mail -s "D
 
 ### 8.1 Pre-Launch Checklist
 
-- [ ] All three services accessible (WordPress, Zulip, Jitsi)
+- [ ] All three services accessible (WordPress, Zulip, BigBlueButton)
 - [ ] SSL certificates valid (A+ rating on SSL Labs)
 - [ ] HTTP/3 enabled and working
 - [ ] WordPress admin login working
@@ -751,7 +684,7 @@ df -h | awk '$5+0 > 80 {print "⚠️  Disk usage: " $5 " on " $6}' | mail -s "D
 - [ ] 2FA enabled for all admins
 - [ ] Member registration workflow tested
 - [ ] Zulip invites sent to founding members
-- [ ] Jitsi video call tested (2+ participants)
+- [ ] BigBlueButton video call tested (2+ participants)
 - [ ] Backups running and encrypted
 - [ ] Monitoring alerts configured
 - [ ] Privacy policy published
@@ -777,7 +710,7 @@ k6 run load-test.js
 ```bash
 # Run security scan
 docker run --rm -it aquasec/trivy image wordpress:6.7
-docker run --rm -it aquasec/trivy image jitsi/web:stable
+docker run --rm -it aquasec/trivy image bbb/web:stable
 docker run --rm -it aquasec/trivy image zulip/docker-zulip:latest
 
 # Check headers
@@ -846,14 +779,14 @@ docker exec -it nujlcb-zulip-db psql -U zulip -c "\l"
 docker compose restart zulip zulip-db zulip-redis
 ```
 
-### Jitsi Video Not Working
+### BigBlueButton Video Not Working
 
 ```bash
 # Check firewall
 ufw status | grep 10000
 
 # Verify JVB is running
-docker compose logs jitsi-jvb
+docker compose logs bbb-jvb
 
 # Test UDP port
 nc -u -z -v vps-d8-ip 10000
@@ -912,7 +845,7 @@ If deployment fails:
 
 1. **Content Migration**: Import all pages from static preview
 2. **Member Onboarding**: Send welcome emails with login instructions
-3. **Training Sessions**: Show officers how to use WordPress/Zulip/Jitsi
+3. **Training Sessions**: Show officers how to use WordPress/Zulip/BigBlueButton
 4. **LinkedIn Integration**: Set up auto-posting from WordPress to LinkedIn
 5. **Custom Development**: Add any unique features requested by members
 

@@ -200,7 +200,7 @@ Members can access:
 
 ## Video Meetings
 
-**Jitsi Platform**: [convene.nuj-lcb.org.uk](https://convene.nuj-lcb.org.uk)
+**BigBlueButton Platform**: [convene.nuj-lcb.org.uk](https://convene.nuj-lcb.org.uk)
 
 ### Upcoming Meetings
 

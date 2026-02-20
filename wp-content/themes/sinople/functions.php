@@ -508,7 +508,7 @@ function sinople_should_render_quick_links(): bool {
 function sinople_get_quick_tool_links(): array {
     return array(
         array(
-            'label' => __( 'Office', 'sinople' ),
+            'label' => __( 'Collabora', 'sinople' ),
             'url'   => 'https://office.nuj-lcb.org.uk/',
         ),
         array(
@@ -516,7 +516,7 @@ function sinople_get_quick_tool_links(): array {
             'url'   => 'https://members.nuj-lcb.org.uk/',
         ),
         array(
-            'label' => __( 'Conference (Jitsi)', 'sinople' ),
+            'label' => __( 'Conference (BigBlueButton)', 'sinople' ),
             'url'   => 'https://conference.nuj-lcb.org.uk/',
         ),
         array(
