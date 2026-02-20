@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once get_template_directory() . '/vendor/php-aegis/autoload.php';
 
 // Theme constants
-define( 'SINOPLE_VERSION', '2.0.0' );
+define( 'SINOPLE_VERSION', '2.0.1' );
 define( 'SINOPLE_PATH', get_template_directory() );
 define( 'SINOPLE_URL', get_template_directory_uri() );
 
