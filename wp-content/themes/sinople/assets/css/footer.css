@@ -1,0 +1,123 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/**
+ * Footer Styles for Sinople Theme
+ */
+
+/* Missed Posts Section */
+.missed-section {
+  background: var(--color-bg-alt);
+  padding: var(--space-8) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.missed-section .section-title {
+  font-size: var(--font-xl);
+  font-weight: var(--weight-bold);
+  margin-bottom: var(--space-6);
+  color: var(--color-heading);
+}
+
+/* Footer Widgets */
+.footer-widgets-area {
+  background: var(--color-heading);
+  color: var(--color-bg-alt);
+  padding: var(--space-12) 0;
+}
+
+.footer-widgets-area .widget-title {
+  color: #ffffff;
+  border-bottom-color: var(--color-primary);
+}
+
+.footer-widgets-area .widget {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.footer-widgets-area .widget a {
+  color: var(--color-bg-alt);
+  opacity: 0.85;
+}
+
+.footer-widgets-area .widget a:hover,
+.footer-widgets-area .widget a:focus-visible {
+  color: var(--color-primary);
+  opacity: 1;
+}
+
+.footer-widgets-area .widget li {
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Footer Info Bar */
+.site-footer {
+  background: var(--color-bg-alt);
+  padding: var(--space-6) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.footer-copyright {
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+}
+
+.footer-policy-nav {
+  flex-shrink: 0;
+}
+
+.footer-policy-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.footer-policy-links a {
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-policy-links a:hover,
+.footer-policy-links a:focus-visible {
+  color: var(--color-primary);
+}
+
+.footer-social {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-social a {
+  color: var(--color-text-muted);
+  font-size: var(--font-lg);
+  transition: color var(--transition-fast);
+}
+
+.footer-social a:hover,
+.footer-social a:focus-visible {
+  color: var(--color-primary);
+}
+
+@media (max-width: 767px) {
+  .footer-info {
+    flex-direction: column;
+    text-align: center;
+  }
+}

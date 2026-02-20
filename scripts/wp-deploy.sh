@@ -297,14 +297,53 @@ if [ -n "${MENU_ID}" ]; then
         fi
     done
 
-    # Assign menu to theme location
+    # Assign menu to primary theme location
     wpcli menu location assign "${MENU_ID}" primary 2>/dev/null || \
     wpcli menu location assign "${MENU_ID}" menu-1 2>/dev/null || \
-        warn "Could not assign menu to theme location. Check theme menu locations."
+        warn "Could not assign primary menu to theme location."
 
-    echo "  Navigation menu configured."
+    echo "  Primary navigation menu configured."
 else
     warn "Could not create navigation menu."
+fi
+
+# Footer menu
+if ! wpcli menu list --fields=name --format=csv 2>/dev/null | tail -n +2 | tr -d '"' | grep -Fxq "Footer Menu"; then
+    wpcli menu create "Footer Menu" >/dev/null
+fi
+
+FOOTER_MENU_ID="$(wpcli menu list --fields=term_id,name --format=csv 2>/dev/null \
+    | awk -F',' '$2 ~ /Footer Menu/ {print $1; exit}' \
+    | tr -d '"')"
+
+if [ -n "${FOOTER_MENU_ID}" ]; then
+    for slug in about-us contact join; do
+        PAGE_ID="$(first_id_for_slug page "${slug}")"
+        if [ -n "${PAGE_ID}" ]; then
+            if page_in_menu "${FOOTER_MENU_ID}" "${PAGE_ID}"; then
+                echo "  Footer menu has: ${slug}"
+            else
+                wpcli menu item add-post "${FOOTER_MENU_ID}" "${PAGE_ID}" >/dev/null 2>&1 || true
+                echo "  Added to footer menu: ${slug}"
+            fi
+        fi
+    done
+    wpcli menu location assign "${FOOTER_MENU_ID}" footer 2>/dev/null || true
+    echo "  Footer menu configured."
+fi
+
+# Social links menu
+if ! wpcli menu list --fields=name --format=csv 2>/dev/null | tail -n +2 | tr -d '"' | grep -Fxq "Social Links"; then
+    wpcli menu create "Social Links" >/dev/null
+fi
+
+SOCIAL_MENU_ID="$(wpcli menu list --fields=term_id,name --format=csv 2>/dev/null \
+    | awk -F',' '$2 ~ /Social Links/ {print $1; exit}' \
+    | tr -d '"')"
+
+if [ -n "${SOCIAL_MENU_ID}" ]; then
+    wpcli menu location assign "${SOCIAL_MENU_ID}" social 2>/dev/null || true
+    echo "  Social links menu configured (add links via Appearance > Menus)."
 fi
 
 # ============================================================================
@@ -397,6 +436,78 @@ for unwanted in akismet hello; do
         echo "  Removed unwanted plugin: ${unwanted}"
     fi
 done
+
+# ============================================================================
+# 10. SEED POSTS
+# ============================================================================
+
+echo "--- [10/11] Creating seed posts ---"
+
+create_post() {
+    local title="$1"
+    local slug="$2"
+    local content_file="$3"
+    local category="$4"
+    local post_id=""
+    local content="<p>Content coming soon.</p>"
+
+    if [ -f "${content_file}" ]; then
+        content=$(cat "${content_file}")
+    fi
+
+    post_id="$(first_id_for_slug post "${slug}")"
+    if [ -n "${post_id}" ]; then
+        echo "  Post exists: ${title}"
+    else
+        wpcli post create --post_type=post \
+            --post_title="${title}" \
+            --post_name="${slug}" \
+            --post_status="publish" \
+            --post_content="${content}" \
+            --post_category="${category}" >/dev/null 2>&1 || true
+        echo "  Created post: ${title}"
+    fi
+}
+
+# Create categories first
+for cat_name in "Branch News" "Campaigns" "Events" "Press Freedom" "Freelance" "Industry"; do
+    if ! wpcli term list category --field=name --format=csv 2>/dev/null | grep -Fxq "${cat_name}"; then
+        wpcli term create category "${cat_name}" >/dev/null 2>&1 || true
+        echo "  Created category: ${cat_name}"
+    fi
+done
+
+# Create seed posts from content/posts/
+if [ -d "${CONTENT_DIR}/posts" ]; then
+    for post_file in "${CONTENT_DIR}/posts"/*.html; do
+        [ -f "${post_file}" ] || continue
+        BASENAME="$(basename "${post_file}" .html)"
+        TITLE="$(echo "${BASENAME}" | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')"
+        create_post "${TITLE}" "${BASENAME}" "${post_file}" "1"
+    done
+fi
+
+echo "  Seed posts created."
+
+# ============================================================================
+# 11. WIDGET SETUP
+# ============================================================================
+
+echo "--- [11/11] Configuring widgets ---"
+
+# Sidebar widgets: Search, Recent Posts, Categories, Archives
+wpcli widget add search sidebar-1 --title="Search" 2>/dev/null || true
+wpcli widget add recent-posts sidebar-1 --title="Latest Posts" --number=5 2>/dev/null || true
+wpcli widget add categories sidebar-1 --title="Categories" --count=1 2>/dev/null || true
+wpcli widget add archives sidebar-1 --title="Archives" --count=1 2>/dev/null || true
+
+# Footer widgets
+wpcli widget add text footer-1 --title="About NUJ LCB" --text="The National Union of Journalists London Central Branch represents journalists working in central London." 2>/dev/null || true
+wpcli widget add recent-posts footer-2 --title="Recent News" --number=3 2>/dev/null || true
+wpcli widget add categories footer-3 --title="Categories" 2>/dev/null || true
+wpcli widget add text footer-4 --title="Contact" --text="Email: contact@nuj-lcb.org.uk" 2>/dev/null || true
+
+echo "  Widgets configured."
 
 echo ""
 echo "=== Deployment Complete ==="

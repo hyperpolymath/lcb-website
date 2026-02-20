@@ -1,0 +1,152 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/**
+ * Post Card Styles for Sinople Theme
+ */
+
+/* Post Card */
+.post-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.post-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Card Image */
+.post-card-image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+
+.post-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.post-card:hover .post-card-image img {
+  transform: scale(1.05);
+}
+
+.post-card-image .category-badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+}
+
+/* Category badge */
+.category-badge {
+  display: inline-block;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: var(--font-xs);
+  font-weight: var(--weight-semibold);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  transition: background-color var(--transition-fast);
+}
+
+.category-badge:hover,
+.category-badge:focus-visible {
+  background: var(--color-primary-hover);
+  color: var(--color-text-inverse);
+}
+
+/* Card Body */
+.post-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: var(--space-4);
+}
+
+.post-card-title {
+  font-size: var(--font-lg);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-snug);
+  margin: 0 0 var(--space-2);
+}
+
+.post-card-title a {
+  color: var(--color-heading);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.post-card-title a:hover,
+.post-card-title a:focus-visible {
+  color: var(--color-primary);
+}
+
+.post-card-excerpt {
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+  margin: 0 0 var(--space-3);
+  flex: 1;
+}
+
+.post-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-xs);
+  color: var(--color-text-muted);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.post-card-meta i {
+  color: var(--color-primary);
+}
+
+/* Horizontal card variant (for sidebar, missed posts) */
+.post-card-horizontal {
+  flex-direction: row;
+  align-items: center;
+}
+
+.post-card-horizontal .post-card-image {
+  width: 120px;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+}
+
+.post-card-horizontal .post-card-body {
+  padding: var(--space-3);
+}
+
+.post-card-horizontal .post-card-title {
+  font-size: var(--font-sm);
+}
+
+.post-card-horizontal .post-card-meta {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* Small card (missed posts section) */
+.post-card-small .post-card-image {
+  aspect-ratio: 16 / 9;
+}
+
+.post-card-small .post-card-title {
+  font-size: var(--font-base);
+}
+
+.post-card-small .post-card-excerpt {
+  display: none;
+}

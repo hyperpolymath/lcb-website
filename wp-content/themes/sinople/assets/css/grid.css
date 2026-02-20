@@ -1,0 +1,151 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/**
+ * Grid System for Sinople Theme
+ *
+ * Minimal CSS Grid with Bootstrap-compatible class names.
+ * No 200KB Bootstrap dependency.
+ */
+
+/* Main content + sidebar layout */
+.content-area {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  padding: var(--space-8) 0;
+}
+
+@media (min-width: 992px) {
+  .content-area {
+    grid-template-columns: 1fr var(--sidebar-width);
+  }
+
+  .content-area.no-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .content-area.sidebar-left {
+    grid-template-columns: var(--sidebar-width) 1fr;
+  }
+}
+
+/* Row / Column Grid */
+.row {
+  display: grid;
+  gap: var(--gutter);
+}
+
+.row-2 { grid-template-columns: repeat(2, 1fr); }
+.row-3 { grid-template-columns: repeat(3, 1fr); }
+.row-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 991px) {
+  .row-3,
+  .row-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 575px) {
+  .row-2,
+  .row-3,
+  .row-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Bootstrap-compatible col classes */
+.col-lg-4 { /* handled by grid parent */ }
+.col-lg-8 { /* handled by grid parent */ }
+
+/* Auto-fit grid for cards */
+.card-grid {
+  display: grid;
+  gap: var(--gutter);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+@media (max-width: 575px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Featured section: sidebar | carousel | sidebar */
+.featured-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gutter);
+}
+
+@media (min-width: 992px) {
+  .featured-grid {
+    grid-template-columns: 1fr 2fr 1fr;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .featured-grid {
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .featured-grid .featured-sidebar-right {
+    display: none;
+  }
+}
+
+/* Missed posts: 4 columns */
+.missed-grid {
+  display: grid;
+  gap: var(--gutter);
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 991px) {
+  .missed-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 575px) {
+  .missed-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Footer widget columns */
+.footer-columns {
+  display: grid;
+  gap: var(--gutter);
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 991px) {
+  .footer-columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 575px) {
+  .footer-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Spacing utilities */
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--space-2); }
+.mb-2 { margin-bottom: var(--space-4); }
+.mb-3 { margin-bottom: var(--space-6); }
+.mb-4 { margin-bottom: var(--space-8); }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--space-2); }
+.mt-2 { margin-top: var(--space-4); }
+.mt-3 { margin-top: var(--space-6); }
+.mt-4 { margin-top: var(--space-8); }
+
+.pt-0 { padding-top: 0; }
+.pt-4 { padding-top: var(--space-8); }
+.pb-4 { padding-bottom: var(--space-8); }
+
+.text-center { text-align: center; }

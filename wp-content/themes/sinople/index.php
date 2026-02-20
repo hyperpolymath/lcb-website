@@ -1,35 +1,38 @@
 <?php
 /**
- * Main template file
+ * Main Template File (fallback)
+ *
  * @package Sinople
+ * @since 2.0.0
  */
-get_header(); ?>
 
-<?php $show_quick_links = function_exists( 'sinople_should_render_quick_links' ) && sinople_should_render_quick_links(); ?>
-<div class="site-content<?php echo $show_quick_links ? ' front-layout has-quick-links' : ''; ?>">
-    <?php
-    if ( $show_quick_links && function_exists( 'sinople_render_quick_links' ) ) {
-        sinople_render_quick_links();
-    }
-    ?>
-    <main id="main" class="site-main" role="main">
-        <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
-            <article id="post-<?php the_ID(); ?>" <?php post_class( 'h-entry' ); ?>>
-                <header class="entry-header">
-                    <h2 class="entry-title p-name"><a href="<?php the_permalink(); ?>" class="u-url"><?php the_title(); ?></a></h2>
-                </header>
-                <div class="entry-content e-content">
-                    <?php the_excerpt(); ?>
+get_header();
+?>
+
+<div class="container">
+    <div class="content-area">
+        <main id="main" class="site-main" role="main">
+
+            <?php if ( have_posts() ) : ?>
+                <div class="card-grid">
+                    <?php while ( have_posts() ) : the_post(); ?>
+                        <?php get_template_part( 'template-parts/content', 'card' ); ?>
+                    <?php endwhile; ?>
                 </div>
-            </article>
-        <?php endwhile; endif; ?>
-    </main>
 
-    <?php
-    if ( ! $show_quick_links ) {
-        get_sidebar();
-    }
-    ?>
+                <?php the_posts_pagination( array(
+                    'prev_text' => '<i class="fa-solid fa-chevron-left" aria-hidden="true"></i> ' . esc_html__( 'Previous', 'sinople' ),
+                    'next_text' => esc_html__( 'Next', 'sinople' ) . ' <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>',
+                ) ); ?>
+
+            <?php else : ?>
+                <p><?php esc_html_e( 'No posts found.', 'sinople' ); ?></p>
+            <?php endif; ?>
+
+        </main>
+
+        <?php get_sidebar(); ?>
+    </div>
 </div>
 
 <?php get_footer();

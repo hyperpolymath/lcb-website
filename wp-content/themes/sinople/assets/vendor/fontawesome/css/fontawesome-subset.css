@@ -1,0 +1,137 @@
+/* SPDX-License-Identifier: MIT */
+/**
+ * Font Awesome 6 Free — Subset (~30 icons)
+ *
+ * Self-hosted subset for Sinople Theme.
+ * Full library is ~1.5MB; this subset is ~30KB.
+ *
+ * Icons included:
+ * Solid: bars, xmark, search, chevron-down, chevron-right, chevron-left,
+ *        sun, moon, rss, tags, link, arrow-right, clock, fire, newspaper,
+ *        circle-xmark, angle-right, share-nodes
+ * Regular: clock, user, folder, comment, hourglass-half, calendar, envelope
+ * Brands: x-twitter, facebook-f, instagram, mastodon, youtube, linkedin-in
+ *
+ * NOTE: Download the actual WOFF2 webfonts from Font Awesome and place in
+ * assets/vendor/fontawesome/webfonts/. This CSS references them.
+ */
+
+/* Base styles */
+.fa-solid,
+.fa-regular,
+.fa-brands,
+.fas,
+.far,
+.fab {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-rendering: auto;
+}
+
+/* Font Awesome Solid */
+@font-face {
+  font-family: "Font Awesome 6 Free";
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url("../webfonts/fa-solid-900.woff2") format("woff2");
+}
+
+.fa-solid,
+.fas {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+}
+
+/* Font Awesome Regular */
+@font-face {
+  font-family: "Font Awesome 6 Free";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../webfonts/fa-regular-400.woff2") format("woff2");
+}
+
+.fa-regular,
+.far {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 400;
+}
+
+/* Font Awesome Brands */
+@font-face {
+  font-family: "Font Awesome 6 Brands";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../webfonts/fa-brands-400.woff2") format("woff2");
+}
+
+.fa-brands,
+.fab {
+  font-family: "Font Awesome 6 Brands";
+  font-weight: 400;
+}
+
+/* Icon definitions — Solid */
+.fa-bars::before { content: "\f0c9"; }
+.fa-xmark::before { content: "\f00d"; }
+.fa-search::before,
+.fa-magnifying-glass::before { content: "\f002"; }
+.fa-chevron-down::before { content: "\f078"; }
+.fa-chevron-right::before { content: "\f054"; }
+.fa-chevron-left::before { content: "\f053"; }
+.fa-sun::before { content: "\f185"; }
+.fa-moon::before { content: "\f186"; }
+.fa-rss::before { content: "\f09e"; }
+.fa-tags::before { content: "\f02c"; }
+.fa-link::before { content: "\f0c1"; }
+.fa-arrow-right::before { content: "\f061"; }
+.fa-fire::before { content: "\f06d"; }
+.fa-newspaper::before { content: "\f1ea"; }
+.fa-circle-xmark::before { content: "\f057"; }
+.fa-angle-right::before { content: "\f105"; }
+.fa-share-nodes::before { content: "\f1e0"; }
+
+/* Icon definitions — Regular */
+.fa-regular.fa-clock::before { content: "\f017"; }
+.fa-regular.fa-user::before { content: "\f007"; }
+.fa-regular.fa-folder::before { content: "\f07b"; }
+.fa-regular.fa-comment::before { content: "\f075"; }
+.fa-regular.fa-hourglass-half::before { content: "\f252"; }
+.fa-regular.fa-calendar::before { content: "\f133"; }
+.fa-regular.fa-envelope::before { content: "\f0e0"; }
+
+/* Icon definitions — Brands */
+.fa-x-twitter::before { content: "\e61b"; }
+.fa-facebook-f::before { content: "\f39e"; }
+.fa-instagram::before { content: "\f16d"; }
+.fa-mastodon::before { content: "\f4f6"; }
+.fa-youtube::before { content: "\f167"; }
+.fa-linkedin-in::before { content: "\f0e1"; }
+
+/* Sizing */
+.fa-sm { font-size: 0.875em; }
+.fa-lg { font-size: 1.25em; }
+.fa-xl { font-size: 1.5em; }
+.fa-2x { font-size: 2em; }
+
+/* Fixed width */
+.fa-fw {
+  text-align: center;
+  width: 1.25em;
+}
+
+/* Spin animation */
+.fa-spin {
+  animation: fa-spin 2s infinite linear;
+}
+
+@keyframes fa-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

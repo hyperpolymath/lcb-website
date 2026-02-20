@@ -1,0 +1,118 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/**
+ * Dark Mode Overrides for Sinople Theme
+ *
+ * All dark mode colour values are set in variables.css via [data-theme="dark"].
+ * This file handles component-specific dark mode adjustments.
+ */
+
+/* Top bar in dark mode */
+html[data-theme="dark"] .topbar {
+  background: var(--color-primary-dark);
+}
+
+html[data-theme="dark"] .topbar-ticker-label {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Header */
+html[data-theme="dark"] .site-header {
+  border-bottom-color: var(--color-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Cards */
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .post-card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+/* Buttons */
+html[data-theme="dark"] .button,
+html[data-theme="dark"] button:not(.header-btn):not(.offcanvas-close):not(.dropdown-toggle),
+html[data-theme="dark"] input[type="submit"] {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+/* Forms */
+html[data-theme="dark"] input[type="text"],
+html[data-theme="dark"] input[type="email"],
+html[data-theme="dark"] input[type="url"],
+html[data-theme="dark"] input[type="search"],
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+/* Blockquotes */
+html[data-theme="dark"] blockquote {
+  background: var(--color-surface);
+  border-left-color: var(--color-primary);
+}
+
+/* Code */
+html[data-theme="dark"] code,
+html[data-theme="dark"] pre {
+  background: var(--color-surface);
+}
+
+/* Tables */
+html[data-theme="dark"] th {
+  background: var(--color-surface);
+}
+
+/* Widgets */
+html[data-theme="dark"] .widget {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+/* Category badge */
+html[data-theme="dark"] .category-badge {
+  background: var(--color-primary-dark);
+  color: var(--color-text-inverse);
+}
+
+/* Footer */
+html[data-theme="dark"] .site-footer {
+  background: var(--color-bg-alt);
+}
+
+html[data-theme="dark"] .footer-widgets-area {
+  border-top-color: var(--color-border);
+}
+
+/* Search modal */
+html[data-theme="dark"] .search-modal-content {
+  background: var(--color-surface);
+}
+
+/* Featured section */
+html[data-theme="dark"] .featured-section {
+  background: var(--color-bg-alt);
+}
+
+/* Offcanvas */
+html[data-theme="dark"] .offcanvas-drawer {
+  background: var(--color-surface);
+}
+
+/* Dark mode toggle icon swap */
+.dark-mode-toggle .fa-moon { display: inline-block; }
+.dark-mode-toggle .fa-sun { display: none; }
+
+html[data-theme="dark"] .dark-mode-toggle .fa-moon { display: none; }
+html[data-theme="dark"] .dark-mode-toggle .fa-sun { display: inline-block; }
+
+/* High contrast mode adjustments for dark theme */
+html[data-theme="dark"] .high-contrast {
+  --color-text: #ffffff;
+  --color-bg: #000000;
+  --color-primary: #00ff99;
+  --color-border: #ffffff;
+}

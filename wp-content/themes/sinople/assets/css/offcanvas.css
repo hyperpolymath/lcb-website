@@ -1,0 +1,133 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/**
+ * Offcanvas Mobile Navigation for Sinople Theme
+ */
+
+.offcanvas-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--color-overlay);
+  z-index: var(--z-offcanvas);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-base), visibility var(--transition-base);
+}
+
+.offcanvas-backdrop.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.offcanvas-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 300px;
+  max-width: 85vw;
+  background: var(--color-surface);
+  z-index: calc(var(--z-offcanvas) + 1);
+  transform: translateX(-100%);
+  transition: transform var(--transition-base);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.offcanvas-drawer.is-open {
+  transform: translateX(0);
+}
+
+.offcanvas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.offcanvas-title {
+  font-size: var(--font-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.offcanvas-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-heading);
+  cursor: pointer;
+  font-size: var(--font-lg);
+  transition: all var(--transition-fast);
+}
+
+.offcanvas-close:hover,
+.offcanvas-close:focus-visible {
+  background: var(--color-primary-pale);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.offcanvas-body {
+  flex: 1;
+  padding: var(--space-4);
+}
+
+.offcanvas-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.offcanvas-menu li {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.offcanvas-menu a {
+  display: block;
+  padding: var(--space-3) 0;
+  color: var(--color-heading);
+  text-decoration: none;
+  font-weight: var(--weight-medium);
+  transition: color var(--transition-fast);
+}
+
+.offcanvas-menu a:hover,
+.offcanvas-menu a:focus-visible {
+  color: var(--color-primary);
+}
+
+.offcanvas-menu .current-menu-item > a {
+  color: var(--color-primary);
+  font-weight: var(--weight-semibold);
+}
+
+.offcanvas-menu .sub-menu {
+  display: block;
+  position: static;
+  border: none;
+  box-shadow: none;
+  padding: 0 0 0 var(--space-4);
+  min-width: auto;
+  background: transparent;
+}
+
+.offcanvas-menu .sub-menu a {
+  font-size: var(--font-sm);
+  padding: var(--space-2) 0;
+}
+
+/* Hide drawer on desktop */
+@media (min-width: 992px) {
+  .offcanvas-drawer,
+  .offcanvas-backdrop {
+    display: none !important;
+  }
+}

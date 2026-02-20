@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
 /**
  * Print Styles for Sinople Theme
  */
@@ -23,11 +24,26 @@
     page-break-inside: avoid;
   }
 
+  .topbar,
   .site-header,
   .main-navigation,
+  .offcanvas-drawer,
+  .offcanvas-backdrop,
   .widget-area,
-  .site-footer {
-    display: none;
+  .featured-section,
+  .missed-section,
+  .footer-widgets-area,
+  .site-footer,
+  .search-modal,
+  .dark-mode-toggle,
+  .offcanvas-toggle,
+  .search-trigger,
+  .header-actions,
+  .pagination,
+  .related-posts,
+  .author-box,
+  .category-badge {
+    display: none !important;
   }
 
   .site-main {
@@ -41,5 +57,9 @@
 
   abbr[title]:after {
     content: " (" attr(title) ")";
+  }
+
+  img {
+    max-width: 100% !important;
   }
 }
