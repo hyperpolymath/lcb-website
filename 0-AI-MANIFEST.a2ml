@@ -64,11 +64,22 @@ lcb-website/
 │   └── wordpress.ctp                # Cerro Torre manifest (Ed25519+Dilithium5)
 ├── content/
 │   ├── pages/                       # Markdown source for WP pages
+│   ├── posts/                       # HTML seed posts (8 articles)
+│   ├── images/                      # Featured images for seed posts
 │   ├── policies/                    # AI usage policy, legal
 │   └── mockups/                     # HTML mockups
 ├── wp-content/
-│   ├── themes/sinople/              # Sinople theme + php-aegis
+│   ├── themes/sinople/              # Sinople v2.0.0 theme (Newspaperup layout)
+│   │   ├── assets/css/              # 18 CSS files + variables.css token system
+│   │   ├── assets/js/               # 5 JS files (dark mode, offcanvas, search, swiper, nav)
+│   │   ├── assets/fonts/            # Self-hosted WOFF2 (Lexend Deca, Outfit)
+│   │   ├── assets/vendor/           # Font Awesome 6 subset, Swiper 11
+│   │   ├── inc/                     # 9 PHP includes (security, indieweb, variants, etc.)
+│   │   ├── template-parts/          # 10 template partials (header/, footer/, cards, etc.)
+│   │   └── page-templates/          # Full-width, sidebar-left page templates
 │   └── mu-plugins/                  # Must-use plugins
+├── scripts/
+│   └── wp-deploy.sh                 # WP-CLI deployment (menus, widgets, posts, images)
 ├── templates/
 │   ├── wp-config-security.php       # Security constants for wp-config
 │   ├── htaccess-well-known          # .well-known serving rules
@@ -96,6 +107,15 @@ lcb-website/
 ├── services/                        # Service configs (mariadb, OLS, varnish)
 └── hooks/                           # Git hooks
 ```
+
+## SINOPLE THEME v2.0.0 INVARIANTS
+
+1. **Security headers managed by PhpAegis ONLY** — `functions.php` is authoritative for CSP; `inc/security.php` headers method is a no-op
+2. **No CDN dependencies** — fonts, Font Awesome, Swiper are ALL self-hosted in `assets/`
+3. **CSS variables in variables.css** — ALL colour/typography/spacing tokens defined there, not inline
+4. **Dark mode via data-theme attribute** — `<html data-theme="dark">`, NOT body classes
+5. **Colour scheme via data-scheme attribute** — `<html data-scheme="nuj-green">`, NOT body classes
+6. **GPL-2.0-or-later** — WordPress theme requirement, overrides PMPL for theme files only
 
 ## SESSION STARTUP CHECKLIST
 
@@ -130,9 +150,9 @@ After reading this file, demonstrate understanding by stating:
 
 ## META
 
-- **Format Version:** 1.1.0
+- **Format Version:** 1.2.0
 - **Created:** 2026-01-19
-- **Updated:** 2026-02-14
+- **Updated:** 2026-02-20
 - **Maintained By:** Jonathan D.A. Jewell (hyperpolymath)
 - **License:** PMPL-1.0-or-later
 - **Protocol:** https://github.com/hyperpolymath/0-ai-gatekeeper-protocol

@@ -279,46 +279,65 @@ add_action( 'widgets_init', 'sinople_widgets_init' );
 
 /**
  * Enqueue Scripts and Styles
+ *
+ * In production mode (SINOPLE_PRODUCTION defined and true), loads minified
+ * bundles from assets/dist/. Otherwise loads individual files for development.
+ * Run `php scripts/build-assets.php` to rebuild the bundles.
  */
 function sinople_enqueue_assets() {
-    // CSS — order matters for cascade
-    wp_enqueue_style( 'sinople-variables', SINOPLE_URL . '/assets/css/variables.css', array(), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-style', get_stylesheet_uri(), array( 'sinople-variables' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-layout', SINOPLE_URL . '/assets/css/layout.css', array( 'sinople-style' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-grid', SINOPLE_URL . '/assets/css/grid.css', array( 'sinople-layout' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-header', SINOPLE_URL . '/assets/css/header.css', array( 'sinople-style' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-offcanvas', SINOPLE_URL . '/assets/css/offcanvas.css', array( 'sinople-style' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-components', SINOPLE_URL . '/assets/css/components.css', array( 'sinople-style' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-cards', SINOPLE_URL . '/assets/css/cards.css', array( 'sinople-style' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-sidebar', SINOPLE_URL . '/assets/css/sidebar.css', array( 'sinople-style' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-footer-css', SINOPLE_URL . '/assets/css/footer.css', array( 'sinople-style' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-dark-mode', SINOPLE_URL . '/assets/css/dark-mode.css', array( 'sinople-variables' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-search-modal', SINOPLE_URL . '/assets/css/search-modal.css', array( 'sinople-style' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-accessibility', SINOPLE_URL . '/assets/css/accessibility.css', array( 'sinople-style' ), SINOPLE_VERSION );
-    wp_enqueue_style( 'sinople-print', SINOPLE_URL . '/assets/css/print.css', array(), SINOPLE_VERSION, 'print' );
+    $production = defined( 'SINOPLE_PRODUCTION' ) && SINOPLE_PRODUCTION;
 
-    // Featured section CSS (front page only)
+    if ( $production && file_exists( SINOPLE_PATH . '/assets/dist/sinople.min.css' ) ) {
+        // Production: single CSS bundle (includes variables, layout, components, dark mode, etc.)
+        wp_enqueue_style( 'sinople-bundle', SINOPLE_URL . '/assets/dist/sinople.min.css', array(), SINOPLE_VERSION );
+    } else {
+        // Development: individual CSS files — order matters for cascade
+        wp_enqueue_style( 'sinople-variables', SINOPLE_URL . '/assets/css/variables.css', array(), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-style', get_stylesheet_uri(), array( 'sinople-variables' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-layout', SINOPLE_URL . '/assets/css/layout.css', array( 'sinople-style' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-grid', SINOPLE_URL . '/assets/css/grid.css', array( 'sinople-layout' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-header', SINOPLE_URL . '/assets/css/header.css', array( 'sinople-style' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-offcanvas', SINOPLE_URL . '/assets/css/offcanvas.css', array( 'sinople-style' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-components', SINOPLE_URL . '/assets/css/components.css', array( 'sinople-style' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-cards', SINOPLE_URL . '/assets/css/cards.css', array( 'sinople-style' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-sidebar', SINOPLE_URL . '/assets/css/sidebar.css', array( 'sinople-style' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-footer-css', SINOPLE_URL . '/assets/css/footer.css', array( 'sinople-style' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-dark-mode', SINOPLE_URL . '/assets/css/dark-mode.css', array( 'sinople-variables' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-search-modal', SINOPLE_URL . '/assets/css/search-modal.css', array( 'sinople-style' ), SINOPLE_VERSION );
+        wp_enqueue_style( 'sinople-accessibility', SINOPLE_URL . '/assets/css/accessibility.css', array( 'sinople-style' ), SINOPLE_VERSION );
+
+        // Featured section CSS (front page only, already in bundle for production)
+        if ( is_front_page() ) {
+            wp_enqueue_style( 'sinople-featured', SINOPLE_URL . '/assets/css/featured.css', array( 'sinople-style' ), SINOPLE_VERSION );
+        }
+    }
+
+    // Always separate: print (different media), vendor (different versioning), fonts
+    wp_enqueue_style( 'sinople-print', SINOPLE_URL . '/assets/css/print.css', array(), SINOPLE_VERSION, 'print' );
+    wp_enqueue_style( 'fontawesome', SINOPLE_URL . '/assets/vendor/fontawesome/css/fontawesome-subset.css', array(), '6.5.0' );
+    wp_enqueue_style( 'sinople-fonts', SINOPLE_URL . '/assets/css/fonts.css', array(), SINOPLE_VERSION );
+
     if ( is_front_page() ) {
-        wp_enqueue_style( 'sinople-featured', SINOPLE_URL . '/assets/css/featured.css', array( 'sinople-style' ), SINOPLE_VERSION );
         wp_enqueue_style( 'swiper', SINOPLE_URL . '/assets/vendor/swiper/swiper-bundle.min.css', array(), '11.0.0' );
     }
 
-    // Font Awesome (subset)
-    wp_enqueue_style( 'fontawesome', SINOPLE_URL . '/assets/vendor/fontawesome/css/fontawesome-subset.css', array(), '6.5.0' );
-
-    // Fonts
-    wp_enqueue_style( 'sinople-fonts', SINOPLE_URL . '/assets/css/fonts.css', array(), SINOPLE_VERSION );
-
     // JavaScript
-    wp_enqueue_script( 'sinople-dark-mode', SINOPLE_URL . '/assets/js/dark-mode.js', array(), SINOPLE_VERSION, true );
-    wp_enqueue_script( 'sinople-offcanvas', SINOPLE_URL . '/assets/js/offcanvas.js', array(), SINOPLE_VERSION, true );
-    wp_enqueue_script( 'sinople-search-modal', SINOPLE_URL . '/assets/js/search-modal.js', array(), SINOPLE_VERSION, true );
-    wp_enqueue_script( 'sinople-navigation', SINOPLE_URL . '/assets/js/navigation.js', array(), SINOPLE_VERSION, true );
+    if ( $production && file_exists( SINOPLE_PATH . '/assets/dist/sinople.min.js' ) ) {
+        // Production: single JS bundle (dark mode, offcanvas, search modal, navigation)
+        wp_enqueue_script( 'sinople-bundle', SINOPLE_URL . '/assets/dist/sinople.min.js', array(), SINOPLE_VERSION, true );
+    } else {
+        // Development: individual JS files
+        wp_enqueue_script( 'sinople-dark-mode', SINOPLE_URL . '/assets/js/dark-mode.js', array(), SINOPLE_VERSION, true );
+        wp_enqueue_script( 'sinople-offcanvas', SINOPLE_URL . '/assets/js/offcanvas.js', array(), SINOPLE_VERSION, true );
+        wp_enqueue_script( 'sinople-search-modal', SINOPLE_URL . '/assets/js/search-modal.js', array(), SINOPLE_VERSION, true );
+        wp_enqueue_script( 'sinople-navigation', SINOPLE_URL . '/assets/js/navigation.js', array(), SINOPLE_VERSION, true );
+    }
 
-    // Swiper (front page only)
+    // Swiper (front page only, always separate — vendor dependency)
     if ( is_front_page() ) {
         wp_enqueue_script( 'swiper', SINOPLE_URL . '/assets/vendor/swiper/swiper-bundle.min.js', array(), '11.0.0', true );
-        wp_enqueue_script( 'sinople-swiper-init', SINOPLE_URL . '/assets/js/swiper-init.js', array( 'swiper' ), SINOPLE_VERSION, true );
+        $swiper_dep = $production ? 'sinople-bundle' : 'sinople-navigation';
+        wp_enqueue_script( 'sinople-swiper-init', SINOPLE_URL . '/assets/js/swiper-init.js', array( 'swiper', $swiper_dep ), SINOPLE_VERSION, true );
     }
 
     // Comment reply
@@ -326,8 +345,9 @@ function sinople_enqueue_assets() {
         wp_enqueue_script( 'comment-reply' );
     }
 
-    // Localize
-    wp_localize_script( 'sinople-navigation', 'sinople', array(
+    // Localize (attach to whichever script handle is active)
+    $main_handle = $production ? 'sinople-bundle' : 'sinople-navigation';
+    wp_localize_script( $main_handle, 'sinople', array(
         'ajax_url' => admin_url( 'admin-ajax.php' ),
         'nonce'    => wp_create_nonce( 'sinople_nonce' ),
         'rest_url' => esc_url_raw( rest_url() ),
@@ -347,6 +367,7 @@ require_once SINOPLE_PATH . '/inc/indieweb.php';
 require_once SINOPLE_PATH . '/inc/accessibility.php';
 require_once SINOPLE_PATH . '/inc/template-tags.php';
 require_once SINOPLE_PATH . '/inc/walker-nav.php';
+require_once SINOPLE_PATH . '/inc/block-patterns.php';
 require_once SINOPLE_PATH . '/inc/theme-options.php';
 
 /**
