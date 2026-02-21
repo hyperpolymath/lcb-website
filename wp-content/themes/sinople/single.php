@@ -74,13 +74,23 @@ get_header();
                 <!-- Related Posts -->
                 <?php
                 $categories = get_the_category();
-                if ( ! empty( $categories ) ) :
+                $related = array();
+                if ( ! empty( $categories ) ) {
                     $related = get_posts( array(
                         'category__in'   => wp_list_pluck( $categories, 'term_id' ),
                         'post__not_in'   => array( get_the_ID() ),
                         'numberposts'    => 3,
                         'post_status'    => 'publish',
                     ) );
+                }
+                // Fallback to recent posts if no related in same category
+                if ( empty( $related ) ) {
+                    $related = get_posts( array(
+                        'post__not_in'   => array( get_the_ID() ),
+                        'numberposts'    => 3,
+                        'post_status'    => 'publish',
+                    ) );
+                }
 
                     if ( ! empty( $related ) ) :
                         ?>
@@ -116,7 +126,6 @@ get_header();
                             </div>
                         </section>
                     <?php endif; ?>
-                <?php endif; ?>
 
                 <?php
                 if ( comments_open() || get_comments_number() ) :
@@ -130,5 +139,8 @@ get_header();
         <?php get_sidebar(); ?>
     </div>
 </div>
+
+    <!-- You May Have Missed -->
+    <?php get_template_part( 'template-parts/footer/missed-posts' ); ?>
 
 <?php get_footer();
