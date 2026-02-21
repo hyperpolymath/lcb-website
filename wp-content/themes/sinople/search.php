@@ -47,4 +47,7 @@ get_header();
     </div>
 </div>
 
+    <!-- You May Have Missed -->
+    <?php get_template_part( 'template-parts/footer/missed-posts' ); ?>
+
 <?php get_footer();
