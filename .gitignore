@@ -1,61 +1,72 @@
 # SPDX-License-Identifier: PMPL-1.0-or-later
 
-# Environment files
-.env
-.env.local
-.env.*.local
-
-# Cabal cache
-/.cabal
-
-# Build artifacts
+# ── Build artifacts ──────────────────────────────────────
 build/
 dist/
 target/
 *.o
 *.ali
 
-# Cerro Torre cache
+# ── Cabal cache ──────────────────────────────────────────
+/.cabal
+
+# ── Cerro Torre / supply-chain ───────────────────────────
 .ct-cache/
-sbom/
 in_toto/
+sbom/
 *.ctp.signed
 
-# WordPress
-wp-content/uploads/
-wp-content/upgrade/
-wp-content/backup-db/
-wp-content/cache/
-wp-content/backups/
+# ── Database backups ─────────────────────────────────────
+*.sql
+*.sql.gz
 
-# Logs
-*.log
-logs/
-wp-content/debug.log
+# ── Environment / secrets ────────────────────────────────
+.env
+.env.local
+.env.*.local
+.env.production-reference
+*.crt
+*.key
+*.pem
+secrets/
 
-# IDE
-.vscode/
+# ── IDE / editor ─────────────────────────────────────────
 .idea/
+.vscode/
 *.swp
 *.swo
 *~
 
-# OS
+# ── Logs ─────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Node / Deno (safeguard) ──────────────────────────────
+node_modules/
+
+# ── OS ───────────────────────────────────────────────────
 .DS_Store
+.directory
 Thumbs.db
 
-# Secrets
-*.key
-*.pem
-*.crt
-secrets/
-.env.production-reference
+# ── PHP tooling ──────────────────────────────────────────
+.php-cs-fixer.cache
+.phpunit.result.cache
 
-# Database backups
-*.sql.gz
-*.sql
+# ── Temp files ───────────────────────────────────────────
+*.bak
+*.tmp
 
-# Common junk
+# ── WordPress (server-managed, not in repo) ──────────────
+wp-content/backup-db/
+wp-content/backups/
+wp-content/cache/
+wp-content/debug.log
+wp-content/mu-plugins/
+wp-content/plugins/
+wp-content/upgrade/
+wp-content/uploads/
+
+# ── Miscellaneous ────────────────────────────────────────
 ai-cli-crash-capture/
-.directory
 sync_report*.txt
