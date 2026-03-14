@@ -20,9 +20,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once get_template_directory() . '/vendor/php-aegis/autoload.php';
 
 // Theme constants
-define( 'SINOPLE_VERSION', '2.0.1' );
+define( 'SINOPLE_VERSION', '2.0.2' );
 define( 'SINOPLE_PATH', get_template_directory() );
 define( 'SINOPLE_URL', get_template_directory_uri() );
+
+/**
+ * Get or create a per-request CSP nonce for inline scripts.
+ *
+ * @return string Base64-encoded 32-byte random nonce, stable for the request lifetime.
+ */
+function sinople_get_csp_nonce(): string {
+    if ( ! isset( $GLOBALS['sinople_csp_nonce'] ) ) {
+        $GLOBALS['sinople_csp_nonce'] = base64_encode( random_bytes( 32 ) );
+    }
+    return $GLOBALS['sinople_csp_nonce'];
+}
 
 /**
  * Theme Setup
@@ -512,9 +524,11 @@ function sinople_security_headers(): void {
         \PhpAegis\Headers::strictTransportSecurity( 31536000, true, false );
     }
 
+    $nonce = sinople_get_csp_nonce();
+
     \PhpAegis\Headers::contentSecurityPolicy( array(
         'default-src'  => array( "'self'" ),
-        'script-src'   => array( "'self'", "'unsafe-inline'", "'unsafe-eval'" ),
+        'script-src'   => array( "'self'", "'nonce-" . $nonce . "'" ),
         'style-src'    => array( "'self'", "'unsafe-inline'" ),
         'img-src'      => array( "'self'", 'data:', 'https:' ),
         'font-src'     => array( "'self'", 'data:' ),

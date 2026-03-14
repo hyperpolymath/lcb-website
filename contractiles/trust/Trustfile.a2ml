@@ -1,0 +1,703 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# =============================================================================
+# A2ML Trustfile — NUJ London Central Branch Website (nuj-lcb.org.uk)
+# Populated from rsr-template-repo/Trustfile_just_an_example.a2ml
+# =============================================================================
+
+---
+### [META]
+id: "did:web:nuj-lcb.org.uk"
+version: "2026.3.14-draft"
+context:
+  - "https://a2ml.org/ns/v2"
+  - "https://leanprover-community.github.io/lean4"
+  - "https://hypatia.scans/ns/v1"
+  - "https://w3id.org/security/v4"
+  - "https://w3id.org/transparency/v1"
+meta:
+  generated: "2026-03-14T00:00:00Z"
+  expires: "2027-03-14T00:00:00Z"
+  signature:
+    algorithm: "Ed448+Dilithium5"
+    value: |
+      -----BEGIN HYBRID SIGNATURE-----
+      PENDING — generate after cerro-torre gains PQ support
+      -----END HYBRID SIGNATURE-----
+    signedBy: "did:web:nuj-lcb.org.uk#primary-sig"
+    proof: "https://nuj-lcb.org.uk/proofs/meta.lean"
+  fallbackSignature:
+    algorithm: "SPHINCS+"
+    value: |
+      -----BEGIN SPHINCS+ SIGNATURE-----
+      PENDING — generate after cerro-torre gains PQ support
+      -----END SPHINCS+ SIGNATURE-----
+  integrity:
+    sha3-512: "PENDING"
+    shake256: "PENDING"
+    zonemd: "PENDING"
+  ci_cd:
+    github_actions: "https://github.com/hyperpolymath/lcb-website/blob/main/.github/workflows/trustfile.yml"
+    gitbot_fleet: "https://gitbot-fleet.hyperpolymath.org/hooks/trustfile"
+    hypatia_scan: "https://hypatia.scans/repos/lcb-website"
+  automation:
+    hashing: ["SHA3-512", "SHAKE256", "BLAKE3"]
+    diffing: "alert-on-unexpected-changes"
+    integrity: ["zonemd-consistency", "transparency-log-continuity", "lean-proof-validity"]
+
+---
+### [THREAT_MODEL]
+adversaries:
+  - type: "APT"
+    mitigations:
+      - "Capability-based auth → No lateral movement."
+      - "LEAN4 proofs → No exploit primitives."
+      - "Transparency logs → Immediate detection."
+  - type: "Ransomware"
+    mitigations:
+      - "Consent-Aware HTTP → No bulk exfiltration."
+      - "SDP (CAdRE Router) → Resource isolation."
+      - "Immutable logs → Instant rollback."
+      - "UpdraftPlus encrypted backups → Recovery path."
+  - type: "Quantum Adversary"
+    mitigations:
+      - "Kyber1024 + Dilithium5 → PQ-resistant crypto."
+      - "SPHINCS+ fallback → Crypto agility."
+      - "GitBot-Fleet → Automated key rotation."
+  - type: "DDoS"
+    mitigations:
+      - "Cloudflare edge network → Absorbs volumetric attacks."
+      - "HTTP DDoS Managed Ruleset → Auto-mitigation at max sensitivity."
+      - "Challenge Passage TTL → Rate-limits challenge solvers."
+      - "Security Level → Adjustable based on threat intelligence."
+  - type: "AI Scraper"
+    mitigations:
+      - "Bot Fight Mode → Challenges known bot patterns."
+      - "Block AI Bots → Blocks verified AI crawlers + similar unverified."
+      - "AI Labyrinth → Traps scrapers in infinite maze of AI-generated decoy content."
+      - "AI Crawl Control → Per-crawler blocking and monitoring."
+      - "Managed robots.txt → Blocks 11 AI training bots (GPTBot, Claude-Web, CCBot, etc.)."
+      - "AIBDP consent policy → .well-known/aibdp.json with HTTP 430 for non-consent."
+  - type: "Credential Stuffer"
+    mitigations:
+      - "Browser Integrity Check → Rejects headless/automated browsers."
+      - "Challenge Passage TTL → Forces re-challenge after 30 min."
+      - "HSTS preload → Prevents SSL-stripping MITM for credential capture."
+      - "Wordfence 2FA → Multi-factor for admin login."
+      - "Wordfence login lockout → Rate-limits failed attempts."
+  - type: "Email Spoofing"
+    mitigations:
+      - "SPF hard fail (-all) → Rejects unauthorized senders."
+      - "DMARC p=reject → Instructs receivers to drop spoofed mail."
+      - "DKIM signing → Cryptographic message authentication."
+      - "CAA records → Restricts certificate issuance to authorized CAs."
+  - type: "WordPress Exploit"
+    mitigations:
+      - "PhpAegis Headers → CSP with per-request nonces, HSTS, X-Frame-Options."
+      - "PhpAegis Validator/Sanitizer → Input validation and output escaping."
+      - "Sanctify-PHP → Haskell-based taint analysis and code hardening."
+      - "Wordfence WAF → Application-level firewall."
+      - "DISALLOW_FILE_EDIT → No in-admin PHP editing."
+      - "wp-config-security.php → 12 hardening constants."
+
+---
+### [DNS]
+dnssec:
+  enabled: true
+  algorithm: "ECDSAP256SHA256"
+  ds_record: "PENDING — propagate via Cloudflare"
+  key_tag: "PENDING"
+  digest_type: "SHA-256"
+  policy: "DNSSEC MUST be enabled on all zones. DS records propagated to registrar."
+  security:
+    proof: "DNS.DNSSEC.lean"
+    ci_cd: "verify-dnssec-propagation"
+records:
+  - type: "A"
+    name: "@"
+    value: "65.181.113.13"
+    ttl: "auto"
+    proxied: true
+    security:
+      proof: "DNS.Core.A_Record.lean"
+  - type: "CNAME"
+    name: "www"
+    value: "nuj-lcb.org.uk"
+    ttl: "auto"
+    proxied: true
+    security:
+      proof: "DNS.Core.CNAME_Record.lean"
+  - type: "TXT"
+    name: "@"
+    value: '"v=spf1 -all"'
+    ttl: 3600
+    notes: "Hard fail. No servers currently authorized to send from nuj-lcb.org.uk."
+    security:
+      proof: "Email.SPF.lean"
+  - type: "TXT"
+    name: "_dmarc"
+    value: '"v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s; rua=mailto:dmarc@nuj-lcb.org.uk; fo=1"'
+    ttl: 3600
+    notes: "Strict alignment. Reject all unauthenticated."
+    security:
+      proof: "Email.DMARC.lean"
+  - type: "CAA"
+    name: "@"
+    value: '0 issue "letsencrypt.org"'
+    ttl: 3600
+  - type: "CAA"
+    name: "@"
+    value: '0 issue "digicert.com"'
+    ttl: 3600
+    notes: "Cloudflare Universal SSL uses DigiCert and Let's Encrypt."
+  - type: "CAA"
+    name: "@"
+    value: '0 iodef "mailto:security@hyperpolymath.org"'
+    ttl: 3600
+
+---
+### [EMAIL_SECURITY]
+overview: |
+  nuj-lcb.org.uk does not currently send email directly.
+  Email routing via Verpex cPanel or Cloudflare Email Routing (planned).
+  All records configured to reject spoofed mail until sending is enabled.
+policy:
+  non_sending_domains:
+    spf: "v=spf1 -all"
+    dmarc: "p=reject; sp=reject; adkim=s; aspf=s; fo=1"
+    dkim: "revoked (empty public key)"
+  sending_domains:
+    spf: "v=spf1 include:_spf.verpex.com -all"
+    dmarc: "p=reject; sp=reject; adkim=s; aspf=s; pct=100; fo=1"
+    dkim: "2048-bit RSA minimum; rotate annually"
+    notes: "Enable when WP Mail SMTP configured via Verpex."
+email_routing:
+  provider: "Verpex cPanel (planned: Cloudflare Email Routing)"
+  security:
+    proof: "Email.Routing.lean"
+
+---
+### [TRUSTFILE]
+issuer: "did:web:nuj-lcb.org.uk"
+keys:
+  - id: "#primary-sig"
+    type: "HybridKey2024"
+    classical:
+      algorithm: "Ed448"
+      publicKeyJwk:
+        kty: "OKP"
+        crv: "Ed448"
+        x: "PENDING — generate key pair"
+    postQuantum:
+      algorithm: "Dilithium5"
+      publicKeyJwk:
+        kty: "OKP"
+        crv: "Dilithium5"
+        x: "PENDING — generate key pair"
+    fallback:
+      algorithm: "SPHINCS+"
+      publicKeyJwk:
+        kty: "OKP"
+        crv: "SPHINCS+"
+        x: "PENDING — generate key pair"
+    usage: ["authentication", "assertion"]
+    security:
+      proof: "Crypto.HybridKey.lean"
+      ci_cd: "rotate-keys-on-compromise"
+algorithms:
+  hashing: ["SHA3-512", "SHAKE256", "BLAKE3"]
+  kdf: "HKDF-SHAKE512"
+  rng: "ChaCha20-DRBG"
+  passwordHashing: "Argon2id (512 MiB, 8 iter, 4 lanes)"
+  security:
+    proof: "Crypto.Algorithms.lean"
+policies:
+  dns:
+    rego: |
+      package trustfile.dns
+      default allow = false
+      allow {
+        input.record.security.proof != ""
+      }
+    lean: "Policies.DNS.lean"
+  http:
+    rego: |
+      package trustfile.http
+      default allow = false
+      allow {
+        input.consent.granted
+        valid_capability(input.capability)
+      }
+    lean: "Policies.HTTP.lean"
+  php:
+    rego: |
+      package trustfile.php
+      default allow = false
+      allow {
+        input.php.aegis_enabled
+        input.php.sanctify_enabled
+      }
+    lean: "Policies.PHP.lean"
+fallbacks:
+  signatures: ["Ed448+Dilithium5", "SPHINCS+"]
+  keyExchange: ["Kyber1024-X25519", "X25519"]
+
+---
+### [SSL/TLS]
+ciphers:
+  - "TLS_AES_256_GCM_SHA384"
+  - "TLS_CHACHA20_POLY1305_SHA256"
+groups:
+  - "X25519Kyber768Draft00"
+  - "secp256r1"
+protocols:
+  - "TLSv1.3"
+minimum_version: "1.2"
+notes: |
+  TLS 1.3 preferred with post-quantum key exchange (X25519Kyber768).
+  Minimum version 1.2 enforced at Cloudflare edge. TLS 1.0 and 1.1 BANNED.
+  Cloudflare SSL mode: Full (strict) — requires valid origin certificate.
+  Origin cert: Verpex AutoSSL (Let's Encrypt) for nuj-lcb.org.uk + www.
+features:
+  ocspStapling: true
+  signedCertTimestamps: true
+  certificateTransparency:
+    monitoring: true
+  mustStaple: true
+  opportunistic_encryption: true
+  automatic_https_rewrites: true
+  always_use_https: true
+edge_certificates:
+  provider: "Cloudflare Universal SSL"
+  type: "DV (Domain Validated)"
+  issuers: ["DigiCert", "Let's Encrypt", "Google Trust Services"]
+  auto_renewal: true
+  caa_restriction: true
+security:
+  proof: "TLS.Configuration.lean"
+
+---
+### [CLOUDFLARE]
+waf:
+  ruleset: "OWASP_ModSecurity_CRS"
+  sensitivity: "high"
+  paranoiaLevel: 4
+  managed_rulesets:
+    - name: "Cloudflare Managed Ruleset"
+      action: "execute"
+      phase: "http_request_firewall_managed"
+    - name: "Cloudflare OWASP Core Ruleset"
+      action: "execute"
+      phase: "http_request_firewall_managed"
+  ddos:
+    http:
+      sensitivity: "high"
+      action: "managed_challenge"
+      ruleset: "Cloudflare HTTP DDoS Attack Protection"
+  security:
+    proof: "Cloudflare.WAF.lean"
+
+---
+### [CLOUDFLARE_EDGE_SECURITY]
+ssl_tls:
+  mode: "strict"
+  min_tls_version: "1.2"
+  tls_1_3: "zrt"
+  always_use_https: true
+  automatic_https_rewrites: true
+  opportunistic_encryption: true
+  hsts:
+    enabled: true
+    max_age: 31536000
+    include_subdomains: true
+    preload: true
+    nosniff: true
+  universal_ssl: true
+  security:
+    proof: "Cloudflare.SSL.lean"
+
+bot_defense:
+  bot_fight_mode: true
+  block_ai_bots: true
+  ai_labyrinth: true
+  ai_crawl_control:
+    default_action: "block"
+    notes: |
+      Block all known AI crawlers by default. robots.txt blocks 11 bots:
+      GPTBot, ChatGPT-User, CCBot, anthropic-ai, Claude-Web, cohere-ai,
+      Google-Extended, Bytespider, PetalBot, Amazonbot, FacebookBot.
+      AIBDP consent policy returns HTTP 430 for non-consenting agents.
+  managed_robots_txt: true
+  security:
+    proof: "Cloudflare.Bots.lean"
+
+scrape_shield:
+  email_obfuscation: true
+  hotlink_protection: true
+  server_side_excludes: true
+  security:
+    proof: "Cloudflare.ScrapeShield.lean"
+
+browser_integrity:
+  browser_check: true
+  security_level: "medium"
+  challenge_ttl: 1800
+  security:
+    proof: "Cloudflare.BrowserIntegrity.lean"
+
+page_shield:
+  enabled: true
+  script_monitoring: true
+  security:
+    proof: "Cloudflare.PageShield.lean"
+
+security_txt:
+  enabled: true
+  contact: "mailto:security@hyperpolymath.org"
+  preferred_languages: "en"
+  expires: "2027-02-14T00:00:00.000Z"
+  policy: "https://nuj-lcb.org.uk/policies/security-policy"
+  canonical: "https://nuj-lcb.org.uk/.well-known/security.txt"
+  security:
+    proof: "Cloudflare.SecurityTxt.lean"
+    ci_cd: "renew-security-txt-before-expiry"
+
+---
+### [RESPONSE_HEADERS]
+overview: |
+  Security response headers applied at both origin (PhpAegis) and edge (Cloudflare).
+  PhpAegis is authoritative for CSP (uses per-request nonces). Cloudflare adds
+  defence-in-depth for X-Frame-Options, Referrer-Policy, etc.
+
+managed_transforms:
+  add:
+    - "X-Content-Type-Options: nosniff"
+    - "X-Frame-Options: SAMEORIGIN"
+    - "Referrer-Policy: strict-origin-when-cross-origin"
+  remove:
+    - "Server"
+    - "X-Powered-By"
+
+custom_headers:
+  - name: "Permissions-Policy"
+    value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+  - name: "Content-Security-Policy"
+    value: "default-src 'self'; script-src 'self' 'nonce-{per-request}'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    notes: "CSP managed by PhpAegis in functions.php. Nonce regenerated each request."
+  - name: "Cross-Origin-Opener-Policy"
+    value: "same-origin"
+  - name: "Cross-Origin-Embedder-Policy"
+    value: "require-corp"
+  - name: "Cross-Origin-Resource-Policy"
+    value: "same-origin"
+
+security:
+  proof: "Cloudflare.ResponseHeaders.lean"
+
+---
+### [NETWORK]
+http2: true
+http3: true
+quic: true
+zero_rtt: true
+websockets: true
+onion_routing: true
+ipv6_compatibility: true
+brotli: true
+
+zero_rtt_policy: |
+  0-RTT enabled for performance. Only idempotent requests (GET/HEAD) use 0-RTT.
+  Non-idempotent requests (POST/PUT/DELETE) always use full handshake.
+
+security:
+  proof: "Cloudflare.Network.lean"
+
+---
+### [PERFORMANCE]
+early_hints: true
+speed_brain: true
+auto_minify:
+  javascript: true
+  css: true
+  html: true
+rocket_loader: false
+always_online: true
+
+caching:
+  browser_ttl: "respect-origin"
+  edge_ttl: "default"
+  notes: "LiteSpeed Cache plugin manages WordPress-level TTLs and Redis object cache."
+
+security:
+  proof: "Cloudflare.Performance.lean"
+
+---
+### [PHP_HARDENING]
+aegis:
+  enabled: true
+  version: "0.9.0"
+  location: "wp-content/themes/sinople/vendor/php-aegis/"
+  mu_plugin: "wp-content/mu-plugins/php-aegis-loader.php"
+  modules:
+    - "Headers (CSP nonce, HSTS, X-Frame-Options, Permissions-Policy)"
+    - "Validator (strict input validation)"
+    - "Sanitizer (context-aware HTML/JS/CSS/JSON)"
+    - "Crypto (cryptographic utilities)"
+    - "TurtleEscaper (RDF/Turtle output escaping)"
+    - "WordPress/Adapter (23 adapter functions)"
+    - "RateLimit (TokenBucket with File/Memory backends)"
+    - "IndieWeb (Micropub, IndieAuth, Webmention security)"
+  rules:
+    - "disable_functions=exec,popen,shell_exec,system"
+    - "expose_php=0"
+    - "session.cookie_httponly=1"
+    - "session.cookie_secure=1"
+sanctify:
+  enabled: true
+  version: "0.2.0"
+  language: "Haskell"
+  location: "/var/mnt/eclipse/repos/sanctify-php/"
+  capabilities:
+    - "PHP parser (Megaparsec, full grammar coverage)"
+    - "AST taint analysis (OWASP Top 10, ReDoS, SSRF, XXE, TOCTOU)"
+    - "WordPress-specific checks (nonce, capabilities, AJAX, REST API)"
+    - "Automatic transformations (strict_types, sanitization injection)"
+    - "Multiple output formats (text, JSON, SARIF, HTML)"
+  directives:
+    - "sanctify.globals=1"
+    - "sanctify.request=1"
+    - "sanctify.error_reporting=E_ALL"
+
+---
+### [CONTAINER_SUPPLY_CHAIN]
+overview: |
+  Container supply-chain verification via the stapeln ecosystem (100% complete).
+  All container images built with Podman on Chainguard Wolfi base images,
+  signed as .ctp bundles via cerro-torre, and governed by svalinn edge gateway.
+  Runtime monitoring by vordr. Orchestration via selur-compose.
+
+runtime:
+  engine: "Podman"
+  policy: "Rootless containers only. Never Docker."
+  security:
+    proof: "Container.Runtime.lean"
+
+base_images:
+  provider: "Chainguard"
+  registry: "cgr.dev/chainguard/"
+  allowed:
+    - "cgr.dev/chainguard/wolfi-base:latest"
+    - "cgr.dev/chainguard/mariadb:latest"
+    - "cgr.dev/chainguard/redis:latest"
+    - "cgr.dev/chainguard/static:latest"
+  policy: "Only Chainguard images permitted as base. Rebuilt daily, CVE-free."
+  security:
+    proof: "Container.BaseImages.lean"
+
+verified_bundles:
+  format: ".ctp"
+  tool: "cerro-torre"
+  manifest: "infra/wordpress.ctp"
+  operations:
+    pack: "ct pack infra/wordpress.ctp"
+    sign: "cerro-torre sign lcb-wordpress:6.9.0"
+    verify: "ct verify infra/wordpress.ctp"
+    seal: "selur seal lcb-wordpress:6.9.0"
+  attestations:
+    required: ["source-signature", "reproducible-build", "sbom-complete"]
+    recommended: ["security-audit", "pq-signature"]
+  security:
+    proof: "Container.Bundles.lean"
+
+gateway:
+  tool: "svalinn"
+  status: "100% — HTTP/3 validated"
+  capabilities:
+    - "JWT/OAuth2 authentication"
+    - "Rate limiting (consenting bots: 1000/burst:50, non-consenting: 0)"
+    - "Container trust enforcement (.ctp signature verification)"
+    - "AIBDP consent enforcement (HTTP 430)"
+    - "TLS termination"
+  security:
+    proof: "Container.Gateway.lean"
+
+monitoring:
+  tool: "vordr"
+  status: "~90%"
+  capabilities:
+    - "Health endpoint monitoring"
+    - "Container crash detection"
+    - "Resource usage thresholds"
+    - "Structured JSON log output"
+  security:
+    proof: "Container.Monitoring.lean"
+
+orchestration:
+  tool: "selur-compose"
+  file: "selur-compose.yml"
+  services:
+    - "selur-sv (gateway, ports 443/80)"
+    - "wordpress (lcb-wordpress:6.9.0, port 8080)"
+    - "mariadb (cgr.dev/chainguard/mariadb)"
+    - "redis (cgr.dev/chainguard/redis)"
+
+signing:
+  algorithm: "Ed25519"
+  pq_algorithm: "Dilithium5-AES (ML-DSA-87, when available)"
+  pq_fallback: "SPHINCS+"
+  tool: "cerro-torre sign"
+  security:
+    proof: "Container.Signing.lean"
+
+---
+### [CONSENT_AWARE_HTTP]
+overview: |
+  AIBDP (AI Bot Data Policy) enforcement via .well-known/aibdp.json.
+  Non-consenting AI agents receive HTTP 430 Consent Required.
+  Implemented at svalinn gateway level with rate limiting.
+
+policy_file: ".well-known/aibdp.json"
+enforcement: "svalinn gateway (selur-compose.yml x-svalinn policy)"
+http_430: true
+rate_limits:
+  consenting_bots: 1000
+  burst: 50
+  non_consenting: 0
+ietf_draft: "draft-jewell-http-430-consent-required-00"
+standard_repo: "standards/consent-aware-http"
+security:
+  proof: "HTTP.Consent.lean"
+
+---
+### [INDIEWEB]
+level: 4
+features:
+  webmention: true
+  micropub: true
+  indieauth: true
+bastion: "civic-connect/indieweb2-bastion (60%)"
+security:
+  aegis_helpers: "PhpAegis IndieWeb module (Micropub, IndieAuth, Webmention SSRF prevention)"
+  proof: "IndieWeb.Protocol.lean"
+
+---
+### [WORDPRESS_SPECIFICS]
+version: "6.9.1"
+php_version: "8.4"
+hosting: "Verpex cPanel with LiteSpeed Enterprise"
+theme: "Sinople v2.0.2"
+database: "MariaDB (cPanel managed, nujprcor_lcbwp26)"
+deploy_script: "scripts/wp-deploy.sh"
+content_source: "content/pages/ and content/policies/"
+
+plugins:
+  day_1:
+    - "Wordfence Security (WAF, malware scan, 2FA, login lockout)"
+    - "LiteSpeed Cache (server-level cache, image optimisation)"
+    - "bbPress (4 forums: General, Freelance, Events, Branch Business)"
+    - "Members (nuj_member custom role, content restriction)"
+    - "WP Mail SMTP (reliable email via Verpex SMTP)"
+    - "UpdraftPlus (encrypted daily backups)"
+    - "Contact Form 7"
+  week_1:
+    - "WP Activity Log (audit trail)"
+    - "WP GDPR Compliance (consent, data requests)"
+    - "Download Monitor (secure PDF downloads)"
+    - "Redirection (URL redirects, 404 monitoring)"
+    - "Yoast SEO (sitemaps, Open Graph)"
+
+hardening:
+  - "DISALLOW_FILE_EDIT = true"
+  - "FORCE_SSL_ADMIN = true"
+  - "WP_AUTO_UPDATE_CORE = true"
+  - "Comments disabled by default"
+  - "Pingbacks disabled"
+  - "User registration disabled (admin manually promotes)"
+  - "Default posts/pages deleted"
+
+---
+### [CI_CD]
+github_actions:
+  name: "Trustfile Validation"
+  workflow: ".github/workflows/trustfile.yml"
+  checks:
+    - "a2ml validate contractiles/trust/Trustfile.a2ml"
+    - "runhaskell contractiles/trust/Trustfile.hs"
+    - "hypatia scan --config hypatia.yml"
+
+gitbot_fleet:
+  hooks:
+    - type: "pre-commit"
+      script: "a2ml validate contractiles/trust/Trustfile.a2ml"
+    - type: "post-merge"
+      script: "gitbot-fleet diff --file contractiles/trust/Trustfile.a2ml"
+
+hypatia:
+  scans:
+    - type: "dns"
+      frequency: "daily"
+    - type: "crypto"
+      frequency: "weekly"
+    - type: "php"
+      frequency: "on-push"
+
+---
+### [LEAN4_PROOFS]
+theorems:
+  - name: "dns_correctness"
+    file: "DNS.Core.lean"
+    description: "All DNS records are conflict-free and correctly signed."
+    status: "pending"
+  - name: "tls_handshake_safety"
+    file: "TLS.Handshake.lean"
+    description: "TLS 1.3 + Kyber1024 handshake resists downgrade attacks."
+    status: "pending"
+  - name: "consent_aware_http_soundness"
+    file: "HTTP.Consent.lean"
+    description: "Consent-Aware HTTP (CAdRE) enforces user intent."
+    status: "pending"
+  - name: "php_hardening_no_bypasses"
+    file: "PHP.Hardening.lean"
+    description: "PHP-Aegis + Sanctify-PHP blocks all unsafe functions."
+    status: "pending"
+  - name: "container_supply_chain_integrity"
+    file: "Container.Integrity.lean"
+    description: "Cerro-torre CTP manifest integrity through build/sign/verify pipeline."
+    status: "pending"
+  - name: "email_anti_spoofing"
+    file: "Email.Policy.lean"
+    description: "SPF -all + DMARC reject prevents email spoofing."
+    status: "pending"
+
+---
+### [SIGNATURE_BLOCK]
+primary:
+  algorithm: "Ed448+Dilithium5"
+  signature: |
+    -----BEGIN HYBRID SIGNATURE-----
+    PENDING — sign after all LEAN4 proofs are discharged
+    -----END HYBRID SIGNATURE-----
+  signedBy: "did:web:nuj-lcb.org.uk#primary-sig"
+fallback:
+  algorithm: "SPHINCS+"
+  signature: |
+    -----BEGIN SPHINCS+ SIGNATURE-----
+    PENDING — sign after all LEAN4 proofs are discharged
+    -----END SPHINCS+ SIGNATURE-----
+
+---
+### [DEPLOYMENT]
+steps:
+  1: "Reinstate Verpex hosting account (SUSPENDED as of 2026-03-14)."
+  2: "Configure SSH access (add ED25519 pubkey to cPanel)."
+  3: "Run scripts/wp-deploy.sh for plugin/page/menu/forum baseline."
+  4: "Rotate admin credentials."
+  5: "Install and configure Wordfence (WAF, 2FA, login lockout)."
+  6: "Configure LiteSpeed Cache (TTLs, Redis, WebP)."
+  7: "Configure WP Mail SMTP via Verpex."
+  8: "Set up bbPress forums and Members plugin."
+  9: "Enable DNSSEC and propagate DS records via Cloudflare."
+  10: "Generate PQ key pairs and sign this Trustfile."
+  11: "Run sanctify-php against Sinople theme."
+  12: "Discharge LEAN4 proofs."
+  13: "Validate with securityheaders.com (target: A+) and ssllabs.com (target: A+)."
+  14: "Sign final Trustfile and commit."

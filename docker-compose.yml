@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: PMPL-1.0-or-later
-# SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>
+# SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>
 #
 # Docker Compose for LCB Website Development with OpenLiteSpeed
 # This is a development-only configuration.
 # WARNING: EXPERIMENTAL - Use nuj-lcb-production for actual deployment
-# Production uses svalinn-compose.yml with verified container stack.
+# Production uses selur-compose.yml with verified container stack.
 
 version: '3.8'
 

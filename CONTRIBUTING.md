@@ -212,7 +212,7 @@ lcb-website/
 │   ├── varnish/           # Varnish VCL files
 │   └── mariadb/           # MariaDB configuration
 ├── docker-compose.yml      # Development environment
-├── svalinn-compose.yml     # Production verified stack
+├── selur-compose.yml       # Production verified stack (stapeln)
 └── justfile                # Command automation
 ```
 

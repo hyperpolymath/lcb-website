@@ -3,7 +3,7 @@ ctp_version = "1.0"
 [metadata]
 name = "lcb-wordpress"
 version = "6.9.0"
-revision = 1
+revision = 2
 kind = "container_image"
 summary = "Hardened LCB WordPress runtime (Sinople + php-aegis)"
 description = "Chainguard wolfi-base WordPress package, extended with the Sinople theme, php-aegis helpers, consent-aware HTTP/.well-known assets, and automation hooks."
@@ -16,10 +16,10 @@ keywords = ["wordpress", "hardened", "sinople", "lcb", "chainguard"]
 family = "chainguard"
 section = "wolfi-base"
 snapshot_service = "cgr.dev"
-snapshot_timestamp = 2026-02-14T00:00:00Z
+snapshot_timestamp = 2026-03-14T00:00:00Z
 
 [provenance]
-import_date = 2026-02-14T00:00:00Z
+import_date = 2026-03-14T00:00:00Z
 sbom = "sbom/spdx/lcb-wordpress.sbom.spdx.json"
 provenance_log = "in_toto/lcb-wordpress.provenance.jsonl"
 
@@ -66,12 +66,12 @@ comment = "Chainguard images use rolling tags with signed provenance. Verify via
 id = "sinople-theme"
 type = "local_directory"
 name = "wp-sinople-theme"
-version = "0.1.0"
+version = "2.0.0"
 
 [[inputs.sources.artifacts]]
 filename = "wp-sinople-theme"
 uri = "file://wp-content/themes/sinople"
-sha256 = "b358183f45f3232b0f2bf742a5ef3c033347a77fd05c0e6eee0684ddc68b4737"
+sha256 = "2c0e1c327121e02e897255a552f8bfc94f05911dc40f15ae8288bf3e6780da7b"
 
 [[inputs.sources]]
 id = "php-aegis-mu"
@@ -82,19 +82,18 @@ version = "1.0.0"
 [[inputs.sources.artifacts]]
 filename = "php-aegis-mu"
 uri = "file://wp-content/mu-plugins"
-sha256 = "35017a37f886ef9a139030a57d4dbbab975cd0f0e57afb2e84d961ffef5d019d"
+sha256 = "4555650d95de0c4f2b10d48bf45ae5202525f29e7d8fb3663aaabc3ec8ace367"
 
 [[inputs.sources]]
 id = "well-known-assets"
 type = "local_directory"
 name = "well-known"
-version = "2026-02-14"
+version = "2026-03-14"
 
 [[inputs.sources.artifacts]]
 filename = "well-known"
 uri = "file://.well-known"
-sha256 = "e078a2bd2b181e1e8c31a8982e74aefa7f2d828aa233150103edf4b18ca68231"
-comment = "Recalculate after updating security.txt expiry"
+sha256 = "ae4415591e6dd10f34ef2cb2ff7ce036dd238b51380cb699409b93ad0b51f92b"
 
 # ==========================================================================
 # Build

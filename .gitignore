@@ -63,6 +63,7 @@ wp-content/backups/
 wp-content/cache/
 wp-content/debug.log
 wp-content/mu-plugins/
+!wp-content/mu-plugins/php-aegis-loader.php
 wp-content/plugins/
 wp-content/upgrade/
 wp-content/uploads/

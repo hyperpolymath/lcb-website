@@ -67,8 +67,9 @@ function sinople_accessibility_focus_script(): void {
     if ( is_admin() ) {
         return;
     }
+    $nonce = sinople_get_csp_nonce();
     ?>
-    <script id="sinople-accessibility-focus">
+    <script id="sinople-accessibility-focus" nonce="<?php echo esc_attr( $nonce ); ?>">
     (function () {
         var nav = document.querySelector(".main-navigation");
         if (!nav) return;
