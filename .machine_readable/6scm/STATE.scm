@@ -4,10 +4,10 @@
 
 (state
   (metadata
-    (version "0.3.0")
+    (version "0.4.0")
     (schema-version "1.0")
     (created "2026-01-19")
-    (updated "2026-02-20")
+    (updated "2026-03-14")
     (project "lcb-website")
     (repo "github.com/hyperpolymath/lcb-website"))
 
@@ -67,14 +67,14 @@
        ("stapeln-path" . "Container build via cerro-torre sign + selur-compose deploy"))))
 
   (blockers-and-issues
-    (critical ())
+    (critical ("Verpex hosting account SUSPENDED — contact provider to reinstate before any live work"))
     (high ("Plugin baseline not yet installed (Wordfence, LiteSpeed Cache, bbPress, Members, SMTP, backups)"
-           "Content pages/policies still need import or authoring in WordPress"))
-    (medium ("security.txt well-known hash in wordpress.ctp needs recalculation after expiry update"
-             "Container path blocked: cerro-torre ct binary needs Alire index fix"
-             "Dark mode inline script relies on unsafe-inline CSP — consider nonce-based approach"))
-    (low ("svalinn-compose.yml kept for reference — can delete after selur-compose.yml verified"
-          "Initial admin credentials were generated during automated install and must be rotated immediately")))
+           "Content pages/policies still need import or authoring in WordPress"
+           "SSH access to Verpex not configured — add ED25519 pubkey to enable WP-CLI"))
+    (medium ("Container path blocked: cerro-torre at 68% — Build_From_Manifest not implemented"
+             "cerro-torre transparency verification stubbed (Merkle/SET/consistency return False)"
+             "cerro-torre SPARK proofs not discharged"))
+    (low ("Initial admin credentials were generated during automated install and must be rotated immediately")))
 
   (critical-next-actions
     (immediate ("Run wp-deploy.sh against Verpex to deploy menus, widgets, posts, and images"
@@ -90,6 +90,34 @@
                  "Launch and verify (securityheaders.com A+, ssllabs.com A+)")))
 
   (session-history
+    ((date "2026-03-14")
+     (accomplishments
+       ("Discovered Verpex hosting account SUSPENDED — blocks all live deployment work"
+        "Fixed CSP: replaced unsafe-inline/unsafe-eval with per-request nonce for inline scripts"
+        "  sinople_get_csp_nonce() generates 32-byte random nonce, used in CSP header and script tags"
+        "  Nonce applied to dark mode resolver (variants.php) and accessibility focus (accessibility.php)"
+        "  Bumped Sinople theme to v2.0.2"
+        "Updated wordpress.ctp rev 2: recalculated all three source hashes (sinople, mu-plugins, .well-known)"
+        "  Sinople theme version bumped from 0.1.0 to 2.0.0 in manifest"
+        "  Noted mu-plugins directory is empty (php-aegis not yet installed)"
+        "Deleted obsolete svalinn-compose.yml — selur-compose.yml is the canonical production compose"
+        "  Updated justfile fallback logic: svalinn-compose -> selur-compose"
+        "  Updated CONTRIBUTING.md, docker-compose backup files to reference selur-compose"
+        "Fixed docker-compose.yml: updated copyright year 2025->2026, svalinn->selur reference"
+        "Updated provenance dates in wordpress.ctp to 2026-03-14"
+        "Comprehensive dogfooding dependency audit across ~25 repos"
+        "Synced php-aegis vendor: 15 files now (was 5), includes Crypto, WordPress/Adapter, IndieWeb, RateLimit"
+        "Created mu-plugins/php-aegis-loader.php must-use plugin"
+        "Fixed mu-plugins directory ownership (was container UID 576772)"
+        "Fixed SPDX headers: AGPL-3.0 → MPL-2.0 in php-aegis vendored files"
+        "Fixed copyright attribution in php-aegis files"
+        "Updated php-aegis STATE.scm from blank to actual 90% status"
+        "Updated sanctify-php STATE.scm from blank to actual 90% status"
+        "Fixed sanctify-php SPDX headers: AGPL → PMPL-1.0-or-later in all .hs files"
+        "Fixed sanctify-php cabal maintainer email: gmail → OU"
+        "Fixed php-aegis composer.json license: MIT → MPL-2.0"
+        "Updated cerro-torre assessment: honest 68% not 90% — Build_From_Manifest missing"))
+     (next-session "Reinstate Verpex hosting, configure SSH, run wp-deploy.sh, install plugin baseline"))
     ((date "2026-02-20")
      (accomplishments
        ("Rebuilt Sinople theme v2.0.0 as Newspaperup-style news magazine (11 phases)"

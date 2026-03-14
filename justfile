@@ -113,10 +113,10 @@ dev:
             echo "⚠️  No Podman/Docker compose runtime found"; \
             exit 1; \
         fi; \
-    elif [ -f "svalinn-compose.yml" ]; then \
-        svalinn-compose up -d; \
+    elif [ -f "selur-compose.yml" ]; then \
+        selur-compose up -d; \
     else \
-        echo "⚠️  No compose file found (docker-compose.yml or svalinn-compose.yml)"; \
+        echo "⚠️  No compose file found (docker-compose.yml or selur-compose.yml)"; \
     fi
 
 # Stop development stack
@@ -133,8 +133,8 @@ stop:
             echo "⚠️  No Podman/Docker compose runtime found"; \
             exit 1; \
         fi; \
-    elif [ -f "svalinn-compose.yml" ]; then \
-        svalinn-compose down; \
+    elif [ -f "selur-compose.yml" ]; then \
+        selur-compose down; \
     fi
 
 # Run security checks

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: PMPL-1.0-or-later
 # Docker Compose for LCB Website Development with OpenLiteSpeed
 # This is a development-only configuration.
-# Production uses svalinn-compose.yml with verified container stack.
+# Production uses selur-compose.yml with verified container stack.
 
 version: '3.8'
 

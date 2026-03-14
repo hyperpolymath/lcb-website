@@ -78,8 +78,9 @@ add_filter( 'language_attributes', 'sinople_variant_attributes', 20 );
  */
 function sinople_dark_mode_inline_script(): void {
     $default = sinople_get_default_theme_mode();
+    $nonce   = sinople_get_csp_nonce();
     ?>
-    <script id="sinople-theme-resolver">
+    <script id="sinople-theme-resolver" nonce="<?php echo esc_attr( $nonce ); ?>">
     (function(){
       var d = document.documentElement;
       var stored = null;
