@@ -7,7 +7,7 @@
     (version "0.4.0")
     (schema-version "1.0")
     (created "2026-01-19")
-    (updated "2026-03-14")
+    (updated "2026-03-16")
     (project "lcb-website")
     (repo "github.com/hyperpolymath/lcb-website"))
 
@@ -90,6 +90,11 @@
                  "Launch and verify (securityheaders.com A+, ssllabs.com A+)")))
 
   (session-history
+    ((date "2026-03-16")
+     (accomplishments
+       ("panic-attack pre-commit fixes applied across codebase"
+        "Deployment scripts hardened for reliability"))
+     (next-session "Reinstate Verpex hosting, configure SSH, run wp-deploy.sh"))
     ((date "2026-03-14")
      (accomplishments
        ("Discovered Verpex hosting account SUSPENDED — blocks all live deployment work"
