@@ -1,5 +1,5 @@
 #!/bin/bash
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: PMPL-1.0-or-later
 # Pre-commit hook for nuj-lcb-production
 
 set -e
@@ -13,7 +13,7 @@ if git diff --cached --name-only | grep -q "^.github/workflows/.*\.ya?ml$"; then
     if [ -f "$file" ]; then
       if ! head -1 "$file" | grep -q "SPDX-License-Identifier:"; then
         echo "❌ Missing SPDX header: $file"
-        echo "Add as first line: # SPDX-License-Identifier: AGPL-3.0-or-later"
+        echo "Add as first line: # SPDX-License-Identifier: PMPL-1.0-or-later"
         exit 1
       fi
     fi

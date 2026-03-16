@@ -72,4 +72,4 @@ ddraig-ssg is part of the https://github.com/hyperpolymath/poly-ssg[poly-ssg] fa
 
 == License
 
-AGPL-3.0-or-later
+PMPL-1.0-or-later
