@@ -15,6 +15,7 @@ INPUT_FILE="${1:-$ROOT_DIR/content/nuj-lcb-shareable-site.html}"
 
 # Preserve incoming environment values so placeholders in .env.local
 # do not overwrite explicit variables passed at runtime.
+# NOTE: __UNSET__ is a sentinel string, not a secret or credential.
 incoming_cloudflare_api_token="${CLOUDFLARE_API_TOKEN-__UNSET__}"
 incoming_cloudflare_zone_id="${CLOUDFLARE_ZONE_ID-__UNSET__}"
 incoming_pinata_jwt="${PINATA_JWT-__UNSET__}"

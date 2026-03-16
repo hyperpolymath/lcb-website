@@ -188,8 +188,14 @@
     fab.setAttribute('aria-expanded', 'false');
     fab.setAttribute('aria-controls', 'a11y-toolbar');
     fab.setAttribute('aria-label', 'Accessibility settings');
-    fab.innerHTML = '<i class="fa-solid fa-universal-access a11y-fab-icon-open" aria-hidden="true"></i>' +
-                    '<i class="fa-solid fa-xmark a11y-fab-icon-close" aria-hidden="true"></i>';
+    var iconOpen = document.createElement('i');
+    iconOpen.className = 'fa-solid fa-universal-access a11y-fab-icon-open';
+    iconOpen.setAttribute('aria-hidden', 'true');
+    var iconClose = document.createElement('i');
+    iconClose.className = 'fa-solid fa-xmark a11y-fab-icon-close';
+    iconClose.setAttribute('aria-hidden', 'true');
+    fab.appendChild(iconOpen);
+    fab.appendChild(iconClose);
 
     // Panel
     var panel = document.createElement('div');
@@ -199,48 +205,63 @@
     panel.setAttribute('aria-label', 'Accessibility settings');
     panel.setAttribute('aria-hidden', 'true');
 
-    panel.innerHTML =
-      '<h2 class="a11y-toolbar-title">Accessibility</h2>' +
+    // Helper to create an element with attributes and children
+    function el(tag, attrs, children) {
+      var node = document.createElement(tag);
+      if (attrs) {
+        Object.keys(attrs).forEach(function (k) { node.setAttribute(k, attrs[k]); });
+      }
+      if (typeof children === 'string') {
+        node.textContent = children;
+      } else if (Array.isArray(children)) {
+        children.forEach(function (c) { if (c) node.appendChild(c); });
+      }
+      return node;
+    }
 
-      // Display mode section
-      '<div class="a11y-section">' +
-        '<span class="a11y-section-label">Display Mode</span>' +
-        '<div class="a11y-mode-group">' +
-          '<button type="button" class="a11y-mode-btn" id="a11y-mode-light" aria-pressed="false">' +
-            '<i class="fa-solid fa-sun" aria-hidden="true"></i>' +
-            '<span>Light</span>' +
-          '</button>' +
-          '<button type="button" class="a11y-mode-btn" id="a11y-mode-dark" aria-pressed="false">' +
-            '<i class="fa-solid fa-moon" aria-hidden="true"></i>' +
-            '<span>Dark</span>' +
-          '</button>' +
-          '<button type="button" class="a11y-mode-btn" id="a11y-mode-hc" aria-pressed="false">' +
-            '<i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>' +
-            '<span>Contrast</span>' +
-          '</button>' +
-        '</div>' +
-      '</div>' +
+    function modeBtn(id, iconClass, label) {
+      var icon = el('i', { 'class': iconClass, 'aria-hidden': 'true' });
+      var span = el('span', null, label);
+      return el('button', { type: 'button', 'class': 'a11y-mode-btn', id: id, 'aria-pressed': 'false' }, [icon, span]);
+    }
 
-      // Font size section
-      '<div class="a11y-section">' +
-        '<span class="a11y-section-label">Font Size</span>' +
-        '<div class="a11y-fontsize-group">' +
-          '<button type="button" class="a11y-fontsize-btn" id="a11y-font-decrease" aria-label="Decrease font size">' +
-            '<span aria-hidden="true">A&minus;</span>' +
-          '</button>' +
-          '<span class="a11y-fontsize-label" id="a11y-fontsize-label" aria-live="polite">M</span>' +
-          '<button type="button" class="a11y-fontsize-btn" id="a11y-font-increase" aria-label="Increase font size">' +
-            '<span aria-hidden="true">A+</span>' +
-          '</button>' +
-        '</div>' +
-      '</div>' +
+    function fontBtn(id, ariaLabel, text) {
+      var span = el('span', { 'aria-hidden': 'true' }, text);
+      return el('button', { type: 'button', 'class': 'a11y-fontsize-btn', id: id, 'aria-label': ariaLabel }, [span]);
+    }
 
-      // Reset
-      '<div class="a11y-section">' +
-        '<button type="button" class="a11y-reset" id="a11y-reset">' +
-          '<i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Reset All' +
-        '</button>' +
-      '</div>';
+    // Title
+    panel.appendChild(el('h2', { 'class': 'a11y-toolbar-title' }, 'Accessibility'));
+
+    // Display mode section
+    var modeGroup = el('div', { 'class': 'a11y-mode-group' }, [
+      modeBtn('a11y-mode-light', 'fa-solid fa-sun', 'Light'),
+      modeBtn('a11y-mode-dark', 'fa-solid fa-moon', 'Dark'),
+      modeBtn('a11y-mode-hc', 'fa-solid fa-circle-half-stroke', 'Contrast')
+    ]);
+    var modeSection = el('div', { 'class': 'a11y-section' }, [
+      el('span', { 'class': 'a11y-section-label' }, 'Display Mode'),
+      modeGroup
+    ]);
+    panel.appendChild(modeSection);
+
+    // Font size section
+    var decreaseBtn = fontBtn('a11y-font-decrease', 'Decrease font size', 'A\u2212');
+    var fontLabel = el('span', { 'class': 'a11y-fontsize-label', id: 'a11y-fontsize-label', 'aria-live': 'polite' }, 'M');
+    var increaseBtn = fontBtn('a11y-font-increase', 'Increase font size', 'A+');
+    var fontGroup = el('div', { 'class': 'a11y-fontsize-group' }, [decreaseBtn, fontLabel, increaseBtn]);
+    var fontSection = el('div', { 'class': 'a11y-section' }, [
+      el('span', { 'class': 'a11y-section-label' }, 'Font Size'),
+      fontGroup
+    ]);
+    panel.appendChild(fontSection);
+
+    // Reset section
+    var resetIcon = el('i', { 'class': 'fa-solid fa-rotate-left', 'aria-hidden': 'true' });
+    var resetBtn = el('button', { type: 'button', 'class': 'a11y-reset', id: 'a11y-reset' }, [resetIcon]);
+    resetBtn.appendChild(document.createTextNode(' Reset All'));
+    var resetSection = el('div', { 'class': 'a11y-section' }, [resetBtn]);
+    panel.appendChild(resetSection);
 
     document.body.appendChild(panel);
     document.body.appendChild(fab);

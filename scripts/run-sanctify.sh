@@ -26,7 +26,7 @@ HOME="$cabal_home" cabal --store-dir="$cabal_dir/store" build
 output="$reports_dir/sanctify-theme.json"
 summary="$reports_dir/sanctify-theme-summary.txt"
 
-echo "Running sanctify analysis on $theme_dir ..."
+echo "Running sanctify analysis on ${theme_dir} ..."
 HOME="$cabal_home" cabal --store-dir="$cabal_dir/store" run sanctify -- analyze "$theme_dir" --format json --severity=critical,high --use-aegis "$@" > "$output"
 
 cat <<EOF > "$summary"
