@@ -395,10 +395,10 @@ fi
 echo "--- [8/9] Configuring Members role ---"
 
 if wpcli plugin is-active members 2>/dev/null; then
-    if [ "$(wpcli eval 'echo get_role("nuj_member") ? "1" : "0";')" = "1" ]; then
+    if wpcli role list --fields=role --format=csv 2>/dev/null | tail -n +2 | grep -Fxq "nuj_member"; then
         echo "  Role exists: nuj_member"
     else
-        wpcli eval 'add_role("nuj_member", "NUJ Member", array("read" => true));'
+        wpcli role create nuj_member "NUJ Member" --clone=subscriber 2>/dev/null || true
         echo "  Created role: nuj_member"
     fi
 else

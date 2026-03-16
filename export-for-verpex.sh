@@ -17,20 +17,22 @@ if ! podman compose ps | grep -q "Up"; then
 fi
 
 echo "[1/3] Exporting database..."
-podman exec nuj-lcb-wordpress wp db export /tmp/wordpress-backup.sql --allow-root > /dev/null
-podman cp nuj-lcb-wordpress:/tmp/wordpress-backup.sql ./nuj-lcb-backup.sql
-podman exec nuj-lcb-wordpress rm /tmp/wordpress-backup.sql
-echo "  ✓ Database exported: nuj-lcb-backup.sql"
+container_tmp_db="$(podman exec nuj-lcb-wordpress mktemp --suffix=.sql)"
+podman exec nuj-lcb-wordpress wp db export "${container_tmp_db}" --allow-root > /dev/null
+podman cp "nuj-lcb-wordpress:${container_tmp_db}" ./nuj-lcb-backup.sql
+podman exec nuj-lcb-wordpress rm "${container_tmp_db}"
+echo "  Database exported: nuj-lcb-backup.sql"
 
 echo "[2/3] Compressing database..."
 gzip -f nuj-lcb-backup.sql
-echo "  ✓ Database compressed: nuj-lcb-backup.sql.gz"
+echo "  Database compressed: nuj-lcb-backup.sql.gz"
 
 echo "[3/3] Exporting WordPress files..."
-podman exec nuj-lcb-wordpress tar czf /tmp/wordpress-files.tar.gz -C /var/www/html .
-podman cp nuj-lcb-wordpress:/tmp/wordpress-files.tar.gz ./wordpress-files.tar.gz
-podman exec nuj-lcb-wordpress rm /tmp/wordpress-files.tar.gz
-echo "  ✓ Files exported: wordpress-files.tar.gz"
+container_tmp_tar="$(podman exec nuj-lcb-wordpress mktemp --suffix=.tar.gz)"
+podman exec nuj-lcb-wordpress tar czf "${container_tmp_tar}" -C /var/www/html .
+podman cp "nuj-lcb-wordpress:${container_tmp_tar}" ./wordpress-files.tar.gz
+podman exec nuj-lcb-wordpress rm "${container_tmp_tar}"
+echo "  Files exported: wordpress-files.tar.gz"
 
 echo ""
 echo "=== Export Complete! ==="

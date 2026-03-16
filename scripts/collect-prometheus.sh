@@ -80,7 +80,7 @@ if command -v redis-cli >/dev/null 2>&1; then
 fi
 
 cloudflare_ssl_status="unknown"
-cloudflare_records_file=$(mktemp)
+cloudflare_records_file="$(mktemp)"
 echo "[]" > "$cloudflare_records_file"
 if [ -n "${CF_API_TOKEN:-}" ] && [ -n "${CF_ZONE_ID:-}" ]; then
   zone_resp=$(curl -sS -H "Authorization: Bearer $CF_API_TOKEN" -H "Content-Type: application/json" "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID")
