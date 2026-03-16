@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Clade declaration — part of the gv-clade-index registry
+# See: https://github.com/hyperpolymath/gv-clade-index
+
+[identity]
+uuid = "c576c71b-4b13-53c2-9086-2efb23c2d272"
+primary-forge = "github"
+primary-owner = "hyperpolymath"
+canonical-name = "lcb-website"
+prefixed-name = "ap-lcb-website"
+
+[clade]
+primary = "ap"
+secondary = []
+assigned = "2026-03-16"
+rationale = ""
+
+[forges]
+github = "hyperpolymath/lcb-website"
+gitlab = "hyperpolymath/lcb-website"
+bitbucket = "hyperpolymath/lcb-website"
+
+[lineage]
+type = "standalone"
+parent = "LCB union website"
+born = "2026-03-16"
