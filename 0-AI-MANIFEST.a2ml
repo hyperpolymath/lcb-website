@@ -44,7 +44,7 @@ Bot-specific instructions for the gitbot-fleet:
 1. **No SCM duplication** - Root must NOT contain STATE.scm, META.scm, etc.
 2. **Single source of truth** - `.machine_readable/6scm/` is authoritative
 3. **License consistency** - All code PMPL-1.0-or-later unless platform requires MPL-2.0
-4. **Author attribution** - Always "Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>"
+4. **Author attribution** - Always "Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"
 5. **Container standards** - Chainguard wolfi-base images, Containerfile (never Dockerfile), Podman (never Docker)
 6. **Security requirements** - Full crypto spec in `contractiles/trust/Trustfile.hs`
 7. **AI bot blocking** - robots.txt MUST block training bots, .well-known/aibdp.json MUST enforce consent
