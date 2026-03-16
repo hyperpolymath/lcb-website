@@ -14,12 +14,12 @@ This is the AI manifest for **lcb-website** — the NUJ London Central Branch we
 ### Machine-Readable Metadata: `.machine_readable/6scm/` ONLY
 
 These 6 SCM files MUST exist in `.machine_readable/6scm/` directory ONLY:
-1. **STATE.scm** - Project state, progress, blockers
-2. **META.scm** - Architecture decisions, governance
-3. **ECOSYSTEM.scm** - Position in ecosystem, relationships
-4. **AGENTIC.scm** - AI agent interaction patterns
-5. **NEUROSYM.scm** - Neurosymbolic integration config
-6. **PLAYBOOK.scm** - Operational runbook
+1. **.machine_readable/6a2/STATE.a2ml** - Project state, progress, blockers
+2. **.machine_readable/6a2/META.a2ml** - Architecture decisions, governance
+3. **.machine_readable/6a2/ECOSYSTEM.a2ml** - Position in ecosystem, relationships
+4. **.machine_readable/6a2/AGENTIC.a2ml** - AI agent interaction patterns
+5. **.machine_readable/6a2/NEUROSYM.a2ml** - Neurosymbolic integration config
+6. **.machine_readable/6a2/PLAYBOOK.a2ml** - Operational runbook
 
 **CRITICAL:** If ANY of these files exist in the root directory, this is an ERROR.
 
@@ -41,7 +41,7 @@ Bot-specific instructions for the gitbot-fleet:
 
 ## CORE INVARIANTS
 
-1. **No SCM duplication** - Root must NOT contain STATE.scm, META.scm, etc.
+1. **No SCM duplication** - Root must NOT contain .machine_readable/6a2/STATE.a2ml, .machine_readable/6a2/META.a2ml, etc.
 2. **Single source of truth** - `.machine_readable/6scm/` is authoritative
 3. **License consistency** - All code PMPL-1.0-or-later unless platform requires MPL-2.0
 4. **Author attribution** - Always "Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"
@@ -95,12 +95,12 @@ lcb-website/
 │   ├── lust/Intentfile              # Future intent (stapeln pipeline)
 │   └── k9/                          # K9 self-validating config
 ├── .machine_readable/6scm/          # SCM files (6 files)
-│   ├── STATE.scm
-│   ├── META.scm
-│   ├── ECOSYSTEM.scm
-│   ├── AGENTIC.scm
-│   ├── NEUROSYM.scm
-│   └── PLAYBOOK.scm
+│   ├── .machine_readable/6a2/STATE.a2ml
+│   ├── .machine_readable/6a2/META.a2ml
+│   ├── .machine_readable/6a2/ECOSYSTEM.a2ml
+│   ├── .machine_readable/6a2/AGENTIC.a2ml
+│   ├── .machine_readable/6a2/NEUROSYM.a2ml
+│   └── .machine_readable/6a2/PLAYBOOK.a2ml
 ├── .bot_directives/                 # Gitbot-fleet directives (8 bots)
 ├── .github/workflows/               # 17 CI/CD workflows
 ├── docs/                            # AsciiDoc documentation
@@ -122,22 +122,22 @@ lcb-website/
 1. Read THIS file (0-AI-MANIFEST.a2ml) first
 2. Understand canonical locations (.machine_readable/6scm/, .bot_directives/)
 3. Know the invariants (no SCM duplication, Chainguard images, etc.)
-4. Read `.machine_readable/6scm/STATE.scm` for current status
+4. Read `.machine_readable/6scm/.machine_readable/6a2/STATE.a2ml` for current status
 5. Read `TOPOLOGY.md` for architecture overview + completion dashboard
-6. Read `.machine_readable/6scm/AGENTIC.scm` for interaction patterns
+6. Read `.machine_readable/6scm/.machine_readable/6a2/AGENTIC.a2ml` for interaction patterns
 
 ## LIFECYCLE HOOKS
 
 ### on-enter (Session Start)
 
 1. Read and acknowledge this manifest
-2. Read `.machine_readable/6scm/STATE.scm`
+2. Read `.machine_readable/6scm/.machine_readable/6a2/STATE.a2ml`
 3. Check for blockers
 4. State understanding of canonical locations
 
 ### on-exit (Session End)
 
-1. Update `.machine_readable/6scm/STATE.scm` if changes made
+1. Update `.machine_readable/6scm/.machine_readable/6a2/STATE.a2ml` if changes made
 2. Update `TOPOLOGY.md` completion dashboard if components changed
 3. Document new blockers
 4. Summarize outcomes
