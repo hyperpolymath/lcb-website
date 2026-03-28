@@ -13,7 +13,7 @@ This keeps the UI synchronized with the backend invariants (Sanctify/PhpAegis se
 
 == Build notes
 
-* `cadre-router` lives in `/mnt/eclipse/repos/cadre-router` and can be built with `just build` or from `npm`/`deno` as described in its README.
+* `cadre-router` lives in `$REPOS_DIR/cadre-router` and can be built with `just build` or from `npm`/`deno` as described in its README.
 * Branch the minimal JS output into the LCB site’s `frontend/` bundle via our build pipeline so these navigators are available in the honed UI.
 * Keep `cadre-router` docs close to the app’s route definitions so new pages always follow the typed pattern.
 

@@ -12,7 +12,7 @@
 ## Step 1: Clone and Configure
 
 ```bash
-cd /var/mnt/eclipse/repos/lcb-website
+cd /var$REPOS_DIR/lcb-website
 
 # Copy environment template
 cp .env.example .env
