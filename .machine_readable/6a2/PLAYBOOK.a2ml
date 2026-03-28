@@ -6,7 +6,7 @@
   `((version . "1.1.0")
     (procedures
       ((validate
-         (("mustfile" . "bash -c 'cd /var/mnt/eclipse/repos/lcb-website && for check in $(yq -r \".checks[].run\" contractiles/must/Mustfile); do eval \"$check\"; done'")
+         (("mustfile" . "bash -c 'cd /var$REPOS_DIR/lcb-website && for check in $(yq -r \".checks[].run\" contractiles/must/Mustfile); do eval \"$check\"; done'")
           ("trustfile" . "runhaskell contractiles/trust/Trustfile.hs")
           ("topology" . "test -f TOPOLOGY.md")))
        (deploy-verpex

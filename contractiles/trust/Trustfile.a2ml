@@ -455,7 +455,7 @@ sanctify:
   enabled: true
   version: "0.2.0"
   language: "Haskell"
-  location: "/var/mnt/eclipse/repos/sanctify-php/"
+  location: "/var$REPOS_DIR/sanctify-php/"
   capabilities:
     - "PHP parser (Megaparsec, full grammar coverage)"
     - "AST taint analysis (OWASP Top 10, ReDoS, SSRF, XXE, TOCTOU)"

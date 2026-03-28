@@ -39,7 +39,7 @@ Use this if you are starting now from the existing Cloudflare cutover:
 ### 1.1: Export Database
 
 ```bash
-cd /var/mnt/eclipse/repos/lcb-website
+cd /var$REPOS_DIR/lcb-website
 
 # Export database from running container
 podman exec lcb-mariadb-dev \
