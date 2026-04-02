@@ -264,4 +264,4 @@ See: `LINKEDIN-API-INTEGRATION.md` for details
 
 ---
 
-**Questions?** Email: communications@nuj-lcb.org.uk
+**Questions?** Email: general@nuj-lcb.org.uk

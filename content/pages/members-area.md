@@ -9,8 +9,8 @@ Welcome to your members-only space. This area is restricted to current, paid-up 
 - [Member Directory](#member-directory) - Connect with fellow members
 - [Meeting Minutes](#meeting-minutes) - Access branch meeting records
 - [Resources](#resources) - Legal guides, templates, and tools
-- [Discussion Forum](https://forum.nuj-lcb.org.uk) - Member forum (Zulip)
-- [Video Meetings](https://convene.nuj-lcb.org.uk) - Join branch meetings
+- [Discussion Chat](https://chat.nuj-lcb.org.uk) - Member chat space (Zulip)
+- [Video Meetings](https://conference.nuj-lcb.org.uk) - Join branch meetings
 
 ## Member Directory
 
@@ -183,7 +183,7 @@ Members can access:
 
 ## Discussion Forum
 
-**Zulip Member Forum**: [forum.nuj-lcb.org.uk](https://forum.nuj-lcb.org.uk)
+**Zulip Member Chat**: [chat.nuj-lcb.org.uk](https://chat.nuj-lcb.org.uk)
 
 ### Active Streams
 
@@ -201,7 +201,7 @@ Members can access:
 
 ## Video Meetings
 
-**BigBlueButton Platform**: [convene.nuj-lcb.org.uk](https://convene.nuj-lcb.org.uk)
+**BigBlueButton Platform**: [conference.nuj-lcb.org.uk](https://conference.nuj-lcb.org.uk)
 
 ### Upcoming Meetings
 
@@ -220,7 +220,7 @@ Members can access:
 ### How to Join
 
 1. Click link sent via email
-2. Or visit [convene.nuj-lcb.org.uk](https://convene.nuj-lcb.org.uk)
+2. Or visit [conference.nuj-lcb.org.uk](https://conference.nuj-lcb.org.uk)
 3. Enter room name
 4. Enter password (if required)
 5. No account or app needed!
@@ -254,7 +254,7 @@ Members can access:
 - Join picket lines
 - Volunteer for organizing
 
-**Campaign Coordinator**: [campaigns@nuj-lcb.org.uk](mailto:campaigns@nuj-lcb.org.uk)
+**Campaign Coordination**: [general@nuj-lcb.org.uk](mailto:general@nuj-lcb.org.uk)
 
 ## Branch Documents
 
@@ -352,7 +352,7 @@ As an NUJ LCB member, you get:
 ### Frequently Asked Questions
 
 **How do I access the forum?**
-Visit [forum.nuj-lcb.org.uk](https://forum.nuj-lcb.org.uk) and log in with your member email.
+Visit [chat.nuj-lcb.org.uk](https://chat.nuj-lcb.org.uk) and log in with your member email.
 
 **How do I get legal advice?**
 Email [secretary@nuj-lcb.org.uk](mailto:secretary@nuj-lcb.org.uk) describing your issue.
@@ -361,7 +361,7 @@ Email [secretary@nuj-lcb.org.uk](mailto:secretary@nuj-lcb.org.uk) describing you
 Members-only meetings: No. Public meetings/events: Yes.
 
 **How do I volunteer?**
-Email [volunteer@nuj-lcb.org.uk](mailto:volunteer@nuj-lcb.org.uk) with areas of interest.
+Email [general@nuj-lcb.org.uk](mailto:general@nuj-lcb.org.uk) with areas of interest.
 
 **How do I update my contact info?**
 Log in and [edit your profile](/wp-admin/profile.php).
@@ -370,7 +370,7 @@ Log in and [edit your profile](/wp-admin/profile.php).
 
 ### Contact Officers
 
-- **General queries**: [contact@nuj-lcb.org.uk](mailto:contact@nuj-lcb.org.uk)
+- **General queries**: [general@nuj-lcb.org.uk](mailto:general@nuj-lcb.org.uk)
 - **Membership**: [membership@nuj-lcb.org.uk](mailto:membership@nuj-lcb.org.uk)
 - **Workplace issues**: [secretary@nuj-lcb.org.uk](mailto:secretary@nuj-lcb.org.uk)
 - **Welfare**: [welfare@nuj-lcb.org.uk](mailto:welfare@nuj-lcb.org.uk)

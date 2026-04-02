@@ -2,6 +2,9 @@
 # SPDX-License-Identifier: PMPL-1.0-or-later
 #
 # Publish a static site snapshot to IPFS via Pinata and update Cloudflare DNSLink.
+# If Cloudflare Web3 gateway mode is enabled, update the Web3 hostname's
+# DNSLink configuration instead of treating _dnslink.<host> as a normal DNS
+# record.
 # Usage:
 #   bash scripts/ipfs-publish.sh [path/to/html]
 #
@@ -23,6 +26,9 @@ incoming_pinata_api_key="${PINATA_API_KEY-__UNSET__}"
 incoming_pinata_api_secret="${PINATA_API_SECRET-__UNSET__}"
 incoming_ipfs_host="${IPFS_HOST-__UNSET__}"
 incoming_pinata_gateway_domain="${PINATA_GATEWAY_DOMAIN-__UNSET__}"
+incoming_cloudflare_web3_gateway="${CLOUDFLARE_WEB3_GATEWAY-__UNSET__}"
+incoming_cloudflare_web3_hostname_id="${CLOUDFLARE_WEB3_HOSTNAME_ID-__UNSET__}"
+incoming_cloudflare_web3_hostname_name="${CLOUDFLARE_WEB3_HOSTNAME_NAME-__UNSET__}"
 
 if [[ -f "$ENV_FILE" ]]; then
   # shellcheck disable=SC1090
@@ -36,6 +42,9 @@ if [[ "$incoming_pinata_api_key" != "__UNSET__" ]]; then PINATA_API_KEY="$incomi
 if [[ "$incoming_pinata_api_secret" != "__UNSET__" ]]; then PINATA_API_SECRET="$incoming_pinata_api_secret"; fi
 if [[ "$incoming_ipfs_host" != "__UNSET__" ]]; then IPFS_HOST="$incoming_ipfs_host"; fi
 if [[ "$incoming_pinata_gateway_domain" != "__UNSET__" ]]; then PINATA_GATEWAY_DOMAIN="$incoming_pinata_gateway_domain"; fi
+if [[ "$incoming_cloudflare_web3_gateway" != "__UNSET__" ]]; then CLOUDFLARE_WEB3_GATEWAY="$incoming_cloudflare_web3_gateway"; fi
+if [[ "$incoming_cloudflare_web3_hostname_id" != "__UNSET__" ]]; then CLOUDFLARE_WEB3_HOSTNAME_ID="$incoming_cloudflare_web3_hostname_id"; fi
+if [[ "$incoming_cloudflare_web3_hostname_name" != "__UNSET__" ]]; then CLOUDFLARE_WEB3_HOSTNAME_NAME="$incoming_cloudflare_web3_hostname_name"; fi
 
 : "${CLOUDFLARE_API_TOKEN:?Missing CLOUDFLARE_API_TOKEN (set in .env.local)}"
 : "${CLOUDFLARE_ZONE_ID:?Missing CLOUDFLARE_ZONE_ID (set in .env.local)}"
@@ -47,6 +56,8 @@ fi
 
 IPFS_HOST="${IPFS_HOST:-ipfs.nuj-lcb.org.uk}"
 PINATA_GATEWAY_DOMAIN="${PINATA_GATEWAY_DOMAIN:-}"
+CLOUDFLARE_WEB3_GATEWAY="${CLOUDFLARE_WEB3_GATEWAY:-false}"
+CLOUDFLARE_WEB3_HOSTNAME_NAME="${CLOUDFLARE_WEB3_HOSTNAME_NAME:-$IPFS_HOST}"
 
 if [[ ! -f "$INPUT_FILE" ]]; then
   echo "Input file not found: $INPUT_FILE" >&2
@@ -91,44 +102,81 @@ if [[ -z "$cid" ]]; then
 fi
 
 dns_name="_dnslink.$IPFS_HOST"
-dns_content="dnslink=/ipfs/$cid"
+web3_dnslink="/ipfs/$cid"
+dns_record_content="dnslink=$web3_dnslink"
 
-query_response="$(
-  curl -sS \
-    -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-    "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/dns_records?type=TXT&name=$dns_name"
-)"
+if [[ "$CLOUDFLARE_WEB3_GATEWAY" == "true" ]]; then
+  web3_hostname_id="${CLOUDFLARE_WEB3_HOSTNAME_ID:-}"
+  if [[ -z "$web3_hostname_id" ]]; then
+    hostnames_response="$(
+      curl -sS \
+        -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+        "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/web3/hostnames"
+    )"
+    web3_hostname_id="$(jq -r --arg name "$CLOUDFLARE_WEB3_HOSTNAME_NAME" '.result[]? | select(.name == $name and .target == "ipfs") | .id' <<<"$hostnames_response" | head -n1)"
+    if [[ -z "$web3_hostname_id" ]]; then
+      echo "Failed to find Cloudflare Web3 hostname for $CLOUDFLARE_WEB3_HOSTNAME_NAME. Response:" >&2
+      echo "$hostnames_response" >&2
+      exit 1
+    fi
+  fi
 
-record_id="$(jq -r '.result[0].id // empty' <<<"$query_response")"
-
-if [[ -n "$record_id" ]]; then
   dns_response="$(
-    curl -sS -X PUT \
+    curl -sS -X PATCH \
       -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
       -H "Content-Type: application/json" \
-      "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/dns_records/$record_id" \
-      --data "{\"type\":\"TXT\",\"name\":\"$dns_name\",\"content\":\"$dns_content\",\"ttl\":120}"
+      "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/web3/hostnames/$web3_hostname_id" \
+      --data "{\"dnslink\":\"$web3_dnslink\"}"
   )"
+
+  if [[ "$(jq -r '.success // false' <<<"$dns_response")" != "true" ]]; then
+    echo "Failed to update Cloudflare Web3 hostname DNSLink. Response:" >&2
+    echo "$dns_response" >&2
+    exit 1
+  fi
 else
-  dns_response="$(
-    curl -sS -X POST \
+  query_response="$(
+    curl -sS \
       -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-      -H "Content-Type: application/json" \
-      "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/dns_records" \
-      --data "{\"type\":\"TXT\",\"name\":\"$dns_name\",\"content\":\"$dns_content\",\"ttl\":120}"
+      "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/dns_records?type=TXT&name=$dns_name"
   )"
-fi
 
-if [[ "$(jq -r '.success // false' <<<"$dns_response")" != "true" ]]; then
-  echo "Failed to update DNSLink. Response:" >&2
-  echo "$dns_response" >&2
-  exit 1
+  record_id="$(jq -r '.result[0].id // empty' <<<"$query_response")"
+
+  if [[ -n "$record_id" ]]; then
+    dns_response="$(
+      curl -sS -X PUT \
+        -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+        -H "Content-Type: application/json" \
+        "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/dns_records/$record_id" \
+        --data "{\"type\":\"TXT\",\"name\":\"$dns_name\",\"content\":\"$dns_record_content\",\"ttl\":120}"
+    )"
+  else
+    dns_response="$(
+      curl -sS -X POST \
+        -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+        -H "Content-Type: application/json" \
+        "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/dns_records" \
+        --data "{\"type\":\"TXT\",\"name\":\"$dns_name\",\"content\":\"$dns_record_content\",\"ttl\":120}"
+    )"
+  fi
+
+  if [[ "$(jq -r '.success // false' <<<"$dns_response")" != "true" ]]; then
+    echo "Failed to update DNSLink. Response:" >&2
+    echo "$dns_response" >&2
+    exit 1
+  fi
 fi
 
 echo "IPFS publish complete."
 echo "CID: $cid"
-echo "DNSLink: $dns_name -> $dns_content"
+if [[ "$CLOUDFLARE_WEB3_GATEWAY" == "true" ]]; then
+  echo "Web3 gateway DNSLink: $IPFS_HOST -> $web3_dnslink"
+else
+  echo "DNSLink: $dns_name -> $dns_record_content"
+fi
 echo "IPNS URL: https://ipfs.io/ipns/$IPFS_HOST/"
+echo "Direct hostname URL: https://$IPFS_HOST/"
 echo "Direct CID URL: https://ipfs.io/ipfs/$cid"
 if [[ -n "$PINATA_GATEWAY_DOMAIN" ]]; then
   echo "Pinata gateway hint: https://$PINATA_GATEWAY_DOMAIN/ipfs/$cid"

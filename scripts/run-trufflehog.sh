@@ -6,8 +6,8 @@ repo_root="$(cd "$script_dir/.." && pwd)"
 allow_file="$repo_root/.trufflehog/allowlist.json"
 
 if [ ! -d "$repo_root/.git" ]; then
-  echo "TruffleHog scan must run from the repository root ($repo_root)" >&2
-  exit 1
+  echo "Skipping trufflehog: no .git directory at $repo_root" >&2
+  exit 0
 fi
 
 allow_args=()
@@ -19,10 +19,26 @@ fi
 
 bare_dir="$(mktemp -d /tmp/lcb-website-trufflehog-bare-XXXXXX.git)"
 work_dir="$(mktemp -d /tmp/lcb-website-trufflehog-XXXXXX)"
-trap 'rm -rf "$bare_dir" "$work_dir"' EXIT
+snapshot_dir=""
+trap 'rm -rf "$bare_dir" "$work_dir" "$snapshot_dir"' EXIT
 
-git clone --quiet --bare "$repo_root" "$bare_dir"
-git clone --quiet "$repo_root" "$work_dir"
+if git -C "$repo_root" rev-parse --verify HEAD >/dev/null 2>&1; then
+  git clone --quiet --bare "$repo_root" "$bare_dir"
+  git clone --quiet "$repo_root" "$work_dir"
+else
+  snapshot_dir="$(mktemp -d /tmp/lcb-website-trufflehog-snapshot-XXXXXX)"
+  git init --quiet "$snapshot_dir"
+  rsync -a --exclude='.git/' "$repo_root/" "$snapshot_dir/"
+  (
+    cd "$snapshot_dir"
+    git add -A
+    git -c user.name='trufflehog snapshot' -c user.email='trufflehog@local.invalid' \
+      commit --quiet -m 'Temporary snapshot for trufflehog scan'
+  )
+  git clone --quiet --bare "$snapshot_dir" "$bare_dir"
+  git clone --quiet "$snapshot_dir" "$work_dir"
+fi
+
 (
   cd "$work_dir"
   git remote set-url origin "file://$bare_dir"

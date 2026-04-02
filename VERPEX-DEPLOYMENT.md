@@ -30,7 +30,7 @@ Use this if you are starting now from the existing Cloudflare cutover:
 2. Create MySQL DB + user and grant all privileges.
 3. Upload site files and import database.
 4. Update `wp-config.php` with final DB credentials and rotate salts.
-5. Run `scripts/wp-deploy.sh` for plugins/pages/menu/forum baseline.
+5. Run `scripts/wp-deploy.sh` for plugins/pages/menu/forum baseline, then complete `docs/origin-governance-runbook.md`.
 6. Run AutoSSL in cPanel for both hostnames.
 7. Change Cloudflare SSL from temporary `Full` back to `Full (strict)`.
 
@@ -184,6 +184,28 @@ define( 'DB_COLLATE', '' );
 6. Replace the section with fresh keys from: https://api.wordpress.org/secret-key/1.1/salt/
 7. Click **"Save Changes"**
 
+### 5.1.1: Apply security/runtime snippet
+
+Before the final `/* That's all, stop editing! Happy publishing. */` line, paste the contents of `templates/wp-config-security.php` from this repo.
+
+### 5.1.2: Provision the origin-governance secret
+
+Still in `wp-config.php`, add a private capability secret and explicit mode:
+
+```php
+$sinople_capability_secret = 'REPLACE_WITH_A_LONG_RANDOM_SECRET';
+
+putenv('SINOPLE_CAPABILITY_SECRET=' . $sinople_capability_secret);
+$_ENV['SINOPLE_CAPABILITY_SECRET'] = $sinople_capability_secret;
+$_SERVER['SINOPLE_CAPABILITY_SECRET'] = $sinople_capability_secret;
+
+putenv('SINOPLE_CAPABILITY_MODE=enforce');
+$_ENV['SINOPLE_CAPABILITY_MODE'] = 'enforce';
+$_SERVER['SINOPLE_CAPABILITY_MODE'] = 'enforce';
+```
+
+Use at least 64 random characters. Do not commit this secret into the repository.
+
 ### 5.2: Update Site URLs (WP-CLI, no temporary PHP files)
 
 From your Verpex shell (in WordPress document root), run:
@@ -223,6 +245,19 @@ bash scripts/wp-deploy.sh
 Optional:
 - Set `UPDATE_EXISTING_CONTENT=1` if you want existing pages overwritten with repo content.
 - Set `WP_ALLOW_ROOT=1` only if WP-CLI must run as root.
+
+### 5.4: Validate origin governance before any Cloudflare gate
+
+From a trusted checkout of this repo:
+
+```bash
+cd /var/mnt/eclipse/repos/lcb-website
+
+SINOPLE_CAPABILITY_SECRET='your-live-secret' \
+bash scripts/test-origin-governance.sh https://nuj-lcb.org.uk
+```
+
+Do not enable any optional Cloudflare consent/capability worker until this probe passes. The authoritative runbook lives in `docs/origin-governance-runbook.md`.
 
 ## Phase 6: Configure Cloudflare DNS
 

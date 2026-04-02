@@ -191,9 +191,9 @@ This document analyzes the "seams" between all components in the lcb-website har
 
 ---
 
-### SEAM-07: http-capability-gateway → Svalinn (Policy Enforcement)
-**Status:** 🔴 **BROKEN** - http-capability-gateway not implemented
-**Components:** http-capability-gateway (30%) → svalinn (100%)
+### SEAM-07: Origin capability gate / optional edge prefilter → Svalinn (Policy Enforcement)
+**Status:** 🟡 **PARTIAL** - origin enforcement exists, Cloudflare prefilter remains optional
+**Components:** origin-governance MU-plugin (70%) + http-capability-gateway (30%) → svalinn (100%)
 
 **Interface:**
 - Capability gateway provides: Verb governance, HTTP policy layer
@@ -201,19 +201,19 @@ This document analyzes the "seams" between all components in the lcb-website har
 - Protocol: HTTP proxy/middleware
 
 **Issues:**
-- Capability gateway in design phase only (no implementation)
-- Svalinn has own policy engine (may be redundant)
-- Architecture unclear (standalone vs middleware)
+- Canonical origin enforcement now exists, but it still needs live Verpex/Varnish validation
+- Cloudflare worker remains optional and is not enabled on the NUJ zones
+- Token issuance/provisioning (`SINOPLE_CAPABILITY_SECRET`) still needs operational runbook testing
 
 **Resolution:**
-**Option A:** Defer to post-MVP, use Svalinn's policy engine
-**Option B:** Implement as Svalinn middleware (8-12 hours)
-**Option C:** Implement standalone gateway (16-24 hours)
+**Option A:** Ship with the origin MU-plugin as the canonical gate and defer the Cloudflare worker
+**Option B:** Enable the Cloudflare worker later as an API-only fail-fast layer
+**Option C:** Replace both with a future Svalinn-native policy ingress when that path is real
 
-**Recommendation:** Option A (defer), use Svalinn policies for MVP
+**Recommendation:** Option A, with Option B only after origin-side validation succeeds
 
-**Blocking:** Architecture decision
-**Estimated Effort:** 0 hours (defer) OR 8-24 hours (implement)
+**Blocking:** Live-stack validation and secret provisioning
+**Estimated Effort:** 4-8 hours for operational validation, plus live deployment time
 
 ---
 

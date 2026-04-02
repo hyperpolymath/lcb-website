@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: PMPL-1.0-or-later
 # Consent-Aware HTTP (AIBDP) Check for Varnish
-# Implements HTTP 430 enforcement as per consent-aware-http.org
+# Fast-fail layer only: canonical enforcement lives in the WordPress MU-plugin.
 
 sub check_aibdp_consent {
     # Skip consent check for .well-known paths (allow discovery)

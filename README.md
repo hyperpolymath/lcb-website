@@ -44,13 +44,25 @@ All website pages live in `content/`:
 
 Use `scripts/ipfs-publish.sh` (or `just ipfs-publish`) to publish
 `content/nuj-lcb-shareable-site.html` to Pinata and automatically update the
-Cloudflare DNSLink record for `ipfs.nuj-lcb.org.uk`.
+Cloudflare DNSLink state for `ipfs.nuj-lcb.org.uk`.
+
+This repo now supports both publish modes:
+- DNS-only fallback: update `_dnslink.ipfs.nuj-lcb.org.uk` directly.
+- Cloudflare Web3 gateway mode: update the Web3 hostname configuration so
+  `https://ipfs.nuj-lcb.org.uk/` resolves directly.
+
+The direct-host mode still depends on a Cloudflare Web3 gateway subscription
+and the Terraform-managed Web3 hostname being applied in the account.
 
 Set these in `.env.local`:
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ZONE_ID`
 - `PINATA_JWT` (or `PINATA_API_KEY` + `PINATA_API_SECRET`)
 - `IPFS_HOST` (optional, defaults to `ipfs.nuj-lcb.org.uk`)
+- `CLOUDFLARE_WEB3_GATEWAY=true` if `ipfs.nuj-lcb.org.uk` is managed as a
+  Cloudflare Web3 hostname
+- `CLOUDFLARE_WEB3_HOSTNAME_ID` or `CLOUDFLARE_WEB3_HOSTNAME_NAME` to identify
+  the Cloudflare Web3 hostname to patch after each publish
 
 For unattended publishing, the repo includes `.github/workflows/ipfs-publish.yml`
 (daily at 05:15 UTC + manual trigger). Configure repository secrets:
@@ -76,7 +88,7 @@ We will leverage `cadre-router` for the client-side navigation and dashboard exp
 
 ## AI/bot consent
 
-Follow `docs/consent-aware-http.adoc` to see how the site enforces the consent-aware HTTP/AIBDP requirements, returns HTTP 430 when bots do not consent, and coordinates the `.well-known/aibdp.json` declaration with the Cedar/Rust proxy layer before Svalinn/Vörðr execute any manifest.
+Follow `docs/consent-aware-http.adoc` to see how the site enforces the consent-aware HTTP/AIBDP requirements. The canonical decision now lives at the WordPress origin in `wp-content/mu-plugins/origin-governance-gateway.php`, with Varnish/OpenLiteSpeed and Cloudflare acting as optional fast-fail layers around the same `.well-known/aibdp.json` policy.
 
 ## Feedback pipeline
 
@@ -88,7 +100,7 @@ This repo is part of the `gitbot-fleet` quality automation suite; see `docs/gitb
 
 ## HTTP defense
 
-`http-capability-gateway` acts as the first gate for the hardened site, so see `docs/http-capability-gateway.adoc` for how we author Verb Governance specs, map them to consent-aware HTTP narratives, and forward enforcement logs into the feedback and audit trails.
+This repo includes an origin-side capability gate in `wp-content/mu-plugins/origin-governance-gateway.php` plus an optional Cloudflare `http-capability-gateway` worker. Treat the origin gate as the source of truth; the Cloudflare worker is only a coarse `/api/*` prefilter when `enable_capability_gate=true`.
 
 ## Automation router
 
@@ -124,7 +136,7 @@ The repo follows the `rsr-template-repo`/`RSR_OUTLINE.adoc` scheme so the direct
 
 ## Machine-readable metadata
 
-Machine-readable metadata now lives under `.machine_readable/6scm`. These files (AGENTIC, ECOSYSTEM, META, NEUROSYM, PLAYBOOK, STATE) encode the AI agent config, ecosystem position, architectural practices, neurosymbolic hints, operational playbook, and project state so the next handover can load the repo context automatically.
+Machine-readable metadata now lives under `.machine_readable/6a2`. These files (`AGENTIC.a2ml`, `ECOSYSTEM.a2ml`, `META.a2ml`, `NEUROSYM.a2ml`, `PLAYBOOK.a2ml`, `STATE.a2ml`) encode the AI agent config, ecosystem position, architectural practices, neurosymbolic hints, operational playbook, and project state so the next handover can load the repo context automatically.
 
 ## Roadmap
 

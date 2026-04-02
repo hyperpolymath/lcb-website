@@ -3,9 +3,9 @@
 #
 # NUJ LCB Site Configuration Status
 
-**Last Updated:** 2026-02-17
+**Last Updated:** 2026-03-30
 
-## Current Phase: Backend LIVE, Content/Plugin Baseline PENDING
+## Current Phase: Backend LIVE, Content/Plugin Baseline + Origin Governance Validation PENDING
 
 See `TOPOLOGY.md` for the full architecture diagram and completion dashboard.
 
@@ -59,6 +59,7 @@ See `TOPOLOGY.md` for the full architecture diagram and completion dashboard.
 - `wp-config-security.php` — 12 security constants (DISALLOW_FILE_EDIT, FORCE_SSL, etc.)
 - `htaccess-security` — HSTS, CSP, X-Frame-Options, XML-RPC block, directory listing off
 - `htaccess-well-known` — .well-known bypass rules, AIBDP enforcement
+- `origin-governance-gateway.php` — canonical origin-side AIBDP + capability gate (repo ready, live verification pending)
 
 ### robots.txt
 Blocks 11 AI training bots (GPTBot, ChatGPT-User, CCBot, anthropic-ai, Claude-Web, cohere-ai, Google-Extended, Bytespider, PetalBot, Amazonbot, FacebookBot).
@@ -82,7 +83,7 @@ Blocks 11 AI training bots (GPTBot, ChatGPT-User, CCBot, anthropic-ai, Claude-We
 | Component | Status |
 |-----------|--------|
 | Contractiles (must/trust/dust/lust/k9) | Complete |
-| .machine_readable/6scm/ (6 files) | Updated 2026-02-17 |
+| .machine_readable/6a2/ (6 files) | Updated 2026-02-17 |
 | .bot_directives/ (8 bots) | Complete |
 | .github/workflows/ (17 workflows) | Complete |
 | TOPOLOGY.md | Complete |
@@ -95,11 +96,14 @@ Blocks 11 AI training bots (GPTBot, ChatGPT-User, CCBot, anthropic-ai, Claude-We
 2. **DEPLOYMENT.md** — Local Podman setup
 3. **WORDPRESS-DEPLOYMENT-PLAN.md** — Full VPS deployment
 4. **SECURITY-IMPLEMENTATION.md** — Security hardening guide
+5. **docs/origin-governance-runbook.md** — capability secret provisioning + live consent/capability probes
 
 ## Next Steps
 
 1. Log in at `https://nuj-lcb.org.uk/wp-login.php` and rotate the initial admin password
 2. Install/activate plugin baseline (Wordfence, LiteSpeed Cache, bbPress, Members, SMTP, backups)
 3. Run `scripts/wp-deploy.sh` (or equivalent WP-CLI flow) for pages/menu/forum baseline
-4. Populate and review content from `content/pages/` and `content/policies/`
-5. Configure SMTP + backups + final security hardening and launch checks
+4. Provision `SINOPLE_CAPABILITY_SECRET` and `SINOPLE_CAPABILITY_MODE=enforce` in `wp-config.php`
+5. Run `bash scripts/test-origin-governance.sh https://nuj-lcb.org.uk` from a trusted checkout
+6. Populate and review content from `content/pages/` and `content/policies/`
+7. Configure SMTP + backups + final security hardening and launch checks

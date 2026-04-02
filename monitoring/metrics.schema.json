@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nuj-lcb.org.uk/schemas/monitoring/health-snapshot.json",
+  "title": "NUJ Website Health Snapshot",
+  "type": "object",
+  "required": [
+    "timestamp",
+    "varnish",
+    "openlitespeed",
+    "redis",
+    "cloudflare",
+    "wordpress"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "varnish": {
+      "type": "object",
+      "required": [
+        "cache_hit",
+        "backend_healthy",
+        "uptime_seconds",
+        "backend_response_time_ms"
+      ],
+      "properties": {
+        "cache_hit": { "type": "number" },
+        "backend_healthy": { "type": "number" },
+        "uptime_seconds": { "type": "number" },
+        "backend_response_time_ms": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "openlitespeed": {
+      "type": "object",
+      "required": [
+        "requests_per_second",
+        "active_connections",
+        "ssl_expiry_days",
+        "error_5xx"
+      ],
+      "properties": {
+        "requests_per_second": { "type": "number" },
+        "active_connections": { "type": "number" },
+        "ssl_expiry_days": { "type": "number" },
+        "error_5xx": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "redis": {
+      "type": "object",
+      "required": [
+        "hits",
+        "misses",
+        "evicted_keys",
+        "used_memory_mb"
+      ],
+      "properties": {
+        "hits": { "type": "number" },
+        "misses": { "type": "number" },
+        "evicted_keys": { "type": "number" },
+        "used_memory_mb": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "cloudflare": {
+      "type": "object",
+      "required": [
+        "ssl_status",
+        "records"
+      ],
+      "properties": {
+        "ssl_status": { "type": "string" },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "type",
+              "ttl",
+              "proxied"
+            ],
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" },
+              "ttl": { "type": "number" },
+              "proxied": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "wordpress": {
+      "type": "object",
+      "required": [
+        "cron_last_run_minutes",
+        "plugins_active",
+        "php_errors_last_hour"
+      ],
+      "properties": {
+        "cron_last_run_minutes": { "type": "number" },
+        "plugins_active": { "type": "number" },
+        "php_errors_last_hour": { "type": "number" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

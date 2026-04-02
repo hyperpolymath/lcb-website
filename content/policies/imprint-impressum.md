@@ -16,7 +16,7 @@
 
 ### Branch Contact
 
-**Email**: contact@nuj-lcb.org.uk
+**Email**: general@nuj-lcb.org.uk
 
 **Postal Address**:
 NUJ London Central Branch
@@ -91,7 +91,7 @@ All content on this website is the responsibility of the NUJ London Central Bran
 ### Technical Responsibility
 
 **Website Administrator**: [Name/Role]
-**Email**: contact@nuj-lcb.org.uk
+**Email**: general@nuj-lcb.org.uk
 
 ## Purpose and Objectives
 
@@ -209,7 +209,7 @@ UK/EU residents have the right to:
 
 Complaints about this website should be sent to:
 
-**Email**: contact@nuj-lcb.org.uk
+**Email**: general@nuj-lcb.org.uk
 **Subject**: "Website Complaint"
 
 We aim to respond within 14 days.
@@ -220,7 +220,7 @@ EU residents may use the EU Online Dispute Resolution platform:
 
 **URL**: [https://ec.europa.eu/consumers/odr](https://ec.europa.eu/consumers/odr)
 
-Our email for ODR purposes: contact@nuj-lcb.org.uk
+Our email for ODR purposes: general@nuj-lcb.org.uk
 
 ### Alternative Dispute Resolution
 
@@ -237,7 +237,7 @@ For disputes about content or services, members may use:
 
 We aim for WCAG 2.1 AAA compliance. Report accessibility issues:
 
-**Email**: contact@nuj-lcb.org.uk
+**Email**: general@nuj-lcb.org.uk
 **Subject**: "Accessibility Issue"
 
 ### Accessibility Features
@@ -306,4 +306,4 @@ For legal correspondence:
 
 ---
 
-*This imprint fulfills information obligations under UK and EU law, including the EU E-Commerce Directive (Article 5) and German Telemediengesetz (TMG §5). Questions? Email contact@nuj-lcb.org.uk*
+*This imprint fulfills information obligations under UK and EU law, including the EU E-Commerce Directive (Article 5) and German Telemediengesetz (TMG §5). Questions? Email general@nuj-lcb.org.uk*

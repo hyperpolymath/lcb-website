@@ -1,0 +1,57 @@
+groups:
+  - name: nuj-website-health
+    rules:
+      - alert: NujOpenLiteSpeed5xxBurst
+        expr: increase(nuj_openlitespeed_error_5xx[15m]) > 5
+        for: 10m
+        labels:
+          severity: warning
+          service: web
+        annotations:
+          summary: OpenLiteSpeed is returning 5xx responses
+          description: More than 5 OpenLiteSpeed 5xx responses were observed over the last 15 minutes.
+      - alert: NujRedisMissBurst
+        expr: increase(nuj_redis_misses[15m]) > 1000
+        for: 10m
+        labels:
+          severity: warning
+          service: cache
+        annotations:
+          summary: Redis miss rate is elevated
+          description: Redis recorded more than 1000 misses over the last 15 minutes.
+      - alert: NujLowCacheHitRatio
+        expr: nuj_varnish_cache_hit_ratio < 0.80
+        for: 15m
+        labels:
+          severity: warning
+          service: cache
+        annotations:
+          summary: Varnish cache hit ratio is low
+          description: Varnish cache hit ratio has remained below 80 percent for 15 minutes.
+      - alert: NujTlsExpirySoon
+        expr: nuj_openlitespeed_ssl_expiry_days < 21
+        for: 15m
+        labels:
+          severity: critical
+          service: tls
+        annotations:
+          summary: TLS certificate expiry is approaching
+          description: The current certificate has fewer than 21 days remaining.
+      - alert: NujWordPressPhpErrorsPresent
+        expr: nuj_wordpress_php_errors_last_hour > 0
+        for: 15m
+        labels:
+          severity: warning
+          service: wordpress
+        annotations:
+          summary: WordPress PHP errors detected
+          description: The latest scrape found PHP errors in the WordPress error log.
+      - alert: NujCloudflareSslStatusUnexpected
+        expr: nuj_cloudflare_ssl_status{status!="active"} == 1
+        for: 15m
+        labels:
+          severity: critical
+          service: cloudflare
+        annotations:
+          summary: Cloudflare SSL status is not active
+          description: Cloudflare reported a non-active SSL status on the latest API scrape.

@@ -4,13 +4,13 @@
 
 ### General Inquiries
 
-**Email**: [contact@nuj-lcb.org.uk](mailto:contact@nuj-lcb.org.uk)
+**Email**: [general@nuj-lcb.org.uk](mailto:general@nuj-lcb.org.uk)
 
 For general questions, membership inquiries, or information about the branch.
 
 ### Member Support
 
-**Forum**: [forum.nuj-lcb.org.uk](https://forum.nuj-lcb.org.uk)
+**Chat**: [chat.nuj-lcb.org.uk](https://chat.nuj-lcb.org.uk)
 
 Join our Zulip forum for:
 - Member discussions
@@ -20,7 +20,7 @@ Join our Zulip forum for:
 
 ### Video Meetings
 
-**BigBlueButton**: [convene.nuj-lcb.org.uk](https://convene.nuj-lcb.org.uk)
+**BigBlueButton**: [conference.nuj-lcb.org.uk](https://conference.nuj-lcb.org.uk)
 
 Join our video calls for:
 - Branch meetings
@@ -35,10 +35,13 @@ Contact specific officers for their areas of responsibility:
 | Officer | Email | Responsibilities |
 |---------|-------|------------------|
 | **Chair** | chair@nuj-lcb.org.uk | Branch leadership, strategy |
-| **Vice Chair** | vicechair@nuj-lcb.org.uk | Deputy leadership, campaigns |
+| **Vice Chair** | vice-chair@nuj-lcb.org.uk | Deputy leadership, campaigns |
+| **Deputy Treasurer** | deputy-treasurer@nuj-lcb.org.uk | Deputy finance support |
 | **Secretary** | secretary@nuj-lcb.org.uk | Meetings, correspondence |
+| **Assistant Secretary** | assistant-secretary@nuj-lcb.org.uk | Administrative support |
 | **Treasurer** | treasurer@nuj-lcb.org.uk | Branch finances |
 | **Welfare Officer** | welfare@nuj-lcb.org.uk | Confidential member support |
+| **Safety** | safety@nuj-lcb.org.uk | Safety and risk issues |
 | **Membership** | membership@nuj-lcb.org.uk | Recruitment, retention |
 | **Equalities** | equalities@nuj-lcb.org.uk | Diversity, inclusion |
 | **Training** | training@nuj-lcb.org.uk | Professional development |
@@ -60,7 +63,7 @@ Contact specific officers for their areas of responsibility:
 
 If your workplace has an NUJ chapel (workplace committee), contact your chapel rep first. They can provide immediate support and escalate to branch officers if needed.
 
-Don't know your chapel rep? Email us and we'll connect you.
+Don't know your chapel rep? Email us at general@nuj-lcb.org.uk and we'll connect you.
 
 ## Meeting Locations
 
@@ -77,8 +80,8 @@ London WC1R 4RL
 ### Virtual Meetings
 
 All meetings offer remote attendance via:
-- **BigBlueButton**: [convene.nuj-lcb.org.uk](https://convene.nuj-lcb.org.uk)
-- **Forum**: Live discussion at [forum.nuj-lcb.org.uk](https://forum.nuj-lcb.org.uk)
+- **BigBlueButton**: [conference.nuj-lcb.org.uk](https://conference.nuj-lcb.org.uk)
+- **Chat**: Live discussion at [chat.nuj-lcb.org.uk](https://chat.nuj-lcb.org.uk)
 
 No special software needed - works in any modern browser.
 
@@ -110,7 +113,7 @@ London WC1X 8DP
 Follow us for updates, news, and campaigns:
 
 - **Twitter/X**: @NUJ_LCB *(coming soon)*
-- **Forum**: [forum.nuj-lcb.org.uk](https://forum.nuj-lcb.org.uk)
+- **Chat**: [chat.nuj-lcb.org.uk](https://chat.nuj-lcb.org.uk)
 
 *We prioritize member-only spaces (forum) over public social media to protect member privacy.*
 
@@ -118,7 +121,7 @@ Follow us for updates, news, and campaigns:
 
 Get branch updates, meeting notices, and campaign news:
 
-**Sign up**: [Contact us](mailto:contact@nuj-lcb.org.uk?subject=Mailing%20List) with "Mailing List" in subject
+**Sign up**: [Contact us](mailto:general@nuj-lcb.org.uk?subject=Mailing%20List) with "Mailing List" in subject
 
 We send:
 - Monthly branch newsletter
@@ -145,7 +148,7 @@ We aim to be accessible to all. Let us know if you need:
 ### Website Accessibility
 
 This website aims for WCAG AAA compliance. Report accessibility issues:
-**Email**: contact@nuj-lcb.org.uk with subject "Accessibility Issue"
+**Email**: general@nuj-lcb.org.uk with subject "Accessibility Issue"
 
 ## Visit Us
 
@@ -198,12 +201,12 @@ All contacts are confidential. We can signpost to professional services.
 
 | Need | Contact Method |
 |------|----------------|
-| General questions | contact@nuj-lcb.org.uk |
+| General questions | general@nuj-lcb.org.uk |
 | Join the union | membership@nuj-lcb.org.uk |
 | Workplace issue | secretary@nuj-lcb.org.uk (mark URGENT) |
 | Training | training@nuj-lcb.org.uk |
 | Confidential support | welfare@nuj-lcb.org.uk |
-| Member discussion | forum.nuj-lcb.org.uk |
-| Video meetings | convene.nuj-lcb.org.uk |
+| Member discussion | chat.nuj-lcb.org.uk |
+| Video meetings | conference.nuj-lcb.org.uk |
 
 *We aim to respond to all emails within 48 hours (24 hours for urgent issues).*

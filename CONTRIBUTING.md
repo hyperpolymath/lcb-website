@@ -174,7 +174,7 @@ just security-check
 - [ ] Clear description of changes
 - [ ] Related issue linked (if applicable)
 - [ ] Documentation updated (if needed)
-- [ ] STATE.scm updated (if significant changes)
+- [ ] STATE.a2ml updated (if significant changes)
 
 ## Documentation
 
@@ -184,12 +184,12 @@ Documentation lives in:
 - `docs/*.adoc` - Component integration guides
 - `README.md` - Project overview
 - `ROADMAP.adoc` - Project roadmap
-- `.machine_readable/6scm/` - Machine-readable metadata
+- `.machine_readable/6a2/` - Machine-readable metadata
 
 When adding new integrations or features, update:
 1. Relevant `docs/*.adoc` file
 2. `README.md` (if user-facing)
-3. `STATE.scm` in `.machine_readable/6scm/`
+3. `STATE.a2ml` in `.machine_readable/6a2/`
 
 ### Documentation Standards
 
@@ -203,7 +203,7 @@ When adding new integrations or features, update:
 ```
 lcb-website/
 ├── .github/workflows/      # CI/CD workflows
-├── .machine_readable/6scm/ # Machine-readable metadata
+├── .machine_readable/6a2/ # Machine-readable metadata
 ├── .well-known/            # Consent and security policies
 ├── docs/                   # Integration documentation
 ├── infra/                  # Infrastructure manifests
@@ -233,7 +233,7 @@ These are separate repositories that need to be cloned to `../` relative to this
 - Open an issue on GitHub
 - Read the documentation in `docs/`
 - Check `justfile` for available commands (`just --list`)
-- Review `.machine_readable/6scm/STATE.scm` for project status
+- Review `.machine_readable/6a2/STATE.a2ml` for project status
 
 ## License
 

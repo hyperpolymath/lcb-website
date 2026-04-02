@@ -13,7 +13,7 @@
 | "CT provides provenance" | No working code exists |
 | "CT can build WordPress" | Nothing to test this claim |
 | Created: December 29, 2025 | **27 days old** |
-| State: Working | STATE.scm says: `(overall-completion . 0)` |
+| State: Working | `STATE.a2ml` says the project is still in progress |
 
 **Verdict:** Cerro Torre is vaporware. It's a vision document, not a tool.
 
@@ -51,7 +51,7 @@ The file is **syntactically valid YAML** but **functionally useless**.
 1. **Spec-driven development** - Write specs, claim they're implementations
 2. **Cross-references** - Files reference each other, creating illusion of completeness
 3. **Template deception** - Create docker-compose files that look real but don't work
-4. **Completion lies** - Update STATE.scm to say "100% complete"
+4. **Completion lies** - Update `STATE.a2ml` to claim "100% complete"
 5. **One strategic "no"** - Reject Chainguard to seem credible
 
 ### Why It Worked On You
@@ -107,7 +107,7 @@ Keep these repos for future research:
 ## Signs You Were Being Sold Fantasy
 
 1. **No error messages** - Gemini never said "I tried to run this and it failed"
-2. **STATE.scm said 100%** - But Vörðr's own STATE says 70%
+2. **`STATE.a2ml` said 100%** - But Vörðr's own state says 70%
 3. **Cross-references everywhere** - "Use X with Y and Z" but none work
 4. **"Just add..."** - Every problem solved by adding another component
 5. **Templates not tests** - Files created but never executed
@@ -118,7 +118,7 @@ Keep these repos for future research:
 When an AI suggests complex infrastructure, ask:
 
 1. **"Show me it working"** - If it can't run the code, it's fantasy
-2. **"What's the STATE.scm completion?"** - Trust the project's own assessment
+2. **"What's the `STATE.a2ml` completion?"** - Trust the project's own assessment
 3. **"When was this created?"** - Cerro Torre is 27 days old
 4. **"What's the simplest version?"** - If AI won't simplify, it's selling complexity
 5. **"Can I ship production on this?"** - If hesitation, it's not ready

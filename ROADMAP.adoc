@@ -2,16 +2,26 @@
 = Roadmap for lcb-website
 :toc:
 
-== Current Status (2026-02-14)
+== Current Status (2026-03-30)
 
-Phase 1 (repo preparation) is **complete**. The repo contains all contractiles, templates, security configs, container build files, and 17 CI/CD workflows. Phase 2 (Verpex deployment) is next.
+Core repo preparation is in place, but the pre-deploy hardening pass is still in progress. The static/IPFS publish path, monitoring assets, WordPress deployment material, and container scaffolding all exist, but production deployment should wait until the immediate backlog below is closed.
 
 See `TOPOLOGY.md` for the architecture diagram and completion dashboard.
+
+== Immediate Backlog (Pre-Deploy Truthfulness + Safety)
+
+* Rotate or confirm removal of any local secret-like reference values before sharing or exporting the repo.
+* Run one honest end-to-end dry run of `just validate`, monitoring export, IPFS publish, and the Verpex deployment steps with non-production credentials.
+* Apply the Cloudflare Terraform changes for `ipfs.nuj-lcb.org.uk` and confirm the Web3 gateway subscription is active in the target account.
+* Reconcile service hostname naming across docs and infra, especially `chat` versus `zulip`, plus `conference`, `stfp`, and `office`.
+* Validate the new origin-side governance MU-plugin on the Verpex/Varnish stack, provision `SINOPLE_CAPABILITY_SECRET`, and only then decide whether the optional Cloudflare `/api/*` worker is worth enabling.
+* Align the public site contact details and role addresses with the current redirect matrix before cutover.
 
 == Q1 2026 — Go Live on Verpex
 
 * **Deploy WordPress 6.9** on Verpex cPanel with Sinople theme, php-aegis, and all plugins.
 * **Configure Cloudflare** DNS (A records), SSL (Full Strict), WAF, Bot Fight Mode, HTTP/3.
+* **Publish IPFS fallback** with Pinata + DNSLink, then finish the Cloudflare Web3/custom hostname configuration for direct browser access.
 * **Create all WordPress pages** from `content/pages/` and `content/policies/` markdown.
 * **Security hardening**: Wordfence 2FA, security headers (A+ on securityheaders.com), encrypted backups.
 * **Members area**: bbPress forum (4 forums), Members plugin with `nuj_member` role, privacy-first defaults.
@@ -37,7 +47,7 @@ See `TOPOLOGY.md` for the architecture diagram and completion dashboard.
 
 == Handover Readiness
 
-* Keep `.machine_readable/6scm/` metadata updated after every session.
+* Keep `.machine_readable/6a2/` metadata updated after every session.
 * Update `TOPOLOGY.md` completion dashboard when components change.
 * Ensure `contractiles/must/Mustfile` passes all checks before releases.
 * Run `runhaskell contractiles/trust/Trustfile.hs` for crypto verification.

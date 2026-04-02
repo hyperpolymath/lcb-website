@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: PMPL-1.0-or-later
 # Varnish Configuration for LCB Website - Development
+# This is a cache and fast-fail layer; the WordPress MU-plugin remains authoritative.
 vcl 4.1;
 
 import std;

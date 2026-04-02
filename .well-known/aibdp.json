@@ -2,12 +2,12 @@
   "$schema": "https://consent-aware-http.org/schemas/aibdp-v0.2.json",
   "version": "0.2",
   "service": {
-    "name": "LCB Website",
-    "description": "Hardened WordPress deployment demonstrating verified container stack",
-    "url": "https://github.com/hyperpolymath/lcb-website",
+    "name": "NUJ London Central Branch",
+    "description": "Hardened WordPress deployment for NUJ London Central Branch with origin-side AIBDP enforcement",
+    "url": "https://nuj-lcb.org.uk",
     "contact": {
       "type": "email",
-      "value": "lcb-site:ops"
+      "value": "general@nuj-lcb.org.uk"
     }
   },
   "consent_required": true,
@@ -55,5 +55,5 @@
     }
   },
   "documentation_url": "https://consent-aware-http.org/",
-  "last_updated": "2026-01-22T00:00:00Z"
+  "last_updated": "2026-03-30T00:00:00Z"
 }

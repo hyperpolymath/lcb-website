@@ -88,9 +88,9 @@
 
 | Repo | Completion | Status | Notes |
 |------|------------|--------|-------|
-| **http-capability-gateway** | 30% | ❌ Not ready | Design phase only, no implementation |
+| **http-capability-gateway** | 30% | ⚠️ Optional | Cloudflare prefilter only; origin gate now exists in WordPress |
 
-**Blockers:** Architecture not finalized, implementation not started
+**Blockers:** Live validation and token issuance path not yet exercised in production-like conditions
 
 ---
 
@@ -111,7 +111,7 @@
 8. ⚠️ **IndieWeb2 consent portal** - 70% complete
 9. ⚠️ **feedback-o-tron pipeline** - Ready but needs integration
 10. ⚠️ **hybrid-automation-router** - Ready but needs integration
-11. ❌ **http-capability-gateway** - Not implemented
+11. ⚠️ **http-capability-gateway** - Optional edge prefilter, not required for MVP
 12. ⚠️ **bunsenite Nickel parsing** - 75% complete
 13. ⚠️ **sanctify-php hardening** - 40% complete
 14. ⚠️ **php-aegis security** - 65% complete
@@ -137,7 +137,7 @@
 - Finish sanctify-php transformer
 - Integrate php-aegis security
 - Complete IndieWeb2 consent portal
-- Implement http-capability-gateway
+- Validate origin capability enforcement, then decide whether the edge prefilter is worth enabling
 - Get Twingate account and test SDP
 
 ### Phase 4: Production Ready (6-8 weeks)
@@ -217,4 +217,4 @@
 
 **For DHI WordPress base:** Monitor https://github.com/debian-hardened-images
 **For Twingate access:** https://www.twingate.com/contact
-**For integration issues:** Review individual repo STATE.scm files
+**For integration issues:** Review individual repo `STATE.a2ml` files
