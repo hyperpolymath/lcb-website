@@ -56,7 +56,7 @@ Our AI usage boundaries are machine-readable at:
     "summarization": "allowed-short",
     "accessibility": "allowed"
   },
-  "contact": "contact@nuj-lcb.org.uk",
+  "contact": "general@nuj-lcb.org.uk",
   "effective": "2026-01-28"
 }
 ```
@@ -113,7 +113,7 @@ If your content appears on our site (articles, comments, forum posts), you retai
 
 To remove your content from our site:
 
-1. Email **contact@nuj-lcb.org.uk**
+1. Email **general@nuj-lcb.org.uk**
 2. Include: URL, your name, reason for removal
 3. We'll respond within 7 days
 4. Content removed within 14 days
@@ -149,7 +149,7 @@ When we use AI tools, we:
 
 If you find our content being used by AI systems in violation of this policy:
 
-1. **Email**: contact@nuj-lcb.org.uk
+1. **Email**: general@nuj-lcb.org.uk
 2. **Include**: URL of violation, system name, evidence
 3. **We will**: Investigate and take action (DMCA, legal notice, etc.)
 
@@ -224,7 +224,7 @@ Changes will be posted with 30 days' notice. Continued use of our site after cha
 
 ### Contact Us
 
-- **Email**: contact@nuj-lcb.org.uk
+- **Email**: general@nuj-lcb.org.uk
 - **Subject line**: "AI Policy Question"
 - **Response time**: Within 7 days
 
@@ -247,4 +247,4 @@ Changes will be posted with 30 days' notice. Continued use of our site after cha
 
 **Enforcement begins**: 28 January 2026
 
-**Questions?** Email contact@nuj-lcb.org.uk with "AI Policy" in the subject line.
+**Questions?** Email general@nuj-lcb.org.uk with "AI Policy" in the subject line.

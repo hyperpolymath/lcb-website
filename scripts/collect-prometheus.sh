@@ -13,6 +13,10 @@ repo_root="$(cd "$(dirname "$0")/.." && pwd)"
 metrics_dir="$repo_root/monitoring/prometheus"
 reports_dir="$repo_root/monitoring/reports"
 mkdir -p "$metrics_dir" "$reports_dir"
+exporter_file="$repo_root/monitoring/exporter.ncl"
+
+cf_api_token="${CF_API_TOKEN:-${CLOUDFLARE_API_TOKEN:-}}"
+cf_zone_id="${CF_ZONE_ID:-${CLOUDFLARE_ZONE_ID:-}}"
 
 timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 json_report="$reports_dir/health-$(date -u +"%Y%m%dT%H%M%SZ").json"
@@ -82,11 +86,11 @@ fi
 cloudflare_ssl_status="unknown"
 cloudflare_records_file="$(mktemp)"
 echo "[]" > "$cloudflare_records_file"
-if [ -n "${CF_API_TOKEN:-}" ] && [ -n "${CF_ZONE_ID:-}" ]; then
-  zone_resp=$(curl -sS -H "Authorization: Bearer $CF_API_TOKEN" -H "Content-Type: application/json" "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID")
+if [ -n "$cf_api_token" ] && [ -n "$cf_zone_id" ]; then
+  zone_resp=$(curl -sS -H "Authorization: Bearer $cf_api_token" -H "Content-Type: application/json" "https://api.cloudflare.com/client/v4/zones/$cf_zone_id")
   cloudflare_ssl_status=$(jq -r '.result.status // "unknown"' <<<"$zone_resp")
-  records_resp=$(curl -sS -H "Authorization: Bearer $CF_API_TOKEN" -H "Content-Type: application/json" "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records?per_page=100")
-  jq -c '.result[]' <<<"$records_resp" | while IFS= read -r record; do
+  records_resp=$(curl -sS -H "Authorization: Bearer $cf_api_token" -H "Content-Type: application/json" "https://api.cloudflare.com/client/v4/zones/$cf_zone_id/dns_records?per_page=100")
+  jq -c '.result[]?' <<<"$records_resp" | while IFS= read -r record; do
     name=$(jq -r '.name' <<<"$record")
     type=$(jq -r '.type' <<<"$record")
     ttl=$(jq -r '.ttl' <<<"$record")
@@ -133,7 +137,7 @@ jq -n \
 
 metrics_output="$metrics_dir/health.prom"
 metrics_json=$(jq -c '.' "$json_report")
-nickel monitoring/exporter.ncl --arg data "$metrics_json" > "$metrics_output"
+nickel "$exporter_file" --arg data "$metrics_json" > "$metrics_output"
 
 rm -f "$cloudflare_records_file"
 

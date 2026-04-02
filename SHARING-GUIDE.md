@@ -130,7 +130,7 @@ Thanks!
 The shareable site has comment forms. When people click "Send Comment":
 - Opens their email client
 - Pre-filled with their name, email, comment
-- Addressed to: contact@nuj-lcb.org.uk
+- Addressed to: general@nuj-lcb.org.uk
 - They just click Send
 
 ### Option 2: Google Form
@@ -234,4 +234,4 @@ See: `DEPLOYMENT.md` for full deployment process.
 
 ---
 
-**Questions?** Email: contact@nuj-lcb.org.uk (when live) or respond to this email thread.
+**Questions?** Email: general@nuj-lcb.org.uk (when live) or respond to this email thread.

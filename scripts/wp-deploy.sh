@@ -26,7 +26,7 @@ RUN_SEARCH_REPLACE="${RUN_SEARCH_REPLACE:-0}"
 SITE_TITLE="${SITE_TITLE:-NUJ London Central Branch}"
 SITE_TAGLINE="${SITE_TAGLINE:-The voice of journalists in central London}"
 ADMIN_USER="${WP_ADMIN_USER:-nujlcb_admin}"
-ADMIN_EMAIL="${WP_ADMIN_EMAIL:-contact@nuj-lcb.org.uk}"
+ADMIN_EMAIL="${WP_ADMIN_EMAIL:-general@nuj-lcb.org.uk}"
 TIMEZONE="${TIMEZONE:-Europe/London}"
 DATE_FORMAT="${DATE_FORMAT:-j F Y}"
 TIME_FORMAT="${TIME_FORMAT:-H:i}"
@@ -45,6 +45,11 @@ fi
 
 wpcli() {
     wp "${WP_ARGS[@]}" "$@"
+}
+
+wp_env() {
+    local var_name="$1"
+    wpcli eval "echo getenv('${var_name}') ?: '';" 2>/dev/null || true
 }
 
 warn() {
@@ -109,6 +114,30 @@ else
     ADMIN_USER_EXISTS=0
     warn "Admin user '${ADMIN_USER}' does not exist yet."
     warn "Create it later with: wp user create ${ADMIN_USER} ${ADMIN_EMAIL} --role=administrator"
+fi
+
+if [ -f "${WP_PATH}/wp-content/mu-plugins/origin-governance-gateway.php" ]; then
+    echo "  Origin governance MU-plugin detected."
+else
+    warn "Origin governance MU-plugin missing at wp-content/mu-plugins/origin-governance-gateway.php"
+fi
+
+CAPABILITY_MODE="$(wp_env SINOPLE_CAPABILITY_MODE)"
+CAPABILITY_SECRET_PRESENT=0
+if [ -n "$(wp_env SINOPLE_CAPABILITY_SECRET)" ]; then
+    CAPABILITY_SECRET_PRESENT=1
+fi
+
+if [ -n "${CAPABILITY_MODE}" ]; then
+    echo "  Origin governance mode: ${CAPABILITY_MODE}"
+else
+    warn "SINOPLE_CAPABILITY_MODE not present in the runtime environment yet."
+fi
+
+if [ "${CAPABILITY_SECRET_PRESENT}" = "1" ]; then
+    echo "  Capability secret detected in runtime environment."
+else
+    warn "SINOPLE_CAPABILITY_SECRET not detected. Provision it before exposing API write endpoints."
 fi
 
 echo "  Preflight checks passed."
@@ -529,7 +558,7 @@ wpcli widget add archives sidebar-1 --title="Archives" --count=1 2>/dev/null || 
 wpcli widget add text footer-1 --title="About NUJ LCB" --text="The National Union of Journalists London Central Branch represents journalists working in central London." 2>/dev/null || true
 wpcli widget add recent-posts footer-2 --title="Recent News" --number=3 2>/dev/null || true
 wpcli widget add categories footer-3 --title="Categories" 2>/dev/null || true
-wpcli widget add text footer-4 --title="Contact" --text="Email: contact@nuj-lcb.org.uk" 2>/dev/null || true
+wpcli widget add text footer-4 --title="Contact" --text="Email: general@nuj-lcb.org.uk" 2>/dev/null || true
 
 echo "  Widgets configured."
 
@@ -552,3 +581,5 @@ echo "  7. Confirm Members restrictions for /members/ and forum access"
 echo "  8. Review all pages and update placeholder content"
 echo "  9. Run accessibility audit: Lighthouse + aXe"
 echo " 10. Verify security headers: securityheaders.com"
+echo " 11. Provision SINOPLE_CAPABILITY_SECRET and confirm SINOPLE_CAPABILITY_MODE=enforce in wp-config.php"
+echo " 12. Run origin probe: SINOPLE_CAPABILITY_SECRET=<LIVE_SECRET> bash scripts/test-origin-governance.sh ${SITE_URL}"

@@ -724,7 +724,7 @@ WHAT YOU SHOULD DO:
 
 We sincerely apologize for this incident. Member security is our highest priority.
 
-Contact: security@nuj-lcb.org.uk
+Contact: safety@nuj-lcb.org.uk
 Phone: [Contact number]
 
 In solidarity,

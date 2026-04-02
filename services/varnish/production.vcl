@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: PMPL-1.0-or-later
 # Varnish Configuration for LCB Website - Production
-# Includes full consent-aware HTTP enforcement
+# Includes fast-fail consent enforcement; the WordPress MU-plugin remains authoritative.
 
 vcl 4.1;
 

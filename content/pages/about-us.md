@@ -56,7 +56,7 @@ We're actively campaigning for:
 ### Community
 
 - Monthly branch meetings (online and in-person)
-- Member forum for discussion and mutual support (forum.nuj-lcb.org.uk)
+- Member chat space for discussion and mutual support (chat.nuj-lcb.org.uk)
 - Social events and networking
 - Solidarity with journalists facing attacks on press freedom
 
@@ -100,13 +100,13 @@ Officers are elected annually at the AGM. Consider standing if you want to:
 
 ## Contact Us
 
-**General inquiries**: contact@nuj-lcb.org.uk
+**General inquiries**: general@nuj-lcb.org.uk
 
 **Urgent workplace issues**: Members can contact their chapel rep or branch officers directly.
 
-**Join our forum**: [forum.nuj-lcb.org.uk](https://forum.nuj-lcb.org.uk)
+**Join our chat**: [chat.nuj-lcb.org.uk](https://chat.nuj-lcb.org.uk)
 
-**Video meetings**: [convene.nuj-lcb.org.uk](https://convene.nuj-lcb.org.uk)
+**Video meetings**: [conference.nuj-lcb.org.uk](https://conference.nuj-lcb.org.uk)
 
 ## Find Us
 

@@ -10,9 +10,9 @@ validate-rsr:
     @echo "Validating Rhodium Standard Repository compliance..."
     @test -f README.md || (echo "❌ Missing README.md" && exit 1)
     @test -f LEGAL.txt || (echo "❌ Missing LEGAL.txt" && exit 1)
-    @test -f .machine_readable/6scm/STATE.scm || (echo "❌ Missing STATE.scm" && exit 1)
-    @test -f .machine_readable/6scm/ECOSYSTEM.scm || (echo "❌ Missing ECOSYSTEM.scm" && exit 1)
-    @test -f .machine_readable/6scm/META.scm || (echo "❌ Missing META.scm" && exit 1)
+    @test -f .machine_readable/6a2/STATE.a2ml || (echo "❌ Missing .machine_readable/6a2/STATE.a2ml" && exit 1)
+    @test -f .machine_readable/6a2/ECOSYSTEM.a2ml || (echo "❌ Missing .machine_readable/6a2/ECOSYSTEM.a2ml" && exit 1)
+    @test -f .machine_readable/6a2/META.a2ml || (echo "❌ Missing .machine_readable/6a2/META.a2ml" && exit 1)
     @echo "✅ RSR compliance checks passed"
 
 # Build Cerro Torre manifest
@@ -155,6 +155,14 @@ sanctify-analyze:
     @echo "Running sanctify-php against the Sinople theme..."
     @bash scripts/run-sanctify.sh
 
+validate-monitoring:
+    @echo "Validating monitoring assets..."
+    @test -f monitoring/exporter.ncl || (echo "❌ Missing monitoring/exporter.ncl" && exit 1)
+    @test -f monitoring/metrics.schema.json || (echo "❌ Missing monitoring/metrics.schema.json" && exit 1)
+    @test -f monitoring/prometheus/alerts.yml || (echo "❌ Missing monitoring/prometheus/alerts.yml" && exit 1)
+    @test -f monitoring/prometheus/grafana-dashboard.json || (echo "❌ Missing monitoring/prometheus/grafana-dashboard.json" && exit 1)
+    @echo "✅ Monitoring assets present"
+
 # Validate .well-known files
 validate-wellknown:
     @echo "Validating .well-known files..."
@@ -176,7 +184,7 @@ clean:
     @echo "✅ Clean complete"
 
 # Full validation (RSR + well-known + security)
-validate: validate-rsr validate-wellknown security-check
+validate: validate-rsr validate-wellknown security-check validate-monitoring
     @echo "✅ All validations passed"
 
 # Show project status

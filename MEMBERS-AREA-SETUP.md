@@ -342,7 +342,7 @@ In post editor sidebar:
   <div class="platform-card">
     <h3>💬 Discussion Forum</h3>
     <p>Join conversations with fellow members on our Zulip forum.</p>
-    <a href="https://forum.nuj-lcb.org.uk" class="button" target="_blank">
+    <a href="https://chat.nuj-lcb.org.uk" class="button" target="_blank">
       Go to Forum →
     </a>
   </div>
@@ -350,7 +350,7 @@ In post editor sidebar:
   <div class="platform-card">
     <h3>📹 Video Meetings</h3>
     <p>Join branch meetings via our BigBlueButton platform.</p>
-    <a href="https://convene.nuj-lcb.org.uk" class="button" target="_blank">
+    <a href="https://conference.nuj-lcb.org.uk" class="button" target="_blank">
       Join Meeting →
     </a>
   </div>
@@ -464,8 +464,8 @@ Welcome to the NUJ London Central Branch members area! Your account has been app
 ✅ Meeting minutes archive
 ✅ Legal & advice resources
 ✅ Training materials
-✅ Discussion forum (forum.nuj-lcb.org.uk)
-✅ Video meetings (convene.nuj-lcb.org.uk)
+✅ Discussion chat (chat.nuj-lcb.org.uk)
+✅ Video meetings (conference.nuj-lcb.org.uk)
 
 **Set Your Privacy:**
 Visit https://nuj-lcb.org.uk/wp-admin/profile.php to control what other members can see.
@@ -497,13 +497,13 @@ Create page: "Members Area Guide"
    - Browse training materials
 
 3. **Join the Forum**
-   - Visit: forum.nuj-lcb.org.uk
+   - Visit: chat.nuj-lcb.org.uk
    - Use same email as website
    - Introduce yourself in #general
 
 4. **Attend a Meeting**
    - Check calendar for next meeting
-   - Join via: convene.nuj-lcb.org.uk
+   - Join via: conference.nuj-lcb.org.uk
    - No software needed!
 
 ## Privacy Tips

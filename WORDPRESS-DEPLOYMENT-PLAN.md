@@ -1,9 +1,11 @@
 # WordPress Deployment Plan - NUJ London Central Branch
 
+> This document is the future self-hosted VPS/Caddy path. For the real current deployment on Verpex cPanel, use `VERPEX-DEPLOYMENT.md` as the authoritative runbook.
+
 Complete step-by-step plan for deploying the NUJ LCB website to VPS-D8 with three services:
 - Main site: nuj-lcb.org.uk (WordPress)
-- Forum: forum.nuj-lcb.org.uk (Zulip)
-- Video: convene.nuj-lcb.org.uk (BigBlueButton Meet)
+- Chat: chat.nuj-lcb.org.uk (Zulip)
+- Video: conference.nuj-lcb.org.uk (BigBlueButton Meet)
 
 ## Prerequisites
 
@@ -93,12 +95,12 @@ mkdir -p ~/nuj-lcb/caddy/{config,data}
 |------|------|---------|-------|-----|
 | A | @ | VPS-D8-IP | ✓ Proxied | Auto |
 | A | www | VPS-D8-IP | ✓ Proxied | Auto |
-| A | forum | VPS-D8-IP | ✓ Proxied | Auto |
-| A | convene | VPS-D8-IP | ✓ Proxied | Auto |
+| A | chat | VPS-D8-IP | ✓ Proxied | Auto |
+| A | conference | VPS-D8-IP | ✓ Proxied | Auto |
 | AAAA | @ | VPS-D8-IPv6 | ✓ Proxied | Auto |
 | AAAA | www | VPS-D8-IPv6 | ✓ Proxied | Auto |
-| AAAA | forum | VPS-D8-IPv6 | ✓ Proxied | Auto |
-| AAAA | convene | VPS-D8-IPv6 | ✓ Proxied | Auto |
+| AAAA | chat | VPS-D8-IPv6 | ✓ Proxied | Auto |
+| AAAA | conference | VPS-D8-IPv6 | ✓ Proxied | Auto |
 
 ### 2.2 Enable Cloudflare Features
 
@@ -254,13 +256,13 @@ nuj-lcb.org.uk, www.nuj-lcb.org.uk {
 }
 
 # Forum subdomain (Zulip - will add in Phase 4)
-forum.nuj-lcb.org.uk {
+chat.nuj-lcb.org.uk {
 	# Placeholder - Zulip setup later
 	respond "Forum coming soon" 503
 }
 
 # Video subdomain (BigBlueButton - will add in Phase 6)
-convene.nuj-lcb.org.uk {
+conference.nuj-lcb.org.uk {
 	# Placeholder - BigBlueButton setup later
 	respond "Video conferencing coming soon" 503
 }
@@ -434,7 +436,7 @@ Add to `docker-compose.yml`:
     container_name: nujlcb-zulip
     restart: unless-stopped
     environment:
-      SETTING_EXTERNAL_HOST: forum.nuj-lcb.org.uk
+      SETTING_EXTERNAL_HOST: chat.nuj-lcb.org.uk
       SETTING_ZULIP_ADMINISTRATOR: admin@nuj-lcb.org.uk
       SETTING_EMAIL_HOST: smtp.gmail.com  # Or your SMTP
       SETTING_EMAIL_PORT: 587
@@ -476,7 +478,7 @@ Add to `docker-compose.yml`:
 Replace Zulip placeholder in `caddy/Caddyfile`:
 
 ```caddyfile
-forum.nuj-lcb.org.uk {
+chat.nuj-lcb.org.uk {
 	reverse_proxy zulip:80
 
 	header {
@@ -513,7 +515,7 @@ docker exec -it nujlcb-zulip /home/zulip/deployments/current/manage.py createsup
 
 ### 5.4 Configure Zulip
 
-**Access https://forum.nuj-lcb.org.uk**
+**Access https://chat.nuj-lcb.org.uk**
 
 1. Complete organization setup
 2. Set organization name: "NUJ London Central Branch"
@@ -534,7 +536,7 @@ docker exec -it nujlcb-zulip /home/zulip/deployments/current/manage.py createsup
 ## Phase 6: Deploy BigBlueButton Meet (Day 6)
 
 ### 6.1 BigBlueButton Infrastructure
-- Video: convene.nuj-lcb.org.uk (BigBlueButton)
+- Video: conference.nuj-lcb.org.uk (BigBlueButton)
 
 Note: BigBlueButton installation is significantly more complex than BigBlueButton and typically requires a dedicated server or a very specific container setup. We recommend using the official `bbb-install.sh` script or a verified Docker-based orchestration for BigBlueButton.
 
@@ -543,7 +545,7 @@ Note: BigBlueButton installation is significantly more complex than BigBlueButto
 Replace BigBlueButton placeholder:
 
 ```caddyfile
-convene.nuj-lcb.org.uk {
+conference.nuj-lcb.org.uk {
 	reverse_proxy bbb-server:80
 
 	header {
@@ -576,7 +578,7 @@ docker compose up -d bbb-web bbb-prosody bbb-jicofo bbb-jvb
 sleep 60
 
 # Test
-curl -I https://convene.nuj-lcb.org.uk
+curl -I https://conference.nuj-lcb.org.uk
 ```
 
 ### 6.4 Configure BigBlueButton

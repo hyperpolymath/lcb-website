@@ -99,7 +99,7 @@ services:
       - SECRETS_postgres_password=${ZULIP_DB_PASSWORD}
       - SECRETS_secret_key=${ZULIP_SECRET_KEY:?Set ZULIP_SECRET_KEY}
       - SETTING_EXTERNAL_HOST=chat.nuj-lcb.org.uk
-      - SETTING_ZULIP_ADMINISTRATOR=contact@nuj-lcb.org.uk
+      - SETTING_ZULIP_ADMINISTRATOR=general@nuj-lcb.org.uk
       - SETTING_EMAIL_GATEWAY_PATTERN=
       - SETTING_DEFAULT_FROM_EMAIL=noreply@nuj-lcb.org.uk
       - SETTING_NOREPLY_EMAIL_ADDRESS=noreply@nuj-lcb.org.uk

@@ -40,6 +40,23 @@ define('SCRIPT_DEBUG', false);
 define('WP_MEMORY_LIMIT', '256M');
 define('WP_MAX_MEMORY_LIMIT', '512M');    // Admin area memory limit
 
+// === Origin Governance ===
+// Provision SINOPLE_CAPABILITY_SECRET privately in wp-config.php or your runtime environment.
+// Example:
+// $sinople_capability_secret = 'replace-with-a-long-random-secret';
+// putenv('SINOPLE_CAPABILITY_SECRET=' . $sinople_capability_secret);
+// $_ENV['SINOPLE_CAPABILITY_SECRET'] = $sinople_capability_secret;
+// $_SERVER['SINOPLE_CAPABILITY_SECRET'] = $sinople_capability_secret;
+//
+// Keep the mode explicit. The MU-plugin defaults to "enforce" if not set.
+$sinople_capability_mode = getenv('SINOPLE_CAPABILITY_MODE');
+if ($sinople_capability_mode === false || $sinople_capability_mode === '') {
+    $sinople_capability_mode = 'enforce';
+    putenv('SINOPLE_CAPABILITY_MODE=' . $sinople_capability_mode);
+}
+$_ENV['SINOPLE_CAPABILITY_MODE'] = $sinople_capability_mode;
+$_SERVER['SINOPLE_CAPABILITY_MODE'] = $sinople_capability_mode;
+
 // === Cloudflare Compatibility ===
 // Detect HTTPS behind Cloudflare proxy
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {

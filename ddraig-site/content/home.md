@@ -124,7 +124,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helv
   <div id="contact" class="page">
     <div class="page-content">
       <h1>Contact</h1>
-      <p>Email: <a href="mailto:contact@nuj-lcb.org.uk">contact@nuj-lcb.org.uk</a></p>
+      <p>Email: <a href="mailto:general@nuj-lcb.org.uk">general@nuj-lcb.org.uk</a></p>
       <p>Forum: <a href="https://chat.nuj-lcb.org.uk" target="_blank">chat.nuj-lcb.org.uk</a></p>
       <p>Virtual meetings: <a href="https://conference.nuj-lcb.org.uk" target="_blank">conference.nuj-lcb.org.uk</a></p>
     </div>

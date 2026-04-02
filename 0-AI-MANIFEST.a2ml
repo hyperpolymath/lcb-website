@@ -11,9 +11,9 @@ This is the AI manifest for **lcb-website** — the NUJ London Central Branch we
 
 ## CANONICAL LOCATIONS (UNIVERSAL RULE)
 
-### Machine-Readable Metadata: `.machine_readable/6scm/` ONLY
+### Machine-Readable Metadata: `.machine_readable/6a2/` ONLY
 
-These 6 SCM files MUST exist in `.machine_readable/6scm/` directory ONLY:
+These 6 machine-readable files MUST exist in `.machine_readable/6a2/` directory ONLY:
 1. **.machine_readable/6a2/STATE.a2ml** - Project state, progress, blockers
 2. **.machine_readable/6a2/META.a2ml** - Architecture decisions, governance
 3. **.machine_readable/6a2/ECOSYSTEM.a2ml** - Position in ecosystem, relationships
@@ -42,7 +42,7 @@ Bot-specific instructions for the gitbot-fleet:
 ## CORE INVARIANTS
 
 1. **No SCM duplication** - Root must NOT contain .machine_readable/6a2/STATE.a2ml, .machine_readable/6a2/META.a2ml, etc.
-2. **Single source of truth** - `.machine_readable/6scm/` is authoritative
+2. **Single source of truth** - `.machine_readable/6a2/` is authoritative
 3. **License consistency** - All code PMPL-1.0-or-later unless platform requires MPL-2.0
 4. **Author attribution** - Always "Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"
 5. **Container standards** - Chainguard wolfi-base images, Containerfile (never Dockerfile), Podman (never Docker)
@@ -94,13 +94,13 @@ lcb-website/
 │   ├── dust/Dustfile                # WordPress rollback/recovery
 │   ├── lust/Intentfile              # Future intent (stapeln pipeline)
 │   └── k9/                          # K9 self-validating config
-├── .machine_readable/6scm/          # SCM files (6 files)
-│   ├── .machine_readable/6a2/STATE.a2ml
-│   ├── .machine_readable/6a2/META.a2ml
-│   ├── .machine_readable/6a2/ECOSYSTEM.a2ml
-│   ├── .machine_readable/6a2/AGENTIC.a2ml
-│   ├── .machine_readable/6a2/NEUROSYM.a2ml
-│   └── .machine_readable/6a2/PLAYBOOK.a2ml
+├── .machine_readable/6a2/           # Machine-readable files (6 files)
+│   ├── STATE.a2ml
+│   ├── META.a2ml
+│   ├── ECOSYSTEM.a2ml
+│   ├── AGENTIC.a2ml
+│   ├── NEUROSYM.a2ml
+│   └── PLAYBOOK.a2ml
 ├── .bot_directives/                 # Gitbot-fleet directives (8 bots)
 ├── .github/workflows/               # 17 CI/CD workflows
 ├── docs/                            # AsciiDoc documentation
@@ -120,24 +120,24 @@ lcb-website/
 ## SESSION STARTUP CHECKLIST
 
 1. Read THIS file (0-AI-MANIFEST.a2ml) first
-2. Understand canonical locations (.machine_readable/6scm/, .bot_directives/)
+2. Understand canonical locations (.machine_readable/6a2/, .bot_directives/)
 3. Know the invariants (no SCM duplication, Chainguard images, etc.)
-4. Read `.machine_readable/6scm/.machine_readable/6a2/STATE.a2ml` for current status
+4. Read `.machine_readable/6a2/STATE.a2ml` for current status
 5. Read `TOPOLOGY.md` for architecture overview + completion dashboard
-6. Read `.machine_readable/6scm/.machine_readable/6a2/AGENTIC.a2ml` for interaction patterns
+6. Read `.machine_readable/6a2/AGENTIC.a2ml` for interaction patterns
 
 ## LIFECYCLE HOOKS
 
 ### on-enter (Session Start)
 
 1. Read and acknowledge this manifest
-2. Read `.machine_readable/6scm/.machine_readable/6a2/STATE.a2ml`
+2. Read `.machine_readable/6a2/STATE.a2ml`
 3. Check for blockers
 4. State understanding of canonical locations
 
 ### on-exit (Session End)
 
-1. Update `.machine_readable/6scm/.machine_readable/6a2/STATE.a2ml` if changes made
+1. Update `.machine_readable/6a2/STATE.a2ml` if changes made
 2. Update `TOPOLOGY.md` completion dashboard if components changed
 3. Document new blockers
 4. Summarize outcomes
@@ -146,7 +146,7 @@ lcb-website/
 
 After reading this file, demonstrate understanding by stating:
 
-**"I have read the AI manifest. SCM files are located in `.machine_readable/6scm/` ONLY, bot directives in `.bot_directives/`, and I will not create duplicate files in the root directory."**
+**"I have read the AI manifest. Machine-readable files are located in `.machine_readable/6a2/` ONLY, bot directives in `.bot_directives/`, and I will not create duplicate files in the root directory."**
 
 ## META
 

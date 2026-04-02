@@ -425,7 +425,7 @@ Public-facing content:
   - Use stock photos instead of real offices
 
 Contact forms:
-  - Use generic email (contact@nuj-lcb.org.uk)
+  - Use generic email (general@nuj-lcb.org.uk)
   - No direct officer emails on public pages
   - Use Cloudflare email protection
 ```
@@ -523,4 +523,4 @@ TOTAL: £669-2169/year ($800-2600)
 **Priority**: 🚨 CRITICAL (protect member data NOW)
 **Timeline**: Immediate implementation required
 
-**Questions?** Email: security@nuj-lcb.org.uk (to be set up)
+**Questions?** Email: safety@nuj-lcb.org.uk

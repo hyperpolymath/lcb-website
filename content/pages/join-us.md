@@ -89,8 +89,8 @@ Your membership includes:
 - ✅ Financial advice service
 
 ### Community Access
-- ✅ Member forum (forum.nuj-lcb.org.uk)
-- ✅ Video conferencing for meetings (convene.nuj-lcb.org.uk)
+- ✅ Member chat space (chat.nuj-lcb.org.uk)
+- ✅ Video conferencing for meetings (conference.nuj-lcb.org.uk)
 - ✅ Networking events
 - ✅ Branch social gatherings
 
@@ -106,7 +106,7 @@ Your membership includes:
 
 ### By Email
 
-Email **contact@nuj-lcb.org.uk** with:
+Email **general@nuj-lcb.org.uk** with:
 - Your name and contact details
 - Your employer or freelance status
 - Any questions about membership
@@ -129,7 +129,7 @@ You'll receive:
 
 ### Get Involved
 
-- Join our member forum: [forum.nuj-lcb.org.uk](https://forum.nuj-lcb.org.uk)
+- Join our member chat: [chat.nuj-lcb.org.uk](https://chat.nuj-lcb.org.uk)
 - Attend the next branch meeting (dates on [Events page](/events))
 - Introduce yourself in the welcome thread
 - Check upcoming training opportunities
@@ -162,13 +162,13 @@ Yes! Student membership is discounted and gives you access to training, networki
 
 ### What if I can't afford the fees?
 
-Contact us at **contact@nuj-lcb.org.uk**. We can discuss payment plans or hardship arrangements. Don't let cost be a barrier.
+Contact us at **general@nuj-lcb.org.uk**. We can discuss payment plans or hardship arrangements. Don't let cost be a barrier.
 
 ## Still Have Questions?
 
-- **Email**: contact@nuj-lcb.org.uk
+- **Email**: general@nuj-lcb.org.uk
 - **Phone**: [National office] 020 7843 3700
-- **Forum**: Post in the "Joining Questions" stream at [forum.nuj-lcb.org.uk](https://forum.nuj-lcb.org.uk)
+- **Chat**: Post in the "Joining Questions" stream at [chat.nuj-lcb.org.uk](https://chat.nuj-lcb.org.uk)
 - **Meet us**: Come to our next open meeting (see [Events](/events))
 
 ---
@@ -177,6 +177,6 @@ Contact us at **contact@nuj-lcb.org.uk**. We can discuss payment plans or hardsh
 
 **[Join Online Now](https://www.nuj.org.uk/join)**
 
-Or email us at **contact@nuj-lcb.org.uk** and we'll guide you through the process.
+Or email us at **general@nuj-lcb.org.uk** and we'll guide you through the process.
 
 *Stronger together. Join NUJ London Central Branch today.*
