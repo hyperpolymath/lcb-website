@@ -1,0 +1,15 @@
+{
+  "tasks": {
+    "test": "deno test --allow-all tests/",
+    "test:unit": "deno test --allow-all tests/unit/",
+    "test:property": "deno test --allow-all tests/property/",
+    "test:e2e": "deno test --allow-all tests/e2e/",
+    "test:aspect": "deno test --allow-all tests/aspect/",
+    "bench": "deno bench --allow-all tests/bench/"
+  },
+  "imports": {
+    "std/": "https://deno.land/std@0.208.0/",
+    "mock": "https://deno.land/std@0.208.0/testing/mock.ts",
+    "assert": "https://deno.land/std@0.208.0/testing/asserts.ts"
+  }
+}
