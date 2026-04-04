@@ -1,0 +1,45 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+name: E2E, Property and Unit Tests
+on:
+  push: { branches: [main] }
+  pull_request: { branches: ['**'] }
+permissions:
+  contents: read
+jobs:
+  e2e:
+    name: E2E tests (theme lifecycle)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: denoland/setup-deno@v2
+        with: { deno-version: v2.x }
+      - name: Run E2E tests
+        run: deno test tests/e2e/ --allow-all --no-check
+  unit:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: denoland/setup-deno@v2
+        with: { deno-version: v2.x }
+      - name: Run unit tests
+        run: |
+          if ls tests/unit/*.ts 2>/dev/null | head -1 | grep -q .; then
+            deno test tests/unit/ --allow-all --no-check
+          else
+            echo "No unit test files"
+          fi
+  bench:
+    name: Benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: denoland/setup-deno@v2
+        with: { deno-version: v2.x }
+      - name: Run benchmarks
+        run: |
+          if ls tests/bench/*.ts 2>/dev/null | head -1 | grep -q .; then
+            deno bench tests/bench/ --allow-all --no-check
+          else
+            echo "No bench files"
+          fi
