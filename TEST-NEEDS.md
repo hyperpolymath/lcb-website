@@ -59,3 +59,17 @@
 - `tests/fuzz/placeholder.txt` is a scorecard placeholder inherited from rsr-template-repo — it does NOT provide real fuzz testing
 - Replace with an actual fuzz harness (see rsr-template-repo/tests/fuzz/README.adoc) or remove the file
 - Priority: P2 — creates false impression of fuzz coverage
+
+## Session 9 additions (2026-04-04)
+
+### What Was Added
+
+| Area | Tests Added | Location |
+|------|-------------|----------|
+| CI runner | GitHub Actions workflow for existing test suite (unit, benchmarks) | `.github/workflows/e2e.yml` |
+
+### Updated Test Counts
+
+| Suite | Count | Status |
+|-------|-------|--------|
+| CI workflows | 21 | Running e2e suite |
