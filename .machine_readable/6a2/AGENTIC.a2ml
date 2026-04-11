@@ -1,21 +1,34 @@
-;; SPDX-License-Identifier: PMPL-1.0-or-later
-;; AGENTIC.scm - AI agent interaction guidelines for lcb-website
-;; Updated: 2026-02-14
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+#
+# AGENTIC.a2ml — AI agent constraints and capabilities
+[metadata]
+version = "0.1.0"
+last-updated = "2026-04-11"
 
-(define agentic-config
-  `((version . "1.1.0")
-    (claude-code
-      ((model . "claude-opus-4-6")
-       (tools . ("read" "edit" "bash" "glob" "grep" "write"))
-       (permissions . "read-all")))
-    (patterns
-      ((code-review . "thorough")
-       (refactoring . "conservative")
-       (testing . "automated")
-       (documentation . "update TOPOLOGY.md and STATE.scm after changes")))
-    (constraints
-      ((languages . ("ReScript" "PHP" "Rust" "Deno" "Shell" "Haskell" "Nickel"))
-       (banned . ("typescript" "go" "python"))
-       (containers . "Chainguard wolfi-base only, Containerfile not Dockerfile, Podman not Docker")
-       (comments . "Explain security implications when editing manifests or crypto config")
-       (contractiles . "Run Mustfile checks and Trustfile verification after structural changes")))))
+[agent-permissions]
+can-edit-source = true
+can-edit-tests = true
+can-edit-docs = true
+can-edit-config = true
+can-create-files = true
+
+[agent-constraints]
+# What AI agents must NOT do:
+# - Never use banned language patterns (believe_me, unsafeCoerce, etc.)
+# - Never commit secrets or credentials
+# - Never use banned languages (TypeScript, Python, Go, etc.)
+# - Never place state files in repository root (must be in .machine_readable/)
+# - Never use AGPL license (use PMPL-1.0-or-later)
+
+[maintenance-integrity]
+fail-closed = true
+require-evidence-per-step = true
+allow-silent-skip = false
+require-rerun-after-fix = true
+release-claim-requires-hard-pass = true
+
+[automation-hooks]
+# on-enter: Read 0-AI-MANIFEST.a2ml, then STATE.a2ml
+# on-exit: Update STATE.a2ml with session outcomes
+# on-commit: Run just validate-rsr
