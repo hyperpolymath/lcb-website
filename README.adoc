@@ -1,0 +1,113 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+
+= lcb-website — NUJ London Central Branch
+:toc: preamble
+:icons: font
+
+Production repository for the NUJ London Central Branch website (nuj-lcb.org.uk).
+
+This repo contains the full website: WordPress theme (Sinople), page content,
+deployment guides, security documentation, and the experimental container
+infrastructure (Vörðr, Cerro Torre, Svalinn) being dogfooded alongside it.
+
+== Quick Start
+
+[source,bash]
+----
+cp .env.example .env  # Edit with real credentials
+podman-compose -f docker-compose.yml up -d  # OpenLiteSpeed + MariaDB + Varnish
+----
+
+See link:DEPLOYMENT.md[DEPLOYMENT.md] for local Podman setup,
+link:VERPEX-DEPLOYMENT.md[VERPEX-DEPLOYMENT.md] for cPanel hosting, or
+link:WORDPRESS-DEPLOYMENT-PLAN.md[WORDPRESS-DEPLOYMENT-PLAN.md] for full VPS deployment.
+
+== Deployment Quick-Reference
+
+[cols="1,3"]
+|===
+| Path | Target
+
+| *Production (now)* | Verpex cPanel + LiteSpeed Enterprise + PHP 8.4 + Cloudflare DNS
+| *Container (future)* | `podman build -f Containerfile` → `cerro-torre sign` → `selur-compose up`
+| *Dev (local)* | `podman-compose -f docker-compose.yml up -d` (MariaDB + OpenLiteSpeed + Varnish)
+|===
+
+*Key files:*
+
+* `Containerfile` — Multi-stage Chainguard wolfi-base build
+* `selur-compose.yml` — Stapeln orchestration (svalinn + vordr + redis + mariadb)
+* `infra/wordpress.ctp` — Cerro Torre manifest (Ed25519 + Dilithium5 sigs)
+* `templates/` — wp-config security, .htaccess well-known, security headers
+* `TOPOLOGY.md` — Architecture diagram + completion dashboard
+
+== Content
+
+All website pages live in `content/`:
+
+* `content/pages/` — About, Contact, Join, Members Area, LinkedIn Feed
+* `content/policies/` — AI Usage Policy, Imprint/Impressum
+* `content/mockups/` — HTML mockups (homepage, officers page)
+* `content/nuj-lcb-shareable-site.html` — Self-contained offline demo (1072 lines)
+
+== IPFS Automation
+
+Use `scripts/ipfs-publish.sh` (or `just ipfs-publish`) to publish
+`content/nuj-lcb-shareable-site.html` to Pinata and automatically update the
+Cloudflare DNSLink state for `ipfs.nuj-lcb.org.uk`.
+
+Set these in `.env.local`:
+
+* `CLOUDFLARE_API_TOKEN`
+* `CLOUDFLARE_ZONE_ID`
+* `PINATA_JWT`
+* `IPFS_HOST` (optional, defaults to `ipfs.nuj-lcb.org.uk`)
+* `CLOUDFLARE_WEB3_GATEWAY=true` if managed as Cloudflare Web3 hostname
+
+== Integrations
+
+Each integration is documented in `docs/`:
+
+[cols="1,2"]
+|===
+| Integration | Documentation
+
+| Container Baseline | `docs/hardened-wordpress.adoc`
+| Front-end routing | `docs/cadre-router.adoc`
+| AI/bot consent | `docs/consent-aware-http.adoc`
+| Feedback pipeline | `docs/feedback-o-tron.adoc`
+| Quality automation (gitbot-fleet) | `docs/gitbot-fleet-support.adoc`
+| HTTP defense / capability gate | `wp-content/mu-plugins/origin-governance-gateway.php`
+| Automation router | `docs/hybrid-automation-router.adoc`
+| IndieWeb base | `docs/indieweb2-bastion.adoc`
+| ZeroTier overlay | `docs/zerotier-k8s-link.adoc`
+| WordPress theme (Sinople) | `docs/wp-sinople-theme.adoc`
+| Well-known ecosystem | `docs/well-known-ecosystem-integration.adoc`
+| IRC alerting (vext) | `docs/vext-irc-support.adoc`
+| K8s & Twingate SDP | `docs/twingate-k8s-integration.adoc`
+| RSR template | `docs/rsr-template-plan.adoc`
+| Robot Repo Automaton | `docs/robot-repo-automaton.adoc`
+|===
+
+== Machine-Readable Metadata
+
+Machine-readable metadata lives under `.machine_readable/6a2/`:
+
+* `AGENTIC.a2ml` — AI agent config
+* `ECOSYSTEM.a2ml` — ecosystem position
+* `META.a2ml` — architectural practices
+* `NEUROSYM.a2ml` — neurosymbolic hints
+* `PLAYBOOK.a2ml` — operational playbook
+* `STATE.a2ml` — project state
+
+== Roadmap
+
+See link:ROADMAP.adoc[ROADMAP.adoc] for the quarterly plan.
+
+Wondering how this works? See link:EXPLAINME.adoc[].
+
+== License
+
+SPDX-License-Identifier: PMPL-1.0-or-later +
+See link:LICENSE[LICENSE].
