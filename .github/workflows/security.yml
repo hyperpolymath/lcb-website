@@ -36,7 +36,7 @@ jobs:
           publish_results: true
 
       - name: Upload Scorecard results
-        uses: github/codeql-action/upload-sarif@6624720a57d4c312633c7b953db2f2da5bcb4c3a # v3
+        uses: github/codeql-action/upload-sarif@5c8a8a642e79153f5d047b10ec1cba1d1cc65699 # v3
         with:
           sarif_file: results.sarif
 
@@ -53,7 +53,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run TruffleHog
-        uses: trufflesecurity/trufflehog@7ee2e0fdffec27d19ccbb8fb3dcf8a83b9d7f9e8 # main
+        uses: trufflesecurity/trufflehog@580628bb9d5455140899afe2cb981ff5640bf399 # main
         with:
           path: ./
           base: main

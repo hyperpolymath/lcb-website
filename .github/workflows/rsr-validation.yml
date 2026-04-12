@@ -30,9 +30,9 @@ jobs:
           echo "Checking RSR required files..."
           test -f README.md || (echo "❌ Missing README.md" && exit 1)
           test -f LEGAL.txt || (echo "❌ Missing LEGAL.txt" && exit 1)
-          test -f .machine_readable/6scm/STATE.scm || (echo "❌ Missing STATE.scm" && exit 1)
-          test -f .machine_readable/6scm/ECOSYSTEM.scm || (echo "❌ Missing ECOSYSTEM.scm" && exit 1)
-          test -f .machine_readable/6scm/META.scm || (echo "❌ Missing META.scm" && exit 1)
+          test -f .machine_readable/6a2/STATE.a2ml || (echo "❌ Missing STATE.a2ml" && exit 1)
+          test -f .machine_readable/6a2/ECOSYSTEM.a2ml || (echo "❌ Missing ECOSYSTEM.a2ml" && exit 1)
+          test -f .machine_readable/6a2/META.a2ml || (echo "❌ Missing META.a2ml" && exit 1)
           echo "✅ All RSR files present"
 
       - name: Run RSR validation
