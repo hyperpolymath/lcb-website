@@ -2,6 +2,8 @@
 # Justfile for lcb-website
 
 # Default recipe - show available commands
+import? "contractile.just"
+
 default:
     @just --list
 
