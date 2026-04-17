@@ -1,6 +1,1 @@
-# ASDF tool versions for lcb-website
-# Auto-generated - update as needed
-
-deno 2.1.5
-varnish 7.4.3
-openlitespeed 1.8.5
+just 1.25.2
