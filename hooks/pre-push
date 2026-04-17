@@ -24,17 +24,15 @@ if [ "$current_branch" = "main" ] || [ "$current_branch" = "master" ]; then
   echo "Pushing to $current_branch branch"
 fi
 
-# Verify remote is correct
-remote=$(git remote -v | grep push | awk '{print $2}')
-if [[ "$remote" == *"github.com/hyperpolymath/nuj-lcb-production"* ]]; then
-  echo "✓ Pushing to correct remote: $remote"
+# Verify push is going to origin (GitHub) — per estate rule, origin is the
+# only forge we push to directly. Mirror system propagates to others.
+origin_url=$(git remote get-url origin 2>/dev/null || echo "")
+if [[ "$origin_url" == *"github.com"*"hyperpolymath"*"lcb-website"* ]]; then
+  echo "✓ origin points to GitHub hyperpolymath/lcb-website"
 else
-  echo "⚠️  Remote: $remote"
-  read -p "Is this correct? (y/N) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    exit 1
-  fi
+  echo "⚠️  origin URL looks unexpected: $origin_url"
+  echo "   Expected: git@github.com:hyperpolymath/lcb-website.git"
+  exit 1
 fi
 
 echo "✅ Pre-push checks passed"
