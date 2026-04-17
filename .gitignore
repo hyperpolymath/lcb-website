@@ -29,7 +29,23 @@ sbom/
 *.crt
 *.key
 *.pem
-secrets/
+
+# SOPS+age: block all plaintext, allow only ciphertext files.
+secrets/*
+!secrets/README.md
+!secrets/*.enc.yaml
+!secrets/*.enc.yml
+!secrets/*.enc.json
+!secrets/*.enc.toml
+!secrets/*.enc.env
+# Belt-and-braces: any file with .plain. in its name is NEVER committable.
+*.plain.yaml
+*.plain.yml
+*.plain.json
+*.plain.toml
+*.plain.env
+# Decrypted outputs (if user redirects `sops -d` to a file by accident)
+*.decrypted.*
 
 # ── IDE / editor ─────────────────────────────────────────
 .idea/
@@ -145,12 +161,13 @@ __pycache__/
 *.chpl.tmp.*
 
 
-# Secrets
+# Secrets (see earlier SOPS+age section for canonical rules)
 .env
 .env.*
+!.env.example
+!.env.example.production
 *.pem
 *.key
-secrets/
 
 
 # Test/Coverage

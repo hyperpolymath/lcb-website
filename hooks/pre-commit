@@ -1,40 +1,93 @@
 #!/bin/bash
 # SPDX-License-Identifier: PMPL-1.0-or-later
-# Pre-commit hook for nuj-lcb-production
+# Pre-commit hook for lcb-website
+#
+# Enforces three defences:
+#   1. SPDX headers on workflow files.
+#   2. gitleaks scan on the staged patch (blocks known secret shapes).
+#   3. SOPS plaintext detector — any file matching a SOPS creation_rule must
+#      actually be ciphertext (contains the `sops:` metadata block).
 
 set -e
 
 echo "Running pre-commit checks..."
 
-# Check for SPDX headers in workflow files
+# ---------------------------------------------------------------------------
+# 1. SPDX headers on workflow files
+# ---------------------------------------------------------------------------
 if git diff --cached --name-only | grep -q "^.github/workflows/.*\.ya?ml$"; then
   echo "Checking workflow files for SPDX headers..."
   for file in $(git diff --cached --name-only | grep "^.github/workflows/.*\.ya?ml$"); do
     if [ -f "$file" ]; then
       if ! head -1 "$file" | grep -q "SPDX-License-Identifier:"; then
         echo "❌ Missing SPDX header: $file"
-        echo "Add as first line: # SPDX-License-Identifier: PMPL-1.0-or-later"
+        echo "   Add as first line: # SPDX-License-Identifier: PMPL-1.0-or-later"
         exit 1
       fi
     fi
   done
 fi
 
-# Check for secrets or sensitive data
-echo "Scanning for potential secrets..."
-if git diff --cached | grep -iE "(password|secret|api[_-]?key|token|private[_-]?key)" | grep -v "SPDX-License-Identifier"; then
-  echo "⚠️  Warning: Found potential secrets in staged files"
-  echo "Please review the above matches carefully"
-  read -p "Continue with commit? (y/N) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+# ---------------------------------------------------------------------------
+# 2. gitleaks scan of staged changes
+# ---------------------------------------------------------------------------
+if command -v gitleaks >/dev/null 2>&1; then
+  echo "Running gitleaks on staged changes..."
+  gl_args="--staged --no-banner --redact -v"
+  [ -f .gitleaks.toml ] && gl_args="$gl_args --config=.gitleaks.toml"
+  if ! gitleaks protect $gl_args; then
+    echo ""
+    echo "❌ gitleaks detected potential secrets in staged changes."
+    echo "   If this is a false positive, add it to .gitleaks.toml allowlist."
+    echo "   NEVER commit real secrets — encrypt them with SOPS instead:"
+    echo "     just secrets-encrypt secrets/foo.plain.yaml"
     exit 1
   fi
+else
+  echo "⚠️  gitleaks not installed — skipping secret scan (install from https://github.com/gitleaks/gitleaks)"
 fi
 
-# Validate EditorConfig if present
-if [ -f .editorconfig ]; then
-  echo "✓ EditorConfig present"
+# ---------------------------------------------------------------------------
+# 3. SOPS plaintext detector
+#    Any staged file matching the SOPS creation_rules patterns must contain
+#    the `sops:` metadata block, which is SOPS's proof-of-encryption.
+# ---------------------------------------------------------------------------
+echo "Verifying SOPS-rule files are encrypted..."
+staged_files=$(git diff --cached --name-only --diff-filter=ACM)
+sops_violations=0
+for f in $staged_files; do
+  # Match the patterns from .sops.yaml creation_rules
+  case "$f" in
+    *.enc.yaml|*.enc.yml|*.enc.json|*.enc.toml|*.enc.env|secrets/*.yaml|secrets/*.yml|secrets/*.json|secrets/*.toml|secrets/*.env)
+      # README.md inside secrets/ is allowed
+      if [ "$f" = "secrets/README.md" ]; then
+        continue
+      fi
+      # File must contain the SOPS metadata marker
+      if ! /usr/bin/grep -q '^sops:' "$f" 2>/dev/null && ! /usr/bin/grep -q '"sops":' "$f" 2>/dev/null; then
+        echo "❌ $f matches a SOPS creation_rule but is NOT encrypted."
+        echo "   Encrypt it with: sops -e -i $f"
+        sops_violations=$((sops_violations + 1))
+      fi
+      ;;
+  esac
+done
+if [ $sops_violations -gt 0 ]; then
+  echo ""
+  echo "❌ $sops_violations file(s) violating SOPS encryption policy."
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# 4. Plaintext file naming guard
+#    Files with .plain. in the name should never be committed.
+# ---------------------------------------------------------------------------
+plain_staged=$(echo "$staged_files" | /usr/bin/grep -E '\.plain\.' || true)
+if [ -n "$plain_staged" ]; then
+  echo "❌ Refusing to commit plaintext secrets file(s):"
+  echo "$plain_staged" | sed 's/^/   /'
+  echo "   Encrypt first: just secrets-encrypt <file>"
+  exit 1
 fi
 
 echo "✅ Pre-commit checks passed"

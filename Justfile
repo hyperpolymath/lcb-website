@@ -293,3 +293,38 @@ crg-badge:
       D) color="orange" ;; E) color="red" ;; F) color="critical" ;; \
       *) color="lightgrey" ;; esac; \
     echo "[![CRG $$grade](https://img.shields.io/badge/CRG-$$grade-$$color?style=flat-square)](https://github.com/hyperpolymath/standards/tree/main/component-readiness-grades)"
+
+
+# ─── SOPS+age secrets ──────────────────────────────────────────────────────
+
+# Decrypt a secrets file to stdout (e.g. `just secrets-decrypt secrets/verpex.enc.yaml`)
+secrets-decrypt file:
+    @sops -d {{file}}
+
+# Edit a secrets file in place (opens $EDITOR on plaintext, re-encrypts on save)
+secrets-edit file:
+    @sops {{file}}
+
+# Encrypt a plaintext file to its .enc.yaml counterpart
+# Usage: just secrets-encrypt secrets/foo.plain.yaml  ->  writes secrets/foo.enc.yaml
+secrets-encrypt plainfile:
+    @test -f {{plainfile}} || (echo "❌ {{plainfile}} not found" && exit 1)
+    @out=$$(echo {{plainfile}} | sed 's/\.plain\./.enc./'); \
+     sops -e {{plainfile}} > "$$out" && \
+     echo "✅ Encrypted to $$out"
+
+# Rotate to a new age recipient (updates all secrets/*.enc.* after you edit .sops.yaml)
+secrets-rotate:
+    @find secrets -type f \( -name '*.enc.yaml' -o -name '*.enc.yml' -o -name '*.enc.json' -o -name '*.enc.env' \) \
+        -exec sops updatekeys -y {} \;
+    @echo "✅ All .enc files re-encrypted to current .sops.yaml recipients"
+
+# Verify every secrets/*.enc.* can be decrypted with the current key
+secrets-verify:
+    @for f in $$(find secrets -type f -name '*.enc.*'); do \
+        if sops -d "$$f" >/dev/null 2>&1; then \
+            echo "✅ $$f"; \
+        else \
+            echo "❌ $$f — cannot decrypt"; exit 1; \
+        fi; \
+    done
