@@ -87,7 +87,7 @@ Blocks 11 AI training bots (GPTBot, ChatGPT-User, CCBot, anthropic-ai, Claude-We
 | .bot_directives/ (8 bots) | Complete |
 | .github/workflows/ (17 workflows) | Complete |
 | TOPOLOGY.md | Complete |
-| justfile (7080 lines) | Complete |
+| Justfile (7080 lines) | Complete |
 | Git hooks | Complete |
 
 ## Deployment Guides

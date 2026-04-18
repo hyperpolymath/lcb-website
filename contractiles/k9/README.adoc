@@ -19,6 +19,6 @@ K9 contractiles are self-validating configuration components using Nickel.
 
 K9 contractiles complement the main contractiles (must/trust/dust/lust) by
 providing type-checked, self-validating configuration that can be consumed by
-the justfile, Containerfile, or deployment scripts.
+the Justfile, Containerfile, or deployment scripts.
 
 See `rsr-template-repo/contractiles/k9/` for the full K9 specification.

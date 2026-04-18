@@ -213,7 +213,7 @@ lcb-website/
 │   └── mariadb/           # MariaDB configuration
 ├── docker-compose.yml      # Development environment
 ├── selur-compose.yml       # Production verified stack (stapeln)
-└── justfile                # Command automation
+└── Justfile                # Command automation
 ```
 
 ## Component Repositories
